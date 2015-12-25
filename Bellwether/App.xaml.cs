@@ -14,7 +14,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Bellwether.Repositories.Context;
 using Bellwether.Views;
+using Microsoft.Data.Entity;
 
 namespace Bellwether
 {
@@ -34,6 +36,15 @@ namespace Bellwether
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            ApplyMigrations();
+        }
+
+        private void ApplyMigrations()
+        {
+            using (var db = new DataContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         /// <summary>

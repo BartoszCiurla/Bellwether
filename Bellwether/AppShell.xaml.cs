@@ -58,7 +58,7 @@ namespace Bellwether
                 {
                     Symbol = Symbol.Favorite,
                     Label = "Ustawienia",
-                    DestPage = typeof(AppShell)
+                    DestPage = typeof(OptionPage)
                 },
             });
 
