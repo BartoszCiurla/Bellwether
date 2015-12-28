@@ -1,0 +1,10 @@
+{
+  "ApplicationVersion": "1.0",
+  "ApplicationLanguage": "pl",
+  "LanguageResourceVersion": "1.0",
+  "SynchronizeData": "true",
+  "IntegrationGamesLibraryVersion": "1.0",
+  "JokesLibraryVersion": "1.0",
+  "GetAvailableLanguagesApiUrl": "http://localhost:62645/api/Language",
+  "GetLanguageFileApiUrl": "http://localhost:62645/api/Language/GetLanguageFile/?languageId="
+}

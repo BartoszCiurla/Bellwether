@@ -12,6 +12,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Bellwether.Models.Models;
+using Bellwether.Repositories.Context;
+using Bellwether.Repositories.Repositories;
+using Bellwether.Services.Services;
 using Bellwether.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -28,7 +32,7 @@ namespace Bellwether.Views
             this.InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                this.DataContext = new OptionViewModel();
+                this.DataContext = new OptionViewModel(new LanguageService(),new ResourceService());
             };
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -15,6 +16,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Bellwether.Repositories.Context;
+using Bellwether.Repositories.Repositories;
+using Bellwether.Services.Services;
 using Bellwether.Views;
 using Microsoft.Data.Entity;
 
@@ -29,6 +32,7 @@ namespace Bellwether
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+
         public App()
         {
             Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
@@ -36,7 +40,7 @@ namespace Bellwether
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            ApplyMigrations();
+            ApplyMigrations();            
         }
 
         private void ApplyMigrations()
@@ -52,9 +56,10 @@ namespace Bellwether
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            var initResource = new InitResourceService();
+            await initResource.Init();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -63,8 +68,7 @@ namespace Bellwether
 #endif
 
             //Frame rootFrame = Window.Current.Content as Frame;
-            AppShell shell = Window.Current.Content as AppShell;            
-
+            AppShell shell = Window.Current.Content as AppShell;
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (shell == null)
@@ -73,7 +77,7 @@ namespace Bellwether
                 shell = new AppShell();
 
                 //rootFrame.NavigationFailed += OnNavigationFailed;
-                shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+                //shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
                 shell.AppFrame.NavigationFailed += OnNavigationFailed;
 

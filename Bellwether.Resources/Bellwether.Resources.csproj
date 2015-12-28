@@ -105,8 +105,8 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
-    <PRIResource Include="Resources\LanguageRosources.resw" />
-    <PRIResource Include="Resources\ApplicationResources.resw" />
+    <Content Include="StaticResources\ApplicationResources.json" />
+    <Content Include="StaticResources\LanguageResources.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
