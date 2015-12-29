@@ -71,15 +71,19 @@ namespace Bellwether.Services.Services
         {
             try
             {
+                //to zdecydowanie nie jest ostateczna wersja , na czas produkcyjny styknie
                 var dataFolder = await _localFolder.TryGetItemAsync(folderName) as StorageFolder ??
                             await _localFolder.CreateFolderAsync(folderName);
                 var localFile = await dataFolder.TryGetItemAsync(fileName) as StorageFile;
                 //if (localFile == null)
                 //{ // te ify dopiero w wersji produkcyjnej 
                     StorageFile storageStaticFile = GetDataFromStaticFile(staticFileLocation);
-                    await storageStaticFile.CopyAsync(dataFolder);
-                
-                //}
+                var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                string content = await FileIO.ReadTextAsync(storageStaticFile);
+                await FileIO.WriteTextAsync(file, content);
+                //await storageStaticFile.CopyAsync(f);
+
+               // }
             }
             catch (Exception e)
             {

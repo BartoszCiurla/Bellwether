@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -11,6 +12,7 @@ using Windows.ApplicationModel.Resources.Core;
 using Windows.Data.Json;
 using Windows.Globalization;
 using Windows.Storage;
+using Bellwether.Models.Models;
 using Bellwether.Repositories.Repositories;
 using Newtonsoft.Json;
 
@@ -27,10 +29,17 @@ namespace Bellwether.Services.Services
 
     public interface IResourceService
     {
-        Task<string> TakeKeyValueFromLocalAppResources(string key);
+        Task<bool> ChangeLanguage(Dictionary<string, string> languageFile, BellwetherLanguage language);
+        Task<string> GetApplicationVersion();
+        Task<string> GetApplicationLanguage();
+        Task<string> GetLanguageResourceVersion();
+        Task<string> GetAvailableLanguagesApiUrl();
+        Task<string> GetLanguageFileApiUrl();
+        Task<string> GetLanguageApiUrl();
     }
     public class ResourceService : IResourceService
     {
+        //WEDŁUG MOJEGO PLANU Z TEGO MIEJSCA MAJA BYC POBIERANE JESZCZE SCENARIUSZE DLA WIDOKÓW ORAZ SYNCHRONIZACJA + JEJ USTAWIENIE + LEKTOR + JEGO USTAWIENEI
         private readonly ILocalResourceRepository _repository;
         private readonly string _appLocalResources;
         private readonly string _langLocalResources;
@@ -43,38 +52,84 @@ namespace Bellwether.Services.Services
             _localResourcesFile = ResourcesFiles.LocalResourcesFolderName;
         }
 
-        public async Task<string> TakeKeyValueFromLocalAppResources(string key)
+        public async Task<bool> ChangeLanguage(Dictionary<string, string> languageFile, BellwetherLanguage language)
         {
-            _repository.SpecifyTargetFile(_appLocalResources,_localResourcesFile);
-            await _repository.Init();
-            return await _repository.GetValueForKey(key);
-        }
-        public async Task<string> TakeKeyValueFromLocalLangResources(string key)
-        {
-            _repository.SpecifyTargetFile(_langLocalResources,_localResourcesFile);
-            await _repository.Init();
-            return await _repository.GetValueForKey(key);
-        }
-
-        public async Task<bool> ChangeLanguage(Dictionary<string, string> languageFile)
-        {
-            bool operationCompleted = await SaveLanguageFile(languageFile);
-            if (operationCompleted)
+            bool operationCompleted = false;
+            try
             {
-                
+                operationCompleted = await SaveLanguageInAppResources(language);
+                if (operationCompleted)
+                    operationCompleted = await SaveLanguageFile(languageFile);
+            }
+            catch (Exception)
+            {
+                //tu bedzie logowanie
             }
             return operationCompleted;
         }
 
+        public async Task<string> GetApplicationVersion()
+        {
+            return await TakeKeyValueFromLocalAppResources("ApplicationVersion");
+        }
+
+        public async Task<string> GetApplicationLanguage()
+        {
+            return await TakeKeyValueFromLocalAppResources("ApplicationLanguage");
+        }
+
+        public async Task<string> GetLanguageResourceVersion()
+        {
+            return await TakeKeyValueFromLocalAppResources("LanguageResourceVersion");
+        }
+
+        public async Task<string> GetAvailableLanguagesApiUrl()
+        {
+            return await TakeKeyValueFromLocalAppResources("GetAvailableLanguagesApiUrl");
+        }
+
+        public async Task<string> GetLanguageFileApiUrl()
+        {
+            return await TakeKeyValueFromLocalAppResources("GetLanguageFileApiUrl");
+        }
+
+        public async Task<string> GetLanguageApiUrl()
+        {
+            return await TakeKeyValueFromLocalAppResources("GetLanguageApiUrl");
+        }
+
+        private async Task<string> TakeKeyValueFromLocalAppResources(string key)
+        {
+            await InitRepositoryForAppResources();
+            return await _repository.GetValueForKey(key);
+        }
+        private async Task<string> TakeKeyValueFromLocalLangResources(string key)
+        {
+            await InitRepositoryForLangResources();
+            return await _repository.GetValueForKey(key);
+        }
+        private async Task<bool> SaveLanguageInAppResources(BellwetherLanguage language)
+        {
+            bool operationCompleted = false;
+            try
+            {
+                await InitRepositoryForAppResources();
+                await _repository.SaveValueForKey("ApplicationLanguage", language.LanguageShortName);
+                await _repository.SaveValueForKey("LanguageResourceVersion", language.LanguageVersion.ToString(CultureInfo.InvariantCulture));
+                operationCompleted = true;
+            }
+            catch (Exception)
+            {
+                //tu bedzie logowanie
+            }
+            return operationCompleted;
+        }
         private async Task<bool> SaveLanguageFile(Dictionary<string, string> languageFile)
         {
             bool operationCompleted = false;
             try
             {
-                if (languageFile == null)
-                    return false;
-                await _repository.Init();
-                _repository.SpecifyTargetFile(_langLocalResources,_localResourcesFile);
+                await InitRepositoryForLangResources();
                 await _repository.SaveValuesAndKays(languageFile);
                 operationCompleted = true;
             }
@@ -83,85 +138,16 @@ namespace Bellwether.Services.Services
                 //tu bedzie logowanie
             }
             return operationCompleted;
-
         }
-    }
-
-
-
-
-
-
-
-
-    //to jest zeby było i tyle ... 
-    public class SettingInfo
-    {
-        public string keyName { get; set; }
-        public string keyValue { get; set; }
-
-        public SettingInfo()
+        private async Task InitRepositoryForAppResources()
         {
-
+            _repository.SpecifyTargetFile(_appLocalResources, _localResourcesFile);
+            await _repository.Init();
         }
-        public void Test2()
+        private async Task InitRepositoryForLangResources()
         {
-            //string myResult = CustomJsonReader.GetKeyValue(ApplicationResourcesFile, "ApplicationLanguage");
-            //Debug.WriteLine(myResult);
-            //CustomJsonReader.SaveKeyValue(ApplicationResourcesFile, "ApplicationLanguage", "en");
-
-        }
-        public static async void GetApplicationResources()
-        {
-
-            bool fileExists;
-            try
-            {
-                string fileName = "Resources/ApplicationResources.json";
-                Uri appUri = new Uri("ms-appdata:///local/" + fileName);
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(appUri);
-                fileExists = file != null;
-            }
-            catch (Exception e)
-            {
-                fileExists = false;
-            }
-
-
-            List<SettingInfo> lstContent = new List<SettingInfo>();
-            try
-            {
-
-                /*  
-                ApplicationData.Current.LocalFolder for storing local application data
-
-                    Need to make sure using ConfigureAwait, GetAwaiter to avoid any file access errors
-                    Once the file is opened can use ReadTextAsync again with GetAwaiver as snow below 
-                    Conver the text to JsonArray and then deserialize into the object of our own format using DataContractJsonSerializer as below
-                    For more details refer https://www.suchan.cz/2014/07/file-io-best-practices-in-windows-and-phone-apps-part-1-available-apis-and-file-exists-checking/
-                */
-                Uri appUri = new Uri(ResourcesFiles.StaticApplicationResourcesFile);//File name should be prefixed with 'ms-appx:///Assets/*
-                StorageFile anjFile = StorageFile.GetFileFromApplicationUriAsync(appUri).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
-                //var pasta = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                //StorageFile anjFile = await pasta.GetFileAsync(ApplicationResourcesFile);
-                string jsonText = FileIO.ReadTextAsync(anjFile).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
-                var jsonSerializer = new DataContractJsonSerializer(typeof(SettingInfo));
-                JsonArray anjarray = JsonArray.Parse(jsonText);
-                foreach (var jsonValue in anjarray)
-                {
-                    var oJsonVal = (JsonValue)jsonValue;
-                    JsonObject oJsonObj = oJsonVal.GetObject();
-                    using (MemoryStream jsonStream = new MemoryStream(Encoding.Unicode.GetBytes(oJsonObj.ToString())))
-                    {
-                        SettingInfo oContent = (SettingInfo)jsonSerializer.ReadObject(jsonStream);
-                        lstContent.Add(oContent);
-                    }
-                }
-            }
-            catch (Exception exp)
-            {
-                Debug.WriteLine(exp);
-            }
+            _repository.SpecifyTargetFile(_langLocalResources, _localResourcesFile);
+            await _repository.Init();
         }
     }
 }

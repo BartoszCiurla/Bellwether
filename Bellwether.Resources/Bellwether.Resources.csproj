@@ -109,9 +109,12 @@
     <Content Include="StaticResources\LanguageResources.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LanguageScenarios\AppShellScenario.cs" />
+    <Compile Include="LanguageScenarios\OptionScenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Resources.rd.xml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

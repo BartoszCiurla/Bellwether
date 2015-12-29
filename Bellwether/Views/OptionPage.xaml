@@ -8,7 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding BellwetherLanguage, Mode=TwoWay}" DisplayMemberPath="LanguageName" PlaceholderText="Dupa zbita" Padding="12" BorderThickness="0" HorizontalAlignment="Stretch"></ComboBox>
+        <StackPanel>
+        <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" DisplayMemberPath="LanguageName" PlaceholderText="Dupa zbita" Padding="12" BorderThickness="0" HorizontalAlignment="Stretch"></ComboBox>
         <Button Command="{Binding ChangeLanguageCommand}" Padding="12" BorderThickness="0" Margin="12 8" HorizontalAlignment="Stretch" Content="Zmień język" Foreground="White" FontWeight="Bold"></Button>
+            <TextBlock Text="{Binding CurrentLanguage.LanguageName}"  FontWeight="Light" Margin="12"/>
+        </StackPanel>
     </Grid>
 </Page>

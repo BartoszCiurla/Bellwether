@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bellwether.Commands;
 using Bellwether.Models.Models;
+using Bellwether.Services;
 using Bellwether.Services.Services;
 
 namespace Bellwether.ViewModels
@@ -13,18 +14,19 @@ namespace Bellwether.ViewModels
     {
         private readonly ILanguageService _languageService;
         private readonly IResourceService _resourceService;
+        private readonly IVersionService _versionService;
         public OptionViewModel(ILanguageService languageService, IResourceService resourceService)
         {
             _languageService = languageService;
             _resourceService = resourceService;
+            _versionService = new VersionService(_languageService, _resourceService);
             Languages = new ObservableCollection<BellwetherLanguage>();
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             LoadLanguages();
             LoadCurrentLanguage();
         }
-
         private BellwetherLanguage _currentLanguage;
-        public BellwetherLanguage BellwetherLanguage
+        public BellwetherLanguage CurrentLanguage
         {
             get { return _currentLanguage; }
             set
@@ -33,32 +35,45 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
+        private BellwetherLanguage _selectedLanguage;
+        public BellwetherLanguage SelectedLanguage
+        {
+            get { return _selectedLanguage; }
+            set
+            {
+                _selectedLanguage = value;
+                NotifyPropertyChanged();
+            }
+        }
         public ObservableCollection<BellwetherLanguage> Languages { get; set; }
         public RelayCommand ChangeLanguageCommand { get; set; }
 
         private async void ChangeLanguage()
         {
-            string apiUrl = await
-                _resourceService.TakeKeyValueFromLocalAppResources("GetLanguageFileApiUrl");
-            Dictionary<string, string> languageFile =
-                await
-                    _languageService.GetLanguageFile(BellwetherLanguage,apiUrl );
-            foreach (var VARIABLE in languageFile)
+            bool selectedNotLangEqualsToCurrentLang = _selectedLanguage.Id != _currentLanguage.Id;
+            if (selectedNotLangEqualsToCurrentLang)
             {
-                Debug.WriteLine(VARIABLE.Key + " " + VARIABLE.Value);
+                await _versionService.SetNewLanguage(_selectedLanguage.Id);
+                LoadCurrentLanguage();
             }
+            else
+            {
+                //tutaj jakas notyfikacja powinna isć ale to jeszcze nie czas 
+            }                   
         }
+
         private void LoadLanguages()
         {
-            _languageService.GetLanguages().ToList().ForEach(x =>
+            _languageService.GetLocalLanguages().ToList().ForEach(x =>
             {
                 Languages.Add(x);
             });
         }
         private async void LoadCurrentLanguage()
         {
-            string currentLangShortName = await _resourceService.TakeKeyValueFromLocalAppResources("ApplicationLanguage");
-            BellwetherLanguage = Languages.FirstOrDefault(x => x.LanguageShortName == currentLangShortName);
+            string currentLangShortName = await _resourceService.GetApplicationLanguage();
+            CurrentLanguage = Languages.FirstOrDefault(x => x.LanguageShortName == currentLangShortName);
+            SelectedLanguage = CurrentLanguage;
         }
 
 

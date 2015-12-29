@@ -31,6 +31,12 @@ namespace Bellwether.Repositories.Repositories
             {
                 var bellwetherLanguages = mandatoryLanguages as BellwetherLanguage[] ?? mandatoryLanguages.ToArray();
                 _localLanguages = GetLanguages();
+                //_localLanguages.ToList().ForEach(x =>
+                //{
+                //    _repository.Delete(x);
+                //});
+                //_repository.Save();
+
                 if (_localLanguages == null) return InsertLanguagesAndSave(bellwetherLanguages);
 
                 InsertLanguageIfNotExistsOnLocalList(bellwetherLanguages);
@@ -49,7 +55,7 @@ namespace Bellwether.Repositories.Repositories
         {
             mandatoryLanguages.ToList().ForEach(mandatoryLanguage =>
             {
-                if (_localLanguages.ToList().FirstOrDefault(localLanguage => localLanguage.Id == mandatoryLanguage.Id) == null)
+                if (_localLanguages.ToList().FirstOrDefault(localLanguage => localLanguage.Id == mandatoryLanguage.Id && localLanguage.LanguageShortName == mandatoryLanguage.LanguageShortName) == null)
                     InsertLanguage(mandatoryLanguage);
             });
         }
@@ -58,7 +64,7 @@ namespace Bellwether.Repositories.Repositories
         {
             _localLanguages.ToList().ForEach(localLanguage =>
             {
-                if (mandatoryLanguages.ToList().FirstOrDefault(mandatoryLanguage => mandatoryLanguage.Id == localLanguage.Id) == null)
+                if (mandatoryLanguages.ToList().FirstOrDefault(mandatoryLanguage => mandatoryLanguage.Id == localLanguage.Id && mandatoryLanguage.LanguageShortName == localLanguage.LanguageShortName) == null)
                     DeleteLanguage(localLanguage);
             });
         }

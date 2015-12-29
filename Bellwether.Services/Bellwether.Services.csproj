@@ -111,6 +111,7 @@
     <Compile Include="Services\InitResourceService.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\ResourceService.cs" />
+    <Compile Include="VersionService.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Services.rd.xml" />
   </ItemGroup>
   <ItemGroup>

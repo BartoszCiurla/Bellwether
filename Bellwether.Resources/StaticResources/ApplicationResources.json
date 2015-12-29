@@ -6,5 +6,6 @@
   "IntegrationGamesLibraryVersion": "1.0",
   "JokesLibraryVersion": "1.0",
   "GetAvailableLanguagesApiUrl": "http://localhost:62645/api/Language",
-  "GetLanguageFileApiUrl": "http://localhost:62645/api/Language/GetLanguageFile/?languageId="
+  "GetLanguageFileApiUrl": "http://localhost:62645/api/Language/GetLanguageFile/?languageId=",
+  "GetLanguageApiUrl": "http://localhost:62645/api/Language/GetLanguage/?languageId="
 }
