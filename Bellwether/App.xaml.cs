@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Bellwether.Models.Models;
+using Bellwether.Models.ViewModels;
 using Bellwether.Repositories.Context;
 using Bellwether.Repositories.Repositories;
 using Bellwether.Services;
@@ -40,7 +42,7 @@ namespace Bellwether
                 Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
-            this.Suspending += OnSuspending;                   
+            this.Suspending += OnSuspending;
         }
 
         private void ApplyMigrations()
@@ -49,20 +51,12 @@ namespace Bellwether
             {
                 db.Database.Migrate();
             }
-        }
-
-        private async Task CheckVersion()
-        {
-            var versionService = new VersionService(new LanguageService(), new ResourceService());
-            await versionService.VerifyAvailableLanguages();
-            await versionService.VerifyLanguageVersion();
-        }
-
+        }   
         private async Task InitResource()
         {
             IInitResourceService initResource = new InitResourceService();
-            await initResource.Init();        
-        } 
+            await initResource.Init();
+        }
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -70,9 +64,10 @@ namespace Bellwether
         /// <param name="e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ApplyMigrations();
             await InitResource();
-            await CheckVersion();
+            ApplyMigrations();
+            IVersionService vesionService = new VersionService(new LanguageService(),new ResourceService());
+            await vesionService.VerifyVersion();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {

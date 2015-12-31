@@ -1,2 +1,4 @@
 https://clipchamp.com/transcode   konwerter do filmow 
 https://www.youtube.com/watch?v=Skozu4-16v4  EF SQLite
+
+ContentIndexer sample -> to jest doœæ ciekawa alternatywa dla mojego s³abego rozwi¹zania ze statycznymi i lokalnymi zasobami 

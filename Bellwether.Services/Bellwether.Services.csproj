@@ -108,10 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourcesFiles.cs" />
     <Compile Include="Services\InitResourceService.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\ResourceService.cs" />
-    <Compile Include="VersionService.cs" />
+    <Compile Include="Services\VersionService.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Services.rd.xml" />
   </ItemGroup>
   <ItemGroup>

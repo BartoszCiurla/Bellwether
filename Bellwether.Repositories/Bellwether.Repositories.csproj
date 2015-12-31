@@ -120,7 +120,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
     <Compile Include="Repositories\LanguageRepository.cs" />
-    <Compile Include="Repositories\LocalResourceRepository.cs" />
+    <Compile Include="Repositories\ResourceRepository.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Repositories.rd.xml" />
   </ItemGroup>
   <ItemGroup />
@@ -128,6 +128,10 @@
     <ProjectReference Include="..\Bellwether.Models\Bellwether.Models.csproj">
       <Project>{ea549cc4-da8d-4299-bb9b-f904f5bc9d49}</Project>
       <Name>Bellwether.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bellwether.Resources\Bellwether.Resources.csproj">
+      <Project>{d850affb-12b6-45eb-88e4-1866b1bcd9a4}</Project>
+      <Name>Bellwether.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

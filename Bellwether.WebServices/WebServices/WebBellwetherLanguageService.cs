@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Bellwether.Models.Models;
+using Bellwether.Models.ViewModels;
 using Newtonsoft.Json;
 
 namespace Bellwether.WebServices.WebServices
@@ -26,11 +24,18 @@ namespace Bellwether.WebServices.WebServices
             return responseObj.ToList();            
         }
 
-        public async Task<Dictionary<string, string>> GetLanguageFile(string urlWithParams)
+        public async Task<Dictionary<string,string>> GetLanguageFile(string urlWithParams)
         {
             var stringContent = await CreateRequestWithUriParam(urlWithParams);
-            var responseObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(stringContent);
-            return responseObj;
+            var responseObj = JsonConvert.DeserializeObject<IEnumerable<LanguageFilePosition>>(stringContent);            
+            var result = new Dictionary<string,string>();
+            if (responseObj == null)
+                return null;
+            responseObj.ToList().ForEach(x =>
+            {
+                result.Add(x.Key, x.Value);
+            });
+            return result;
         }
 
         public async Task<BellwetherLanguage> GetLanguage(string urlWithParams)
@@ -44,8 +49,8 @@ namespace Bellwether.WebServices.WebServices
         {
             var hc = new HttpClient();
             hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var requestContent = await hc.GetAsync(urlWithParams);
-            return await requestContent.Content.ReadAsStringAsync();
+            var response = await hc.GetAsync(urlWithParams);
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

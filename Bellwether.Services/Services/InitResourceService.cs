@@ -48,9 +48,9 @@ namespace Bellwether.Services.Services
                 //string text = FileIO.ReadTextAsync(file).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
                 //_languageResources = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                //tu bedzie logowanie
+                Debug.WriteLine(exception);
             }
         }
         private async Task InitApplicationResources(string localFolderName, string appResourcesFile, string staticAppResourcesFile)
@@ -61,9 +61,9 @@ namespace Bellwether.Services.Services
                 //string text = FileIO.ReadTextAsync(file).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
                 //_applicationResources = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                //tu bedzie logowanie
+                Debug.WriteLine(exception);
             }
 
         }
@@ -82,8 +82,7 @@ namespace Bellwether.Services.Services
                 string content = await FileIO.ReadTextAsync(storageStaticFile);
                 await FileIO.WriteTextAsync(file, content);
                 //await storageStaticFile.CopyAsync(f);
-
-               // }
+               //}
             }
             catch (Exception e)
             {
@@ -99,9 +98,9 @@ namespace Bellwether.Services.Services
                 Uri appUri = new Uri(staticFileLocation);
                 staticFile = StorageFile.GetFileFromApplicationUriAsync(appUri).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                //tu bedzie logowanei
+                Debug.WriteLine(exception);
             }
             return staticFile;
         }

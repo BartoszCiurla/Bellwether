@@ -7,11 +7,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-        <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" DisplayMemberPath="LanguageName" PlaceholderText="Dupa zbita" Padding="12" BorderThickness="0" HorizontalAlignment="Stretch"></ComboBox>
-        <Button Command="{Binding ChangeLanguageCommand}" Padding="12" BorderThickness="0" Margin="12 8" HorizontalAlignment="Stretch" Content="Zmień język" Foreground="White" FontWeight="Bold"></Button>
-            <TextBlock Text="{Binding CurrentLanguage.LanguageName}"  FontWeight="Light" Margin="12"/>
-        </StackPanel>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border>
+            <TextBlock Margin="10" VerticalAlignment="Center" Text="{Binding TextSettings}"/>
+        </Border>
+        <Grid Grid.Row="1">
+            <StackPanel MinWidth="250" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ComboBox x:Name="AvailableLanguages" VerticalContentAlignment="Center" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" DisplayMemberPath="LanguageName" Header="{Binding TextChangeLanguage}"/>
+                <TextBlock Text="{Binding TextCurrentLanguage}"/>
+                <TextBlock Text="{Binding CurrentLanguage.LanguageName}"/>
+                <TextBlock Text="{Binding TextChangeLanguage}"/>
+                <Button Command="{Binding ChangeLanguageCommand}" Content="{Binding TextApplyLanguage}" />
+                <Button  HorizontalAlignment="Right" Padding="12" BorderThickness="0" Margin="0 4" Content="ZALOGUJ"  Foreground="White" FontWeight="Bold"></Button>
+            </StackPanel>
+        </Grid>
     </Grid>
+    <!--<RelativePanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto" HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+            <RelativePanel>
+               
+                <StackPanel x:Name="CurrentLanguage" Orientation="Horizontal" RelativePanel.Below="AvailableLanguages">
+                   
+                </StackPanel>
+                <StackPanel RelativePanel.Below="CurrentLanguage">
+                    
+                </StackPanel>
+            </RelativePanel>
+        </ScrollViewer>
+    </RelativePanel>-->
 </Page>

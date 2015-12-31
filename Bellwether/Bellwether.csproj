@@ -151,10 +151,6 @@
       <Project>{b4dd2fda-9582-4cc3-8e7a-658b7bd82c54}</Project>
       <Name>Bellwether.Repositories</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bellwether.Resources\Bellwether.Resources.csproj">
-      <Project>{d850affb-12b6-45eb-88e4-1866b1bcd9a4}</Project>
-      <Name>Bellwether.Resources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Bellwether.Services\Bellwether.Services.csproj">
       <Project>{53b54c6b-8bf7-4990-bf01-0b54b4d92cf3}</Project>
       <Name>Bellwether.Services</Name>
