@@ -40,11 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BellwetherLanguageDao.cs" />
+    <Compile Include="Entities\GameFeatureDao.cs" />
+    <Compile Include="Entities\GameFeatureDetailDao.cs" />
+    <Compile Include="Entities\IntegrationGameDao.cs" />
+    <Compile Include="Entities\IntegrationGameFeatureDao.cs" />
     <Compile Include="Entities\JokeDao.cs" />
     <Compile Include="Entities\JokeCategoryDao.cs" />
     <Compile Include="Models\AppApiUrl.cs" />
     <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\BellwetherLanguage.cs" />
+    <Compile Include="Models\GameFeature.cs" />
+    <Compile Include="Models\GameFeatureDetail.cs" />
     <Compile Include="Models\Joke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\AppScenario.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bellwether.Models.Entities;
 using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
+using Bellwether.Repositories.Factories;
 using Bellwether.Services.Factories;
 using Bellwether.WebServices.WebServices;
 
@@ -67,7 +68,15 @@ namespace Bellwether.Services.Services
             var languageDao = _languageService.GetLocalLanguages()
                .FirstOrDefault(x => x.LanguageShortName == _appSettings.AppLanguage);
             if (languageDao == null)
-                return false;            
+                return false;
+            //tutaj testuje nowości 
+            //var result = await ServiceFactory.WebBellwetherGameFeatureService.GetGameFeatures(_appApiUrl.GetIntegrationGamesFeatures + languageDao.Id);
+            //bool result1 = RepositoryFactory.GameFeatureRepository.CheckAndFillGameFeatures(result);
+            //var result3 = RepositoryFactory.GameFeatureRepository.GetGameFeatures();
+            //ZAPIS CECH GIER DZIALA ...
+
+            //tutaj testuje nowości 
+
             _currentLanguage = new BellwetherLanguage { Id = languageDao.Id, LanguageShortName = languageDao.LanguageShortName, LanguageName = languageDao.LanguageName };
             _mandatoryVersion = await _webBellwetherVersionService.GetVersionForLanguage(_appApiUrl.GetVersion + _currentLanguage.Id);
             return true;

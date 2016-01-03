@@ -8,9 +8,10 @@ using Bellwether.Repositories.Context;
 namespace Bellwether.Repositories.Migrations
 {
     [DbContext(typeof(BellwetherDbContext))]
-    partial class BellwetherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160103212133_integrationGames")]
+    partial class integrationGames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");

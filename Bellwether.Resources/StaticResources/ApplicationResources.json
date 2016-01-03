@@ -13,5 +13,5 @@
   "GetJokeCategories": "http://localhost:62645/api/Jokes/GetJokeCategories/?language=",
   "GetJokes": "http://localhost:62645/api/Jokes/GetJokes/?language=",
   "GetIntegrationGames": "jeszcze nie aktywne",
-  "GetIntegrationGamesFeatures": "jeszcze nie aktywne"
+  "GetIntegrationGamesFeatures": "http://localhost:62645/api/IntegrationGames/GetGameFeatuesModelWithDetails/?language="
 }

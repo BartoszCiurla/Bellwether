@@ -51,5 +51,14 @@ namespace Bellwether.Repositories.Factories
                 (_langResourceRepository =
                     new ResourceRepository(ResourcesFiles.LocalLanguageResourcesFile,
                         ResourcesFiles.LocalResourcesFolderName, LocalFolder));
+
+        private static IGameFeatureRepository _gameFeatureRepository;
+
+        public static IGameFeatureRepository GameFeatureRepository
+            =>
+                _gameFeatureRepository ??
+                (_gameFeatureRepository =
+                    new GameFeatureRepository(new GenericRepository<GameFeatureDao>(),
+                        new GenericRepository<GameFeatureDetailDao>()));
     }
 }

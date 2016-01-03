@@ -33,6 +33,13 @@ namespace Bellwether.Services.Factories
 
         public static IWebBellwetherVersionService WebBellwetherVersionService
             => _webBellwetherVersionService ?? (_webBellwetherVersionService = new WebBellwetherVersionService());
-   
+
+        private static IWebBellwetherGameFeatureService _webBellwetherGameFeatureService;
+        public static IWebBellwetherGameFeatureService WebBellwetherGameFeatureService
+            =>
+                _webBellwetherGameFeatureService ??
+                (_webBellwetherGameFeatureService = new WebBellwetherGameFeatureService());
+
+
     }
 }
