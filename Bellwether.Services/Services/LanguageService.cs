@@ -4,20 +4,21 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bellwether.Models.Models;
+using Bellwether.Models.Entities;
 using Bellwether.Repositories.Context;
+using Bellwether.Repositories.Factories;
 using Bellwether.Repositories.Repositories;
+using Bellwether.Services.Factories;
 using Bellwether.WebServices.WebServices;
 
 namespace Bellwether.Services.Services
 {
     public interface ILanguageService
     {
-        IEnumerable<BellwetherLanguage> GetLocalLanguages();
+        IEnumerable<BellwetherLanguageDao> GetLocalLanguages();
         Task<Dictionary<string, string>> GetLanguageFile(string urlWithParams);
-        Task<BellwetherLanguage> GetLanguage(string urlWithParams);
-        Task<IEnumerable<BellwetherLanguage>> GetLanguages(string urlWithParams);
-        bool CheckAndFillLanguages(IEnumerable<BellwetherLanguage> mandatoryLanguages);
+        Task<BellwetherLanguageDao> GetLanguage(string urlWithParams);
+        Task<bool> CheckAndFillLanguages(string urlWithParams);
     }
     public class LanguageService : ILanguageService
     {
@@ -25,11 +26,11 @@ namespace Bellwether.Services.Services
         private readonly ILanguageRepository _repository;
         public LanguageService()
         {
-            _service = new WebBellwetherLanguageService();
-            _repository = new LanguageRepository(new GenericRepository<BellwetherLanguage>(new DataContext()));
+            _service = ServiceFactory.WebBellwetherLanguageService;
+            _repository = RepositoryFactory.LanguageRepository;
         }
 
-        public IEnumerable<BellwetherLanguage> GetLocalLanguages()
+        public IEnumerable<BellwetherLanguageDao> GetLocalLanguages()
         {
             return _repository.GetLanguages();
         }
@@ -39,18 +40,13 @@ namespace Bellwether.Services.Services
             return await _service.GetLanguageFile(urlWithParams);
         }
 
-        public async Task<BellwetherLanguage> GetLanguage(string urlWithParams)
+        public async Task<BellwetherLanguageDao> GetLanguage(string urlWithParams)
         {
             return await _service.GetLanguage(urlWithParams);
         }
-
-        public async Task<IEnumerable<BellwetherLanguage>> GetLanguages(string urlWithParams)
+        public async Task<bool> CheckAndFillLanguages(string urlWithParams)
         {
-            return await _service.GetLanguages(urlWithParams);
-        }
-
-        public bool CheckAndFillLanguages(IEnumerable<BellwetherLanguage> mandatoryLanguages)
-        {
+            var mandatoryLanguages = await _service.GetLanguages(urlWithParams);
             return  _repository.CheckAndFillLanguages(mandatoryLanguages);
         }
     }

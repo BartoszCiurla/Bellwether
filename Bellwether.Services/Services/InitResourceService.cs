@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Bellwether.Repositories;
 
 namespace Bellwether.Services.Services
 {

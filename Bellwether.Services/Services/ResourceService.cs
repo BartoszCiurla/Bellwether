@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Bellwether.Models.Models;
-using Bellwether.Models.ViewModels;
+using Bellwether.Models.Scenarios;
+using Bellwether.Repositories.Factories;
 using Bellwether.Repositories.Repositories;
 
 namespace Bellwether.Services.Services
@@ -13,9 +13,12 @@ namespace Bellwether.Services.Services
     public interface IResourceService
     {
         Task<bool> ChangeLanguage(Dictionary<string, string> languageFile, BellwetherLanguage language);
-        Task<string> GetApplicationVersion();
-        Task<AppLanguageSettingsViewModel> GetApplicationLanguageSettings();
+        Task ChangeJokeCategoryVersion(string jokeCategoryVersion);
+        Task ChangeJokeVersion(string jokeVersion);
         Task<Dictionary<string, string>> GetLanguageContentScenario(IEnumerable<string> requiredKeysForScenario);
+        Task<AppSettings> GetApplicationSettings();
+        Task<AppVersion> GetApplicationVersion();
+        Task<AppApiUrl> GetApplicationApiUrl();
     }
     public class ResourceService : IResourceService
     {
@@ -25,9 +28,8 @@ namespace Bellwether.Services.Services
 
         public ResourceService()
         {
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            _appResourceRepository = new ResourceRepository(ResourcesFiles.LocalApplicationResourcesFile, ResourcesFiles.LocalResourcesFolderName, localFolder);
-            _langResourceRepository = new ResourceRepository(ResourcesFiles.LocalLanguageResourcesFile, ResourcesFiles.LocalResourcesFolderName, localFolder);
+            _appResourceRepository = RepositoryFactory.AppResourceRepository;
+            _langResourceRepository = RepositoryFactory.LangResourceRepository;
         }
 
         public async Task<bool> ChangeLanguage(Dictionary<string, string> languageFile, BellwetherLanguage language)
@@ -46,51 +48,80 @@ namespace Bellwether.Services.Services
             return operationCompleted;
         }
 
+        public async Task ChangeJokeCategoryVersion(string jokeCategoryVersion)
+        {
+            try
+            {
+                await _appResourceRepository.SaveSelectedValues(resources: new Dictionary<string,string> { { "JokeCategoryVersion", jokeCategoryVersion} });
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
+
+        public async Task ChangeJokeVersion(string jokeVersion)
+        {
+            try
+            {
+                await
+                    _appResourceRepository.SaveSelectedValues(resources:
+                        new Dictionary<string, string> {{ "JokeVersion", jokeVersion}});
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
         public async Task<Dictionary<string, string>> GetLanguageContentScenario(IEnumerable<string> requiredKeysForScenario)
         {
             return await _langResourceRepository.GetSelectedKeysValues(requiredKeysForScenario);
         }
-
-        public async Task<AppLanguageSettingsViewModel> GetApplicationLanguageSettings()
+        public async Task<AppSettings> GetApplicationSettings()
         {
-            AppLanguageSettingsViewModel settings = new AppLanguageSettingsViewModel();
-            var requiredKeys = new List<string>
+            var resources = await _appResourceRepository.GetSelectedKeysValues(AppScenario.SettingsScenario);
+            return new AppSettings {AppLanguage = resources["ApplicationLanguage"],SynchronizeData = Convert.ToBoolean(resources["SynchronizeData"]) };
+        }
+
+        public async Task<AppVersion> GetApplicationVersion()
+        {
+            var resource = await _appResourceRepository.GetSelectedKeysValues(AppScenario.ApplicationVersion);
+            return new AppVersion
             {
-                "ApplicationLanguage",
-                "LanguageResourceVersion",
-                "GetAvailableLanguagesApiUrl",
-                "GetLanguageFileApiUrl",
-                "GetLanguageApiUrl"
+                ApplicationVersion = resource["ApplicationVersion"],
+                LanguageVersion = resource["LanguageVersion"],
+                IntegrationGameVersion = resource["IntegrationGameVersion"],
+                JokeCategoryVersion = resource["JokeCategoryVersion"],
+                JokeVersion = resource["JokeVersion"]
             };
-           // await _appResourceRepository.Init();
-            var localLanguageSettings = await _appResourceRepository.GetSelectedKeysValues(requiredKeys);
-            settings.ApplicationLanguage = localLanguageSettings["ApplicationLanguage"];
-            settings.LanguageResourceVersion = localLanguageSettings["LanguageResourceVersion"];
-            settings.GetAvailableLanguagesApiUrl = localLanguageSettings["GetAvailableLanguagesApiUrl"];
-            settings.GetLanguageFileApiUrl = localLanguageSettings["GetLanguageFileApiUrl"];
-            settings.GetLanguageApiUrl = localLanguageSettings["GetLanguageApiUrl"];
-            return settings;
         }
 
-
-        public async Task<string> GetApplicationVersion()
+        public async Task<AppApiUrl> GetApplicationApiUrl()
         {
-            return await TakeKeyValueFromLocalAppResources("ApplicationVersion");
-        }
+            var resource = await _appResourceRepository.GetSelectedKeysValues(AppScenario.ApiUrlScenario);
+            return new AppApiUrl
+            {
+                GetVersion = resource["GetVersion"],
+                GetAvailableLanguages = resource["GetAvailableLanguages"],
+                GetLanguageFile = resource["GetLanguageFile"],
+                GetLanguage = resource["GetLanguage"],
+                GetJokeCategories = resource["GetJokeCategories"],
+                GetJokes = resource["GetJokes"],
+                GetIntegrationGames = resource["GetIntegrationGames"],
+                GetIntegrationGamesFeatures = resource["GetIntegrationGamesFeatures"]
+            };
+        } 
 
-        private async Task<string> TakeKeyValueFromLocalAppResources(string key)
-        {
-            return await _appResourceRepository.GetValueForKey(key);
-        }
         private async Task<bool> SaveLanguageInAppResources(BellwetherLanguage language)
         {
             bool operationCompleted = false;
-            Dictionary<string, string> resources = new Dictionary<string, string>();
             try
             {
-                resources.Add("ApplicationLanguage", language.LanguageShortName);
-                resources.Add("LanguageResourceVersion", language.LanguageVersion.ToString(CultureInfo.InvariantCulture));
-                await _appResourceRepository.SaveSelectedValues(resources);
+                await _appResourceRepository.SaveSelectedValues(resources : new Dictionary<string, string>
+                {
+                    {"ApplicationLanguage", language.LanguageShortName },
+                    {"LanguageVersion", language.LanguageVersion.ToString(CultureInfo.InvariantCulture) }
+                });
                 operationCompleted = true;
             }
             catch (Exception exception)

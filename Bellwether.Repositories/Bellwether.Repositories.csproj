@@ -107,20 +107,20 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\DataContext.cs" />
-    <Compile Include="Migrations\20151224133143_init.cs" />
-    <Compile Include="Migrations\20151224133143_init.designer.cs">
-      <DependentUpon>20151224133143_init.cs</DependentUpon>
+    <Compile Include="Context\BellwetherDbContext.cs" />
+    <Compile Include="Migrations\20160103165504_init.cs" />
+    <Compile Include="Migrations\20160103165504_init.designer.cs">
+      <DependentUpon>20160103165504_init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20151228143118_languageVersioning.cs" />
-    <Compile Include="Migrations\20151228143118_languageVersioning.designer.cs">
-      <DependentUpon>20151228143118_languageVersioning.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\DataContextModelSnapshot.cs" />
+    <Compile Include="Migrations\BellwetherDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
+    <Compile Include="Repositories\JokeCategoryRepository.cs" />
+    <Compile Include="Repositories\JokeRepository.cs" />
     <Compile Include="Repositories\LanguageRepository.cs" />
+    <Compile Include="Factories\RepositoryFactory.cs" />
     <Compile Include="Repositories\ResourceRepository.cs" />
+    <Compile Include="ResourcesFiles.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Repositories.rd.xml" />
   </ItemGroup>
   <ItemGroup />

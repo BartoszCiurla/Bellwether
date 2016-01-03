@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bellwether.Repositories.Context;
+using Bellwether.Repositories.Factories;
 using Microsoft.Data.Entity;
 
 namespace Bellwether.Repositories.Repositories
@@ -23,13 +24,13 @@ namespace Bellwether.Repositories.Repositories
 
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private readonly DataContext _context;
+        private readonly BellwetherDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(DataContext context)
+        public GenericRepository()
         {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
+            _context = RepositoryFactory.Context;
+            _dbSet = _context.Set<TEntity>();
         }
 
 
@@ -65,7 +66,7 @@ namespace Bellwether.Repositories.Repositories
 
         public TEntity Get(Func<TEntity, bool> @where)
         {
-            return _dbSet.Where(where).FirstOrDefault();
+            return _dbSet.FirstOrDefault(@where);
         }
 
         public void Delete(Func<TEntity, bool> @where)

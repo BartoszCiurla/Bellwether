@@ -108,7 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\RequestExecutor.cs" />
+    <Compile Include="WebServices\WebBellwetherJokeService.cs" />
     <Compile Include="WebServices\WebBellwetherLanguageService.cs" />
+    <Compile Include="WebServices\WebBellwetherVersionService.cs" />
     <EmbeddedResource Include="Properties\Bellwether.WebServices.rd.xml" />
   </ItemGroup>
   <ItemGroup>

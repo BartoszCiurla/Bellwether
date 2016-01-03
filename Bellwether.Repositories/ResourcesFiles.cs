@@ -1,5 +1,5 @@
 ﻿
-namespace Bellwether.Services
+namespace Bellwether.Repositories
 {
     public static class ResourcesFiles
     {

@@ -1,35 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bellwether.Models.Models;
+using Bellwether.Models.Entities;
 
 namespace Bellwether.Repositories.Repositories
 {
     public interface ILanguageRepository
     {
-        IEnumerable<BellwetherLanguage> GetLanguages();
-        bool CheckAndFillLanguages(IEnumerable<BellwetherLanguage> mandatoryLanguages);
+        IEnumerable<BellwetherLanguageDao> GetLanguages();
+        bool CheckAndFillLanguages(IEnumerable<BellwetherLanguageDao> mandatoryLanguages);
     }
     public class LanguageRepository : ILanguageRepository
     {
-        private readonly IGenericRepository<BellwetherLanguage> _repository;
-        private IEnumerable<BellwetherLanguage> _localLanguages;
+        private readonly IGenericRepository<BellwetherLanguageDao> _repository;
+        private IEnumerable<BellwetherLanguageDao> _localLanguages;
 
-        public LanguageRepository(IGenericRepository<BellwetherLanguage> repository)
+        public LanguageRepository(IGenericRepository<BellwetherLanguageDao> repository)
         {
             _repository = repository;
         }
 
-        public IEnumerable<BellwetherLanguage> GetLanguages()
+        public IEnumerable<BellwetherLanguageDao> GetLanguages()
         {
             return _repository.GetAll();
         }
 
-        public bool CheckAndFillLanguages(IEnumerable<BellwetherLanguage> mandatoryLanguages)
+        public bool CheckAndFillLanguages(IEnumerable<BellwetherLanguageDao> mandatoryLanguages)
         {
+            if (mandatoryLanguages == null)
+                return false;
             try
             {
-                var bellwetherLanguages = mandatoryLanguages as BellwetherLanguage[] ?? mandatoryLanguages.ToArray();
+                var bellwetherLanguages = mandatoryLanguages as BellwetherLanguageDao[] ?? mandatoryLanguages.ToArray();
                 _localLanguages = GetLanguages();
                 //do usuwania gówna 
                 //_localLanguages.ToList().ForEach(x =>
@@ -52,7 +54,7 @@ namespace Bellwether.Repositories.Repositories
             }
         }
 
-        private void InsertLanguageIfNotExistsOnLocalList(IEnumerable<BellwetherLanguage> mandatoryLanguages)
+        private void InsertLanguageIfNotExistsOnLocalList(IEnumerable<BellwetherLanguageDao> mandatoryLanguages)
         {
             mandatoryLanguages.ToList().ForEach(mandatoryLanguage =>
             {
@@ -61,7 +63,7 @@ namespace Bellwether.Repositories.Repositories
             });
         }
 
-        private void DeleteLanguageIfNotExistsOnMandatoryList(IEnumerable<BellwetherLanguage> mandatoryLanguages)
+        private void DeleteLanguageIfNotExistsOnMandatoryList(IEnumerable<BellwetherLanguageDao> mandatoryLanguages)
         {
             _localLanguages.ToList().ForEach(localLanguage =>
             {
@@ -70,7 +72,7 @@ namespace Bellwether.Repositories.Repositories
             });
         }
 
-        private bool InsertLanguagesAndSave(IEnumerable<BellwetherLanguage> mandatoryLanguages)
+        private bool InsertLanguagesAndSave(IEnumerable<BellwetherLanguageDao> mandatoryLanguages)
         {
             try
             {
@@ -84,12 +86,12 @@ namespace Bellwether.Repositories.Repositories
             }
         }
 
-        private void InsertLanguage(BellwetherLanguage mandatoryLanguage)
+        private void InsertLanguage(BellwetherLanguageDao mandatoryLanguage)
         {
             _repository.Insert(mandatoryLanguage);
         }
 
-        private void DeleteLanguage(BellwetherLanguage localLanguage)
+        private void DeleteLanguage(BellwetherLanguageDao localLanguage)
         {
             _repository.Delete(localLanguage);
         }

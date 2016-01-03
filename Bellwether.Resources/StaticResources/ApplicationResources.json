@@ -1,11 +1,17 @@
 {
+  "SynchronizeData": "true",
   "ApplicationVersion": "1.0",
   "ApplicationLanguage": "pl",
-  "LanguageResourceVersion": "1.0",
-  "SynchronizeData": "true",
-  "IntegrationGamesLibraryVersion": "1.0",
-  "JokesLibraryVersion": "1.0",
-  "GetAvailableLanguagesApiUrl": "http://localhost:62645/api/Language",
-  "GetLanguageFileApiUrl": "http://localhost:62645/api/Language/GetLanguageFile/?languageId=",
-  "GetLanguageApiUrl": "http://localhost:62645/api/Language/GetLanguage/?languageId="
+  "LanguageVersion": "1.0",
+  "IntegrationGameVersion": "1.0",
+  "JokeCategoryVersion": "1.0",
+  "JokeVersion": "1.0",
+  "GetVersion": "http://localhost:62645/api/Versions/?languageId=",
+  "GetAvailableLanguages": "http://localhost:62645/api/Language",
+  "GetLanguageFile": "http://localhost:62645/api/Language/GetLanguageFile/?languageId=",
+  "GetLanguage": "http://localhost:62645/api/Language/GetLanguage/?languageId=",
+  "GetJokeCategories": "http://localhost:62645/api/Jokes/GetJokeCategories/?language=",
+  "GetJokes": "http://localhost:62645/api/Jokes/GetJokes/?language=",
+  "GetIntegrationGames": "jeszcze nie aktywne",
+  "GetIntegrationGamesFeatures": "jeszcze nie aktywne"
 }

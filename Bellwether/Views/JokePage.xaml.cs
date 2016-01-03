@@ -12,9 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Bellwether.Repositories.Context;
-using Bellwether.Repositories.Repositories;
-using Bellwether.Services.Services;
 using Bellwether.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -24,14 +21,14 @@ namespace Bellwether.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class OptionPage : Page
+    public sealed partial class JokePage : Page
     {
-        public OptionPage()
+        public JokePage()
         {
             this.InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                this.DataContext = new OptionViewModel();
+                this.DataContext = new JokeViewModel();
             };
         }
     }

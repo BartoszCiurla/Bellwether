@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Bellwether.Models.Entities;
 using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
+using Bellwether.Services.Factories;
+using Bellwether.WebServices.WebServices;
 
 namespace Bellwether.Services.Services
 {
@@ -15,46 +19,105 @@ namespace Bellwether.Services.Services
     {
         private readonly ILanguageService _languageService;
         private readonly IResourceService _resourceService;
-
-        public VersionService(ILanguageService languageService, IResourceService resourceService)
+        private readonly IWebBellwetherVersionService _webBellwetherVersionService;
+        private readonly IJokeService _jokeService;
+        public VersionService()
         {
-            _languageService = languageService;
-            _resourceService = resourceService;
+            _languageService = ServiceFactory.LanguageService;
+            _resourceService = ServiceFactory.ResourceService;
+            _webBellwetherVersionService = ServiceFactory.WebBellwetherVersionService;
+            _jokeService = ServiceFactory.JokeService;
         }
+        private AppSettings _appSettings;
+        private AppVersion _appVersion;
+        private AppApiUrl _appApiUrl;
+        private AppVersion _mandatoryVersion;
+        private BellwetherLanguage _currentLanguage;
 
         public async Task VerifyVersion()
         {
-            await UpdateLanguageVersion();
-        }
-
-        private async Task UpdateLanguageVersion()
-        {
-            AppLanguageSettingsViewModel languageSettings = await _resourceService.GetApplicationLanguageSettings();
-            bool availableLanguagesChecked = await VerifyAvailableLanguages(languageSettings.GetAvailableLanguagesApiUrl);
-            if (availableLanguagesChecked)
+            bool resourcesPrepared = await PrepareResources();
+            if (resourcesPrepared)
             {
-                BellwetherLanguage newLanguageVersion = await VerifyLanguageVersion(languageSettings);
-                if (newLanguageVersion != null)
-                {
-                    var vesionLanguageFile =
-                        await
-                            _languageService.GetLanguageFile(languageSettings.GetLanguageFileApiUrl + newLanguageVersion.Id);
-                    if (vesionLanguageFile != null)
-                    {
-                        await _resourceService.ChangeLanguage(vesionLanguageFile, newLanguageVersion);
-                    }
-                }
+                await UpdateLanguageVersion();
+                await UpdateJokeCategoryVersion();
+                await UpdateJokeVersion();
+                Dispose();
             }
         }
 
+        private void Dispose()
+        {
+            _appSettings = null;
+            _appVersion = null;
+            _appApiUrl = null;
+            _mandatoryVersion = null;
+            _currentLanguage = null;
+        }
+        private async Task<bool> PrepareResources()
+        {
+            _appSettings = await _resourceService.GetApplicationSettings();
+            if (!_appSettings.SynchronizeData)
+                return false;
+            _appVersion = await _resourceService.GetApplicationVersion();
+            _appApiUrl = await _resourceService.GetApplicationApiUrl();
+            bool availableLanguagesChecked = await VerifyAvailableLanguages(_appApiUrl.GetAvailableLanguages);
+            if (!availableLanguagesChecked)
+                return false;
+            var languageDao = _languageService.GetLocalLanguages()
+               .FirstOrDefault(x => x.LanguageShortName == _appSettings.AppLanguage);
+            if (languageDao == null)
+                return false;            
+            _currentLanguage = new BellwetherLanguage { Id = languageDao.Id, LanguageShortName = languageDao.LanguageShortName, LanguageName = languageDao.LanguageName };
+            _mandatoryVersion = await _webBellwetherVersionService.GetVersionForLanguage(_appApiUrl.GetVersion + _currentLanguage.Id);
+            return true;
+        }
+
+        private async Task UpdateJokeVersion()
+        {
+            if (Convert.ToDouble(_appVersion.JokeVersion) < Convert.ToDouble(_mandatoryVersion.JokeVersion))
+            {
+                bool checkAndFillJokeResult =
+                    await _jokeService.CheckAndFillJokes(_appApiUrl.GetJokes + _currentLanguage.Id);
+                if (checkAndFillJokeResult)
+                {
+                    await _resourceService.ChangeJokeVersion(_mandatoryVersion.JokeVersion);
+                }
+            }
+        }
+        private async Task UpdateJokeCategoryVersion()
+        {
+            if (Convert.ToDouble(_appVersion.JokeCategoryVersion) <
+                Convert.ToDouble(_mandatoryVersion.JokeCategoryVersion))
+            {
+                bool checkAndFillJokeCategoriesResult =
+                    await _jokeService.CheckAndFillJokeCategories(_appApiUrl.GetJokeCategories + _currentLanguage.Id);
+                if (checkAndFillJokeCategoriesResult)
+                {
+                    await _resourceService.ChangeJokeCategoryVersion(_mandatoryVersion.JokeCategoryVersion);
+                }
+            }
+        }
+        private async Task UpdateLanguageVersion()
+        {
+            if (Convert.ToDouble(_appVersion.LanguageVersion) < Convert.ToDouble(_mandatoryVersion.LanguageVersion))
+            {
+                _currentLanguage.LanguageVersion = Convert.ToDouble(_mandatoryVersion.LanguageVersion);
+                var vesionLanguageFile =
+                    await
+                        _languageService.GetLanguageFile(_appApiUrl.GetLanguageFile + _currentLanguage.Id);
+                if (vesionLanguageFile != null)
+                {
+                    await _resourceService.ChangeLanguage(vesionLanguageFile, _currentLanguage);
+                }
+            }
+        }
         private async Task<bool> VerifyAvailableLanguages(string getAvailableLanguagesApiUrl)
         {
             bool operationCompleted = false;
             try
             {
-                var availableLanguages = await _languageService.GetLanguages(getAvailableLanguagesApiUrl);
-                _languageService.CheckAndFillLanguages(availableLanguages);
-                operationCompleted = true;
+                operationCompleted = await _languageService.CheckAndFillLanguages(getAvailableLanguagesApiUrl);
             }
             catch (Exception)
             {
@@ -62,29 +125,6 @@ namespace Bellwether.Services.Services
             }
             return operationCompleted;
 
-        }
-
-        private async Task<BellwetherLanguage> VerifyLanguageVersion(AppLanguageSettingsViewModel languageSettings)
-        {
-            try
-            {
-                string currentLangShortName = languageSettings.ApplicationLanguage;
-                string currentLanguageVersion = languageSettings.LanguageResourceVersion;
-                int languageId =
-                    _languageService.GetLocalLanguages()
-                        .ToList()
-                        .FirstOrDefault(x => x.LanguageShortName == currentLangShortName)
-                        .Id;
-                var newLanguageVersion = await _languageService.GetLanguage(languageSettings.GetLanguageApiUrl + languageId);
-                if (Convert.ToDouble(currentLanguageVersion) < newLanguageVersion.LanguageVersion)
-                    return newLanguageVersion;
-                return null;
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine("Wyjebałem się w VersionService " + exception);
-                return null;
-            }
         }
     }
 }

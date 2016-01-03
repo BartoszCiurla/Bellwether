@@ -39,10 +39,18 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BellwetherLanguageDao.cs" />
+    <Compile Include="Entities\JokeDao.cs" />
+    <Compile Include="Entities\JokeCategoryDao.cs" />
+    <Compile Include="Models\AppApiUrl.cs" />
+    <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\BellwetherLanguage.cs" />
+    <Compile Include="Models\Joke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\AppLanguageSettingsViewModel.cs" />
-    <Compile Include="ViewModels\LanguageFilePosition.cs" />
+    <Compile Include="Scenarios\AppScenario.cs" />
+    <Compile Include="Models\AppVersion.cs" />
+    <Compile Include="ViewModels\JokeViewModel.cs" />
+    <Compile Include="Models\LanguageFilePosition.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Bellwether.Commands;
+using Bellwether.Models.Entities;
 using Bellwether.Models.Models;
-using Bellwether.Models.ViewModels;
+using Bellwether.Repositories.Factories;
+using Bellwether.Services.Factories;
 using Bellwether.Services.Services;
 
 namespace Bellwether.ViewModels
@@ -13,16 +16,18 @@ namespace Bellwether.ViewModels
     {
         private readonly ILanguageService _languageService;
         private readonly IResourceService _resourceService;
-        public OptionViewModel(ILanguageService languageService, IResourceService resourceService)
+        private IJokeService _jokeService;
+        public OptionViewModel()
         {
-            _languageService = languageService;
-            _resourceService = resourceService;
+            _languageService = ServiceFactory.LanguageService;
+            _resourceService = ServiceFactory.ResourceService;
+            _jokeService = ServiceFactory.JokeService;
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             LoadContent();
         }
 
-        private BellwetherLanguage _currentLanguage;
-        public BellwetherLanguage CurrentLanguage
+        private BellwetherLanguageDao _currentLanguage;
+        public BellwetherLanguageDao CurrentLanguage
         {
             get { return _currentLanguage; }
             set
@@ -31,8 +36,8 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        private BellwetherLanguage _selectedLanguage;
-        public BellwetherLanguage SelectedLanguage
+        private BellwetherLanguageDao _selectedLanguage;
+        public BellwetherLanguageDao SelectedLanguage
         {
             get { return _selectedLanguage; }
             set
@@ -41,20 +46,29 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        public ObservableCollection<BellwetherLanguage> Languages { get; set; }
+        public ObservableCollection<BellwetherLanguageDao> Languages { get; set; }
         public RelayCommand ChangeLanguageCommand { get; set; }
 
         private async void ChangeLanguage()
         {
             if (BasicLanguageVerification())
             {
-                AppLanguageSettingsViewModel languageSettings = await _resourceService.GetApplicationLanguageSettings();
+                var resource = await _resourceService.GetApplicationApiUrl();
                 var vesionLanguageFile =
                         await
-                            _languageService.GetLanguageFile(languageSettings.GetLanguageFileApiUrl + SelectedLanguage.Id);
+                            _languageService.GetLanguageFile(resource.GetLanguageFile + SelectedLanguage.Id);
                 if (vesionLanguageFile != null)
                 {
-                    await _resourceService.ChangeLanguage(vesionLanguageFile, SelectedLanguage);
+                    var mandatoryVersion = await ServiceFactory.WebBellwetherVersionService.GetVersionForLanguage(resource.GetVersion + SelectedLanguage.Id);
+                    await _resourceService.ChangeLanguage(vesionLanguageFile, new BellwetherLanguage {Id = SelectedLanguage.Id,LanguageShortName = SelectedLanguage.LanguageShortName,LanguageName = SelectedLanguage.LanguageName,LanguageVersion = Convert.ToDouble(mandatoryVersion.LanguageVersion)});
+                    RepositoryFactory.JokeRepository.RemoveJokes();
+                    RepositoryFactory.JokeCategoryRepository.RemoveJokeCategories();
+                    await _jokeService.CheckAndFillJokeCategories(resource.GetJokeCategories + SelectedLanguage.Id);
+                    await
+                        _resourceService.ChangeJokeCategoryVersion(mandatoryVersion.JokeCategoryVersion);
+                    
+                    await _jokeService.CheckAndFillJokes(resource.GetJokes + SelectedLanguage.Id);
+                    await _resourceService.ChangeJokeVersion(mandatoryVersion.JokeVersion);
                     LoadContent();
                 }
             }
@@ -72,11 +86,7 @@ namespace Bellwether.ViewModels
         }
         private void LoadLanguages()
         {
-            Languages = new ObservableCollection<BellwetherLanguage>();
-            _languageService.GetLocalLanguages().ToList().ForEach(x =>
-            {
-                Languages.Add(x);
-            });
+            Languages = new ObservableCollection<BellwetherLanguageDao>(_languageService.GetLocalLanguages()); 
         }
        
         private async void LoadContent()
@@ -88,8 +98,8 @@ namespace Bellwether.ViewModels
 
         private async Task LoadAppStaticData()
         {
-            var requriedKeysAndValue = await _resourceService.GetApplicationLanguageSettings();
-            string currLang = requriedKeysAndValue.ApplicationLanguage;
+            var requriedKeysAndValue = await _resourceService.GetApplicationSettings();
+            string currLang = requriedKeysAndValue.AppLanguage;
             CurrentLanguage =
                 _languageService
                     .GetLocalLanguages()
@@ -114,6 +124,7 @@ namespace Bellwether.ViewModels
         private string _textChangeLanguage;
         public string TextChangeLanguage { get { return _textChangeLanguage; } set { _textChangeLanguage = value; NotifyPropertyChanged(); } }
         private string _textApplyLanguage;
+
         public string TextApplyLanguage { get { return _textApplyLanguage; } set { _textApplyLanguage = value; NotifyPropertyChanged(); } }
 
 

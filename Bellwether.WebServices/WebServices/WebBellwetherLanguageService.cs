@@ -3,54 +3,48 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Bellwether.Models.Entities;
 using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
+using Bellwether.WebServices.Utility;
 using Newtonsoft.Json;
 
 namespace Bellwether.WebServices.WebServices
 {
     public interface IWebBellwetherLanguageService
     {
-        Task<IEnumerable<BellwetherLanguage>> GetLanguages(string urlWithParams);
+        Task<IEnumerable<BellwetherLanguageDao>> GetLanguages(string urlWithParams);
         Task<Dictionary<string, string>> GetLanguageFile(string urlWithParams);
-        Task<BellwetherLanguage> GetLanguage(string urlWithParams);
+        Task<BellwetherLanguageDao> GetLanguage(string urlWithParams);
     }
     public class WebBellwetherLanguageService : IWebBellwetherLanguageService
     {
-        public async Task<IEnumerable<BellwetherLanguage>> GetLanguages(string urlWithParams)
+        public async Task<IEnumerable<BellwetherLanguageDao>> GetLanguages(string urlWithParams)
         {
-            var stringContent = await CreateRequestWithUriParam(urlWithParams);
-            var responseObj = JsonConvert.DeserializeObject<BellwetherLanguage[]>(stringContent);
-            return responseObj.ToList();            
+            var stringContent = await RequestExecutor.CreateRequestGetWithUriParam(urlWithParams);
+            var languages = JsonConvert.DeserializeObject<BellwetherLanguageDao[]>(stringContent);
+            return languages.ToList();            
         }
 
         public async Task<Dictionary<string,string>> GetLanguageFile(string urlWithParams)
         {
-            var stringContent = await CreateRequestWithUriParam(urlWithParams);
+            var stringContent = await RequestExecutor.CreateRequestGetWithUriParam(urlWithParams);
             var responseObj = JsonConvert.DeserializeObject<IEnumerable<LanguageFilePosition>>(stringContent);            
-            var result = new Dictionary<string,string>();
+            var languageFile = new Dictionary<string,string>();
             if (responseObj == null)
                 return null;
             responseObj.ToList().ForEach(x =>
             {
-                result.Add(x.Key, x.Value);
+                languageFile.Add(x.Key, x.Value);
             });
-            return result;
+            return languageFile;
         }
 
-        public async Task<BellwetherLanguage> GetLanguage(string urlWithParams)
+        public async Task<BellwetherLanguageDao> GetLanguage(string urlWithParams)
         {
-            string stringContent = await CreateRequestWithUriParam(urlWithParams);
-            var responseObj = JsonConvert.DeserializeObject<BellwetherLanguage>(stringContent);
-            return responseObj;
-        }
-
-        private async Task<string> CreateRequestWithUriParam(string urlWithParams)
-        {
-            var hc = new HttpClient();
-            hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await hc.GetAsync(urlWithParams);
-            return await response.Content.ReadAsStringAsync();
+            string stringContent = await RequestExecutor.CreateRequestGetWithUriParam(urlWithParams);
+            var language = JsonConvert.DeserializeObject<BellwetherLanguageDao>(stringContent);
+            return language;
         }
     }
 }

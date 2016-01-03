@@ -105,11 +105,15 @@
     <Compile Include="Controls\NavMenuListView.cs" />
     <Compile Include="Controls\ParallaxBackgroundHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\JokeViewModel.cs" />
     <Compile Include="ViewModels\NavMenuItem.cs" />
     <Compile Include="ViewModels\OptionViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JokePage.xaml.cs">
+      <DependentUpon>JokePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OptionPage.xaml.cs">
       <DependentUpon>OptionPage.xaml</DependentUpon>
@@ -155,6 +159,10 @@
       <Project>{53b54c6b-8bf7-4990-bf01-0b54b4d92cf3}</Project>
       <Name>Bellwether.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Bellwether.WebServices\Bellwether.WebServices.csproj">
+      <Project>{2a34846c-cda7-4c09-beca-55b97f7bf8c2}</Project>
+      <Name>Bellwether.WebServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="AppShell.xaml">
@@ -170,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JokePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

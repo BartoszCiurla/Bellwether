@@ -1,10 +1,11 @@
-﻿namespace Bellwether.Models.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Bellwether.Models.Entities
 {
-    public class BellwetherLanguage
+    public class BellwetherLanguageDao
     {
         public int Id { get; set; }
         public string LanguageName { get; set; }
         public string LanguageShortName { get; set; }
-        public double LanguageVersion { get; set; }
     }
 }

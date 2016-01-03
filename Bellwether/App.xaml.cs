@@ -15,11 +15,12 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
 using Bellwether.Repositories.Context;
+using Bellwether.Repositories.Factories;
 using Bellwether.Repositories.Repositories;
 using Bellwether.Services;
+using Bellwether.Services.Factories;
 using Bellwether.Services.Services;
 using Bellwether.Views;
 using Microsoft.Data.Entity;
@@ -47,16 +48,17 @@ namespace Bellwether
 
         private void ApplyMigrations()
         {
-            using (var db = new DataContext())
-            {
-                db.Database.Migrate();
-            }
+            RepositoryFactory.Context.Database.Migrate();
         }   
         private async Task InitResource()
         {
-            IInitResourceService initResource = new InitResourceService();
-            await initResource.Init();
+            await ServiceFactory.InitResourceService.Init();
         }
+
+        private async Task VerifyVersion()
+        {
+            await ServiceFactory.VersionService.VerifyVersion();
+        } 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -64,10 +66,9 @@ namespace Bellwether
         /// <param name="e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            await InitResource();
             ApplyMigrations();
-            IVersionService vesionService = new VersionService(new LanguageService(),new ResourceService());
-            await vesionService.VerifyVersion();
+            await InitResource();
+            await VerifyVersion();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {

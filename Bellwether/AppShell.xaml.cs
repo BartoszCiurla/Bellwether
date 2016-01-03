@@ -46,7 +46,7 @@ namespace Bellwether
                 {
                     Symbol = Symbol.Favorite,
                     Label = "Kawały",
-                    DestPage = typeof(AppShell)
+                    DestPage = typeof(JokePage)
                 },
                 new NavMenuItem()
                 {
