@@ -29,10 +29,10 @@ namespace Bellwether.Views
         public OptionPage()
         {
             this.InitializeComponent();
-            this.Loaded += (s, e) =>
-            {
-                this.DataContext = new OptionViewModel();
-            };
+            //this.Loaded += (s, e) =>
+            //{
+            //    this.DataContext = new OptionViewModel();
+            //};
         }
     }
 }

@@ -5,6 +5,5 @@
         public int Id { get; set; }
         public string LanguageName { get; set; }
         public string LanguageShortName { get; set; }
-        public double LanguageVersion { get; set; }
     }
 }

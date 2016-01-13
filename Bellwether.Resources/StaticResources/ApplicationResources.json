@@ -6,12 +6,12 @@
   "IntegrationGameVersion": "1.0",
   "JokeCategoryVersion": "1.0",
   "JokeVersion": "1.0",
-  "GetVersion": "http://localhost:62645/api/Versions/?languageId=",
+  "GetVersion": "http://localhost:62645/api/Version/?languageId=",
   "GetAvailableLanguages": "http://localhost:62645/api/Language",
   "GetLanguageFile": "http://localhost:62645/api/Language/GetLanguageFile/?languageId=",
   "GetLanguage": "http://localhost:62645/api/Language/GetLanguage/?languageId=",
-  "GetJokeCategories": "http://localhost:62645/api/Jokes/GetJokeCategories/?language=",
-  "GetJokes": "http://localhost:62645/api/Jokes/GetJokes/?language=",
+  "GetJokeCategories": "http://localhost:62645/api/JokeCategoryManagement/GetJokeCategories/?languageId=",
+  "GetJokes": "http://localhost:62645/api/Jokes/GetJokes/?languageId=",
   "GetIntegrationGames": "jeszcze nie aktywne",
-  "GetIntegrationGamesFeatures": "http://localhost:62645/api/IntegrationGames/GetGameFeatuesModelWithDetails/?language="
+  "GetIntegrationGamesFeatures": "http://localhost:62645/api/GameFeatureManagement/GetGameFeatuesModelWithDetails/?languageId="
 }

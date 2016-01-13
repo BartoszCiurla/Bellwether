@@ -107,13 +107,30 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factories\ServiceFactory.cs" />
+    <Compile Include="Config\AutoMapperConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\InitResourceService.cs" />
+    <Compile Include="Services\IntegrationGameService\GameFeatureManagementService.cs" />
+    <Compile Include="Services\JokeService\JokeCategoryManagementService.cs" />
+    <Compile Include="Services\JokeService\JokeManagementService.cs" />
+    <Compile Include="Services\ApplicationResourceService.cs" />
+    <Compile Include="Services\ResourceService\InitiateResourceService.cs" />
     <Compile Include="Services\JokeService.cs" />
     <Compile Include="Services\LanguageService.cs" />
     <Compile Include="Services\ResourceService.cs" />
-    <Compile Include="Services\VersionService.cs" />
+    <Compile Include="Services\LanguageResourceService.cs" />
+    <Compile Include="Services\ResourceService\ResourceService.cs" />
+    <Compile Include="Services\VersionService\VersionManagementService.cs" />
+    <Compile Include="Services\VersionService\VersionService.cs" />
+    <Compile Include="Services\VersionService\VersionValidateService.cs" />
+    <Compile Include="Utility\ModelMapper.cs" />
+    <Compile Include="Utility\RepositoryFactory.cs" />
+    <Compile Include="Utility\RequestExecutor.cs" />
+    <Compile Include="Utility\ResourcesFiles.cs" />
+    <Compile Include="Utility\ServiceFactory.cs" />
+    <Compile Include="WebServices\WebBellwetherIntegrationGameService.cs" />
+    <Compile Include="WebServices\WebBellwetherJokeService.cs" />
+    <Compile Include="WebServices\WebBellwetherLanguageService.cs" />
+    <Compile Include="WebServices\WebBellwetherVersionService.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Services.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -128,10 +145,6 @@
     <ProjectReference Include="..\Bellwether.Resources\Bellwether.Resources.csproj">
       <Project>{d850affb-12b6-45eb-88e4-1866b1bcd9a4}</Project>
       <Name>Bellwether.Resources</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bellwether.WebServices\Bellwether.WebServices.csproj">
-      <Project>{2a34846c-cda7-4c09-beca-55b97f7bf8c2}</Project>
-      <Name>Bellwether.WebServices</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

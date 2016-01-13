@@ -1,53 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bellwether.Models.Entities;
-using Bellwether.Repositories.Context;
-using Bellwether.Repositories.Factories;
-using Bellwether.Repositories.Repositories;
-using Bellwether.Services.Factories;
-using Bellwether.WebServices.WebServices;
+using Bellwether.Models.Models;
+using Bellwether.Repositories.Entities;
+using Bellwether.Services.Utility;
 
 namespace Bellwether.Services.Services
 {
     public interface ILanguageService
     {
-        IEnumerable<BellwetherLanguageDao> GetLocalLanguages();
-        Task<Dictionary<string, string>> GetLanguageFile(string urlWithParams);
-        Task<BellwetherLanguageDao> GetLanguage(string urlWithParams);
-        Task<bool> CheckAndFillLanguages(string urlWithParams);
+        BellwetherLanguage[] GetLocalLanguages();
+        bool ValidateAndFillLanguages(BellwetherLanguageDao[] mandatoryLanguages);
+        BellwetherLanguage GetLocalLanguageByShortName(string languageShortName);
     }
     public class LanguageService : ILanguageService
     {
-        private readonly IWebBellwetherLanguageService _service;
-        private readonly ILanguageRepository _repository;
-        public LanguageService()
+        public BellwetherLanguage[] GetLocalLanguages()
         {
-            _service = ServiceFactory.WebBellwetherLanguageService;
-            _repository = RepositoryFactory.LanguageRepository;
+            return
+                ModelMapper.Map<BellwetherLanguage[], BellwetherLanguageDao[]>(
+                    RepositoryFactory.Context.BellwetherLanguages.ToArray());
+        }
+        public bool ValidateAndFillLanguages(BellwetherLanguageDao[] mandatoryLanguages)
+        {
+            if (mandatoryLanguages == null)
+                return false;
+            List<BellwetherLanguageDao> localLanguages = RepositoryFactory.Context.BellwetherLanguages.ToList();
+            if (!localLanguages.Any())
+                return InsertLanguagesAndSave(mandatoryLanguages);            
+            InsertLanguageIfNotExistsOnLocalList(mandatoryLanguages, localLanguages);
+            DeleteLanguageIfNotExistsOnMandatoryList(mandatoryLanguages, localLanguages);
+            RepositoryFactory.Context.SaveChanges();
+            return true;
         }
 
-        public IEnumerable<BellwetherLanguageDao> GetLocalLanguages()
+        public BellwetherLanguage GetLocalLanguageByShortName(string languageShortName)
         {
-            return _repository.GetLanguages();
+            var localLanguage = ModelMapper.Map<BellwetherLanguage, BellwetherLanguageDao>(RepositoryFactory.Context.BellwetherLanguages.FirstOrDefault(
+                    x => x.LanguageShortName == languageShortName));
+            if(localLanguage == null)
+                throw new Exception();
+            return localLanguage;
+        }
+        private bool InsertLanguagesAndSave(BellwetherLanguageDao[] mandatoryLanguages)
+        {
+            RepositoryFactory.Context.BellwetherLanguages.AddRange(mandatoryLanguages);
+            RepositoryFactory.Context.SaveChanges();
+            return true;
+        }
+        private void InsertLanguageIfNotExistsOnLocalList(BellwetherLanguageDao[] mandatoryLanguages, List<BellwetherLanguageDao> localLanguages)
+        {
+            mandatoryLanguages.ToList().ForEach(mandatoryLanguage =>
+            {
+                if (localLanguages.FirstOrDefault(localLanguage => localLanguage.Id == mandatoryLanguage.Id) == null)
+                    RepositoryFactory.Context.BellwetherLanguages.Add(mandatoryLanguage);
+            });
         }
 
-        public async Task<Dictionary<string, string>> GetLanguageFile(string urlWithParams)
+        private void DeleteLanguageIfNotExistsOnMandatoryList(BellwetherLanguageDao[] mandatoryLanguages, List<BellwetherLanguageDao> localLanguages)
         {
-            return await _service.GetLanguageFile(urlWithParams);
+            localLanguages.ForEach(localLanguage =>
+            {
+                if (
+                    mandatoryLanguages.ToList()
+                        .FirstOrDefault(mandatoryLanguage => mandatoryLanguage.Id == localLanguage.Id) == null)
+                    RepositoryFactory.Context.BellwetherLanguages.Remove(localLanguage);
+            });
         }
 
-        public async Task<BellwetherLanguageDao> GetLanguage(string urlWithParams)
-        {
-            return await _service.GetLanguage(urlWithParams);
-        }
-        public async Task<bool> CheckAndFillLanguages(string urlWithParams)
-        {
-            var mandatoryLanguages = await _service.GetLanguages(urlWithParams);
-            return  _repository.CheckAndFillLanguages(mandatoryLanguages);
-        }
     }
 }

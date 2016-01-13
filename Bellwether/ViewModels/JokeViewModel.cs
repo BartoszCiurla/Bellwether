@@ -1,31 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿
 using System.Threading.Tasks;
-using Bellwether.Models.Entities;
-using Bellwether.Services.Factories;
-using Bellwether.Services.Services;
+using Bellwether.Services.Utility;
+using Bellwether.Utility;
 
 namespace Bellwether.ViewModels
 {
     public class JokeViewModel
     {
-        private readonly IJokeService _jokeService;
-        private IResourceService _resourceService;
         public JokeViewModel()
         {
-            _jokeService = ServiceFactory.JokeService;
-            _resourceService = ServiceFactory.ResourceService;
-            InitTest();
         }
-        public ObservableCollection<JokeCategoryDao> JokeCategories { get; set; }
-        public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
-        public void InitTest()
+
+        public async void Dupa()
         {
-            JokeCategories = new ObservableCollection<JokeCategoryDao>(_jokeService.GetLocalJokeCategories());
-            Jokes = new ObservableCollection<Models.ViewModels.JokeViewModel>(_jokeService.GetLocalJokes());
+            await ServiceExecutor.ExecuteAsync(() => ServiceFactory.InitResourceService.Initiate());
         }
+        //private readonly IJokeService _jokeService;
+        //private IResourceService _resourceService;
+        //public JokeViewModel()
+        //{
+        //    _jokeService = ServiceFactory.JokeService;
+        //    _resourceService = ServiceFactory.ResourceService;
+        //    InitTest();
+        //}
+        //public ObservableCollection<JokeCategoryDao> JokeCategories { get; set; }
+        //public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
+        //public void InitTest()
+        //{
+            
+        //    JokeCategories = new ObservableCollection<JokeCategoryDao>(_jokeService.GetLocalJokeCategories());
+        //    Jokes = new ObservableCollection<Models.ViewModels.JokeViewModel>(_jokeService.GetLocalJokes());
+        //}
+
+        //public async void Dupa()
+        //{
+        //   var test = await ServiceExecutor.ExecuteAsync(() => ServiceFactory.InitResourceService.Init());
+        //}
     }
 }

@@ -108,24 +108,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\BellwetherDbContext.cs" />
-    <Compile Include="Migrations\20160103165504_init.cs" />
-    <Compile Include="Migrations\20160103165504_init.designer.cs">
-      <DependentUpon>20160103165504_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20160103212133_integrationGames.cs" />
-    <Compile Include="Migrations\20160103212133_integrationGames.designer.cs">
-      <DependentUpon>20160103212133_integrationGames.cs</DependentUpon>
+    <Compile Include="Entities\BellwetherLanguageDao.cs" />
+    <Compile Include="Entities\GameFeatureDao.cs" />
+    <Compile Include="Entities\GameFeatureDetailDao.cs" />
+    <Compile Include="Entities\IntegrationGameDao.cs" />
+    <Compile Include="Entities\IntegrationGameFeatureDao.cs" />
+    <Compile Include="Entities\JokeCategoryDao.cs" />
+    <Compile Include="Entities\JokeDao.cs" />
+    <Compile Include="Migrations\20160113232222_init.cs" />
+    <Compile Include="Migrations\20160113232222_init.designer.cs">
+      <DependentUpon>20160113232222_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BellwetherDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\GameFeatureRepository.cs" />
-    <Compile Include="Repositories\GenericRepository.cs" />
-    <Compile Include="Repositories\JokeCategoryRepository.cs" />
-    <Compile Include="Repositories\JokeRepository.cs" />
-    <Compile Include="Repositories\LanguageRepository.cs" />
-    <Compile Include="Factories\RepositoryFactory.cs" />
+    <Compile Include="OLDNOTUSEDFactories\GameFeatureRepository.cs" />
+    <Compile Include="OLDNOTUSEDFactories\JokeRepository.cs" />
+    <Compile Include="OLDNOTUSEDFactories\OldRepositoryFactory.cs" />
     <Compile Include="Repositories\ResourceRepository.cs" />
-    <Compile Include="ResourcesFiles.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Repositories.rd.xml" />
   </ItemGroup>
   <ItemGroup />

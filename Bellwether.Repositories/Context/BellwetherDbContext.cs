@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Windows.Storage;
-using Bellwether.Models.Entities;
+using Bellwether.Repositories.Entities;
 using Microsoft.Data.Entity;
 
 namespace Bellwether.Repositories.Context
@@ -18,7 +18,7 @@ namespace Bellwether.Repositories.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string databaseFilePath = "Testy4.db";
+            string databaseFilePath = "Testy7.db";
             try
             {
                 databaseFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseFilePath);

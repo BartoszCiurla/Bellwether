@@ -15,7 +15,7 @@ namespace Bellwether.Repositories.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
 
-            modelBuilder.Entity("Bellwether.Models.Entities.BellwetherLanguageDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.BellwetherLanguageDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -27,17 +27,19 @@ namespace Bellwether.Repositories.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.GameFeatureDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.GameFeatureDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("GameFeatureName");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.GameFeatureDetailDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.GameFeatureDetailDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -46,10 +48,12 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("GameFeatureDetailName");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.IntegrationGameDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.IntegrationGameDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -58,10 +62,12 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("IntegrationGameName");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.IntegrationGameFeatureDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.IntegrationGameFeatureDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -72,20 +78,24 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<int?>("IntegrationGameId");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.JokeCategoryDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.JokeCategoryDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("JokeCategoryName");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.JokeDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.JokeDao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -94,36 +104,71 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("JokeContent");
 
+                    b.Property<int?>("LanguageId");
+
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.GameFeatureDetailDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.GameFeatureDao", b =>
                 {
-                    b.HasOne("Bellwether.Models.Entities.GameFeatureDao")
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
                         .WithMany()
-                        .HasForeignKey("GameFeatureDaoId");
+                        .HasForeignKey("LanguageId");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.IntegrationGameFeatureDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.GameFeatureDetailDao", b =>
                 {
-                    b.HasOne("Bellwether.Models.Entities.GameFeatureDetailDao")
+                    b.HasOne("Bellwether.Repositories.Entities.GameFeatureDao")
+                        .WithMany()
+                        .HasForeignKey("GameFeatureDaoId");
+
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
+                });
+
+            modelBuilder.Entity("Bellwether.Repositories.Entities.IntegrationGameDao", b =>
+                {
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
+                });
+
+            modelBuilder.Entity("Bellwether.Repositories.Entities.IntegrationGameFeatureDao", b =>
+                {
+                    b.HasOne("Bellwether.Repositories.Entities.GameFeatureDetailDao")
                         .WithMany()
                         .HasForeignKey("GameFeatureDetailId");
 
-                    b.HasOne("Bellwether.Models.Entities.GameFeatureDao")
+                    b.HasOne("Bellwether.Repositories.Entities.GameFeatureDao")
                         .WithMany()
                         .HasForeignKey("GameFeatureId");
 
-                    b.HasOne("Bellwether.Models.Entities.IntegrationGameDao")
+                    b.HasOne("Bellwether.Repositories.Entities.IntegrationGameDao")
                         .WithMany()
                         .HasForeignKey("IntegrationGameId");
+
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
                 });
 
-            modelBuilder.Entity("Bellwether.Models.Entities.JokeDao", b =>
+            modelBuilder.Entity("Bellwether.Repositories.Entities.JokeCategoryDao", b =>
                 {
-                    b.HasOne("Bellwether.Models.Entities.JokeCategoryDao")
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
+                });
+
+            modelBuilder.Entity("Bellwether.Repositories.Entities.JokeDao", b =>
+                {
+                    b.HasOne("Bellwether.Repositories.Entities.JokeCategoryDao")
                         .WithMany()
                         .HasForeignKey("JokeCategoryId");
+
+                    b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
                 });
         }
     }
