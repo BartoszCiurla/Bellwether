@@ -4,7 +4,7 @@ using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
 using Bellwether.Services.Utility;
 
-namespace Bellwether.Services.Services.Version
+namespace Bellwether.Services.Services.VersionService
 {
     public interface IVersionValidateService
     {
@@ -24,16 +24,25 @@ namespace Bellwether.Services.Services.Version
             await ValidateLanguageVersion(mandatoryVersion);
             await ValidateJokeCategoryVersion(mandatoryVersion);
             await ValidateJokeVersion(mandatoryVersion);
-            //await ValidateGameFeatureVersion(mandatoryVersion);
+            await ValidateGameFeatureVersion(mandatoryVersion);
+            await ValidateIntegrationGameVersion(mandatoryVersion);
             return true;
+        }
+
+        private async Task<bool> ValidateIntegrationGameVersion(ClientVersionViewModel mandatoryVersion)
+        {
+            if (ValidateVersion(
+                    await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("IntegrationGameVersion"),
+                    mandatoryVersion.IntegrationGameVersion))
+                return await UpdateIntegrationGameVersion(mandatoryVersion);
+            return false;
         }
 
         private async Task<bool> ValidateGameFeatureVersion(ClientVersionViewModel mandatoryVersion)
         {
-            if (
-                ValidateVersion(
-                    await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetIntegrationGamesFeatures"),
-                    mandatoryVersion.IntegrationGamesFeatureVersion))
+            if (ValidateVersion(
+                    await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GameFeatureVersion"),
+                    mandatoryVersion.GameFeatureVersion))
                 return await UpdateGameFeatureVersion(mandatoryVersion);
             return false;
         } 
@@ -54,12 +63,6 @@ namespace Bellwether.Services.Services.Version
             return false;
         }
 
-        private async Task<bool> ValidateAvailableLanguages()
-        {
-            ServiceFactory.LanguageService.ValidateAndFillLanguages(await ServiceFactory.WebBellwetherLanguageService.GetLanguages());
-            return true;
-        }
-
         private async Task<bool> ValidateJokeCategoryVersion(ClientVersionViewModel mandatoryVersion)
         {
             if (ValidateVersion(await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("JokeCategoryVersion"), mandatoryVersion.JokeCategoryVersion))
@@ -67,12 +70,28 @@ namespace Bellwether.Services.Services.Version
             return false;
         }
 
+        private async Task<bool> ValidateAvailableLanguages()
+        {
+            ServiceFactory.LanguageService.ValidateAndFillLanguages(await ServiceFactory.WebBellwetherLanguageService.GetLanguages());
+            return true;
+        }
+   
+        private async Task<bool> UpdateIntegrationGameVersion(ClientVersionViewModel mandatoryVersion)
+        {
+            if (ServiceFactory.IntegrationGameManagementService.ValidateAndFillIntegrationGames(
+                await
+                    ServiceFactory.WebBellwetherIntegrationGameService.GetIntegrationGames(
+                        mandatoryVersion.Language.Id)))
+                return await ChangeIntegrationGameVersion(mandatoryVersion.IntegrationGameVersion);
+            return true;
+        }
+
         private async Task<bool> UpdateGameFeatureVersion(ClientVersionViewModel mandatoryVersion)
         {
             if (ServiceFactory.GameFeatureManagementService.ValidateAndFillGameFeatures(
-                        await
-                            ServiceFactory.WebBellwetherIntegrationGameService.GetGameFeatures(mandatoryVersion.Language.Id)))
-                return false;
+                await
+                    ServiceFactory.WebBellwetherIntegrationGameService.GetGameFeatures(mandatoryVersion.Language.Id)))
+                return await ChangeGameFeatureVersion(mandatoryVersion.GameFeatureVersion);
             return true;
         }
 
@@ -82,16 +101,7 @@ namespace Bellwether.Services.Services.Version
                 return await ChangeLanguageVersion(mandatoryVersion.LanguageVersion);
             return false;
         }
-
-        private async Task<bool> FillLanguageFile(ClientVersionViewModel mandatoryVersion)
-        {
-            var languageFile =
-               await ServiceFactory.WebBellwetherLanguageService.GetLanguageFile(mandatoryVersion.Language.Id);
-            if (languageFile == null)
-                return false;
-            return await RepositoryFactory.LanguageResourceRepository.SaveValuesAndKays(languageFile);
-        } 
-
+     
         private async Task<bool> UpdateJokeVersion(ClientVersionViewModel mandatoryVersion)
         {
             if (ServiceFactory.JokeManagementService.ValidateAndFillJokes(
@@ -107,6 +117,29 @@ namespace Bellwether.Services.Services.Version
                     await ServiceFactory.WebBellwetherJokeService.GetJokeCategories(mandatoryVersion.Language.Id)))
                 return await ChangeJokeCategoryVersion(mandatoryVersion.JokeCategoryVersion);
             return true;
+        }
+
+        private async Task<bool> FillLanguageFile(ClientVersionViewModel mandatoryVersion)
+        {
+            var languageFile =
+               await ServiceFactory.WebBellwetherLanguageService.GetLanguageFile(mandatoryVersion.Language.Id);
+            if (languageFile == null)
+                return false;
+            return await RepositoryFactory.LanguageResourceRepository.SaveValuesAndKays(languageFile);
+        }
+
+        private async Task<bool> ChangeGameFeatureVersion(string gameFeatureMandatoryVersion)
+        {
+            return
+                await
+                    RepositoryFactory.ApplicationResourceRepository.SaveValueForKey("GameFeatureVersion", gameFeatureMandatoryVersion);
+        }
+
+        private async Task<bool> ChangeIntegrationGameVersion(string integrationGameMandatoryVersion)
+        {
+            return
+                await
+                    RepositoryFactory.ApplicationResourceRepository.SaveValueForKey("IntegrationGameVersion", integrationGameMandatoryVersion);
         }
 
         private async Task<bool> ChangeJokeVersion(string jokeMandatoryVersion)

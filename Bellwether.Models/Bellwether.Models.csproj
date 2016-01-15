@@ -39,11 +39,10 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AppApiUrl.cs" />
-    <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\BellwetherLanguage.cs" />
-    <Compile Include="Models\GameFeatureViewModel.cs" />
-    <Compile Include="Models\GameFeatureDetailViewModel.cs" />
+    <Compile Include="ViewModels\DirectIntegrationGameViewModel.cs" />
+    <Compile Include="ViewModels\GameFeatureViewModel.cs" />
+    <Compile Include="ViewModels\GameFeatureDetailViewModel.cs" />
     <Compile Include="Models\Joke.cs" />
     <Compile Include="Models\JokeCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

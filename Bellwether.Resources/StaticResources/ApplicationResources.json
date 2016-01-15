@@ -4,6 +4,7 @@
   "ApplicationLanguage": "pl",
   "LanguageVersion": "1.0",
   "IntegrationGameVersion": "1.0",
+  "GameFeatureVersion": "1.0",
   "JokeCategoryVersion": "1.0",
   "JokeVersion": "1.0",
   "GetVersion": "http://localhost:62645/api/Version/?languageId=",
@@ -12,6 +13,6 @@
   "GetLanguage": "http://localhost:62645/api/Language/GetLanguage/?languageId=",
   "GetJokeCategories": "http://localhost:62645/api/JokeCategoryManagement/GetJokeCategories/?languageId=",
   "GetJokes": "http://localhost:62645/api/Jokes/GetJokes/?languageId=",
-  "GetIntegrationGames": "jeszcze nie aktywne",
+  "GetIntegrationGames": "http://localhost:62645/api/IntegrationGame/GetIntegrationGames/?languageId=",
   "GetIntegrationGamesFeatures": "http://localhost:62645/api/GameFeatureManagement/GetGameFeatuesModelWithDetails/?languageId="
 }

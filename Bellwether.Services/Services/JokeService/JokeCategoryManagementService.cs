@@ -25,7 +25,7 @@ namespace Bellwether.Services.Services.JokeService
             if (!localJokeCategories.Any())
                 return InsertJokeCategoriesAndSave(mandatoryJokeCategories,localLanguage);
             InsertJokeCategoryIfNotExistsOnLocalList(mandatoryJokeCategories,localJokeCategories,localLanguage);
-            DeleteJokeCategoryIfNotExistsOnMandatoryList(mandatoryJokeCategories,localJokeCategories);
+            RemoveJokeCategoryIfNotExistsOnMandatoryList(mandatoryJokeCategories,localJokeCategories);
             RepositoryFactory.Context.SaveChanges();
             return true;
         }
@@ -42,7 +42,6 @@ namespace Bellwether.Services.Services.JokeService
                     JokeCategoryName = x.JokeCategoryName
                 });
             });
-            //RepositoryFactory.Context.JokeCategories.AddRange(ModelMapper.Map<JokeCategoryDao[],JokeCategory[]>(mandatoryJokeCategories));
             RepositoryFactory.Context.JokeCategories.AddRange(jokeCategories);
             RepositoryFactory.Context.SaveChanges();
             return true;
@@ -57,7 +56,7 @@ namespace Bellwether.Services.Services.JokeService
             });
         }
 
-        private void DeleteJokeCategoryIfNotExistsOnMandatoryList(JokeCategory[] mandatoryJokeCategories, List<JokeCategoryDao> localJokeCategories)
+        private void RemoveJokeCategoryIfNotExistsOnMandatoryList(JokeCategory[] mandatoryJokeCategories, List<JokeCategoryDao> localJokeCategories)
         {
             localJokeCategories.ForEach(localJokeCategory =>
             {

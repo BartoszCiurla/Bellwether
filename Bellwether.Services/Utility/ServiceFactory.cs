@@ -1,8 +1,8 @@
-﻿using Bellwether.Services.Services;
-using Bellwether.Services.Services.IntegrationGameService;
+﻿using Bellwether.Services.Services.IntegrationGameService;
 using Bellwether.Services.Services.JokeService;
+using Bellwether.Services.Services.LanguageService;
 using Bellwether.Services.Services.ResourceService;
-using Bellwether.Services.Services.Version;
+using Bellwether.Services.Services.VersionService;
 using Bellwether.Services.WebServices;
 
 namespace Bellwether.Services.Utility
@@ -19,10 +19,6 @@ namespace Bellwether.Services.Utility
 
         private static ILanguageService _languageService;
         public static ILanguageService LanguageService => _languageService ?? (_languageService = new LanguageService());
-
-        private static IApplicationResourceService _applicationResourceService;
-        public static IApplicationResourceService AppiApplicationResourceService
-            => _applicationResourceService ?? (_applicationResourceService = new ApplicationResourceService());
 
         private static IWebBellwetherLanguageService _webBellwetherLanguageService;
         public static IWebBellwetherLanguageService WebBellwetherLanguageService
@@ -53,5 +49,11 @@ namespace Bellwether.Services.Utility
             =>
                 _webBellwetherIntegrationGameService ??
                 (_webBellwetherIntegrationGameService = new WebBellwetherIntegrationGameService());
+
+        private static IIntegrationGameManagementService _integrationGameManagementService;
+        public static IIntegrationGameManagementService IntegrationGameManagementService
+            =>
+                _integrationGameManagementService ??
+                (_integrationGameManagementService = new IntegrationGameManagementService());
     }
 }

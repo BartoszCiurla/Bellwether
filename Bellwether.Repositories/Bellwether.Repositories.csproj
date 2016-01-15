@@ -121,9 +121,6 @@
     </Compile>
     <Compile Include="Migrations\BellwetherDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OLDNOTUSEDFactories\GameFeatureRepository.cs" />
-    <Compile Include="OLDNOTUSEDFactories\JokeRepository.cs" />
-    <Compile Include="OLDNOTUSEDFactories\OldRepositoryFactory.cs" />
     <Compile Include="Repositories\ResourceRepository.cs" />
     <EmbeddedResource Include="Properties\Bellwether.Repositories.rd.xml" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using Bellwether.Models.Models;
 using Bellwether.Repositories.Entities;
 using Bellwether.Services.Utility;
 
-namespace Bellwether.Services.Services
+namespace Bellwether.Services.Services.LanguageService
 {
     public interface ILanguageService
     {
