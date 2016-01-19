@@ -104,15 +104,17 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\NavMenuListView.cs" />
     <Compile Include="Controls\ParallaxBackgroundHub.cs" />
-    <Compile Include="ExtensionMethods\ResponseExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\ServiceExecutor.cs" />
+    <Compile Include="ViewModels\IntegrationGameViewModel.cs" />
     <Compile Include="ViewModels\JokeViewModel.cs" />
     <Compile Include="ViewModels\NavMenuItem.cs" />
     <Compile Include="ViewModels\OptionViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IntegrationGamePage.xaml.cs">
+      <DependentUpon>IntegrationGamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\JokePage.xaml.cs">
       <DependentUpon>JokePage.xaml</DependentUpon>
@@ -153,10 +155,6 @@
       <Project>{ea549cc4-da8d-4299-bb9b-f904f5bc9d49}</Project>
       <Name>Bellwether.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bellwether.Repositories\Bellwether.Repositories.csproj">
-      <Project>{b4dd2fda-9582-4cc3-8e7a-658b7bd82c54}</Project>
-      <Name>Bellwether.Repositories</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Bellwether.Services\Bellwether.Services.csproj">
       <Project>{53b54c6b-8bf7-4990-bf01-0b54b4d92cf3}</Project>
       <Name>Bellwether.Services</Name>
@@ -179,6 +177,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\IntegrationGamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\JokePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -187,6 +189,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utility\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

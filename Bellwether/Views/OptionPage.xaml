@@ -22,7 +22,7 @@
                 <TextBlock Text="{Binding CurrentLanguage.LanguageName}"/>
                 <TextBlock Text="{Binding TextChangeLanguage}"/>
                 <Button Command="{Binding ChangeLanguageCommand}" Content="{Binding TextApplyLanguage}" />
-                <Button  HorizontalAlignment="Right" Padding="12" BorderThickness="0" Margin="0 4" Content="ZALOGUJ"  Foreground="White" FontWeight="Bold"></Button>
+                <AppBarToggleButton x:Name="SynchronizeData" Icon="Shuffle" Command="{Binding ChangeSynchronize}" IsChecked="{Binding IsDataSynchronize ,Mode=TwoWay}" Label="{Binding TextSynchronizeData}"/>
             </StackPanel>
         </Grid>
     </Grid>

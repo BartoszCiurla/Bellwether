@@ -15,43 +15,39 @@ namespace Bellwether.Services.Services.IntegrationGameService
         public bool ValidateAndFillIntegrationGames(List<DirectIntegrationGameViewModel> mandatoryIntegrationGames)
         {
             if (mandatoryIntegrationGames == null)
-                return false;
-            List<IntegrationGameDao> localIntegrationGames = RepositoryFactory.Context.IntegrationGames.ToList();
+                return false;            
             BellwetherLanguageDao localLanguage =
                 RepositoryFactory.Context.BellwetherLanguages.FirstOrDefault(
                     x => x.Id == mandatoryIntegrationGames.First().LanguageId);
             if (localLanguage == null)
                 return false;
-            InsertIntegrationGameIfNotExistsOnLocalList(mandatoryIntegrationGames, localIntegrationGames, localLanguage);
-            RemoveIntegrationGameIfNotExistsOnMandatoryList(mandatoryIntegrationGames, localIntegrationGames);
+            InsertIntegrationGameIfNotExistsOnLocalList(mandatoryIntegrationGames, localLanguage);
             return true;
         }
 
-        private void InsertIntegrationGameIfNotExistsOnLocalList(List<DirectIntegrationGameViewModel> mandatory,
-            List<IntegrationGameDao> local, BellwetherLanguageDao language)
+        private void InsertIntegrationGameIfNotExistsOnLocalList(List<DirectIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
         {
+            List<IntegrationGameDao> localIntegrationGames = RepositoryFactory.Context.IntegrationGames.ToList();
             List<GameFeatureDao> gameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
             mandatory.ForEach(x =>
             {
-                if (local.FirstOrDefault(y => y.Id == x.Id && y.Language.Id == x.LanguageId) == null)
-                    RepositoryFactory.Context.IntegrationGames.Add(new IntegrationGameDao {Id=x.Id,Language = language,IntegrationGameDescription = x.GameDescription,IntegrationGameName = x.GameName,GameFeatures = FillFeaturesForGame(x,gameFeatures,language)});
-            });
-            RepositoryFactory.Context.SaveChanges();
-        }
-
-        private void RemoveIntegrationGameIfNotExistsOnMandatoryList(List<DirectIntegrationGameViewModel> mandatory,
-            List<IntegrationGameDao> local)
-        {
-            local.ForEach(x =>
-            {
-                if (mandatory.FirstOrDefault(z => z.Id == x.Id && z.LanguageId == x.Language.Id) == null)
+                var integrationGame = localIntegrationGames.FirstOrDefault(y => y.Id == x.Id);
+                if (integrationGame == null)
                 {
-                    RepositoryFactory.Context.IntegrationGames.Remove(x);
-                    RepositoryFactory.Context.IntegrationGameFeatures.RemoveRange(x.GameFeatures);
+                    RepositoryFactory.Context.IntegrationGames.Add(new IntegrationGameDao { Id = x.Id, Language = language, IntegrationGameDescription = x.GameDescription, IntegrationGameName = x.GameName, GameFeatures = FillFeaturesForGame(x, gameFeatures, language) });
                 }
+                else
+                {
+                    integrationGame.IntegrationGameDescription = x.GameDescription;
+                    integrationGame.IntegrationGameName = x.GameName;
+                    integrationGame.Language = language;
+                    integrationGame.GameFeatures = FillFeaturesForGame(x, gameFeatures, language);
+                    RepositoryFactory.Context.Update(integrationGame);
+                }                                    
             });
             RepositoryFactory.Context.SaveChanges();
         }
+    
         private List<IntegrationGameFeatureDao> FillFeaturesForGame(DirectIntegrationGameViewModel mandatoryGame, List<GameFeatureDao> gameFeatures, BellwetherLanguageDao language)
         {
             return new List<IntegrationGameFeatureDao>

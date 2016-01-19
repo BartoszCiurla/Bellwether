@@ -5,12 +5,22 @@
     xmlns:local="using:Bellwether.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:Bellwether.Models.ViewModels"
     mc:Ignorable="d">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <ComboBox  VerticalContentAlignment="Center" ItemsSource="{Binding JokeCategories}" DisplayMemberPath="JokeCategoryName" Header="Test kategorie zartu"/>
-            <ComboBox  VerticalContentAlignment="Center" ItemsSource="{Binding Jokes}" DisplayMemberPath="JokeContent" Header="Test kategorie zartu"/>
-        </StackPanel>
+    <Page.Resources>
+        <DataTemplate x:Key="Jo" x:DataType="viewModels:JokeViewModel">
+            <Grid Width="280">
+                <TextBlock Text="{x:Bind JokeContent}" 
+                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+            </Grid>
+        </DataTemplate>
+        
+    </Page.Resources>
+    <Grid>
+        <ListView x:Name="Jokes" ItemsSource="{Binding Jokes}"          
+              ItemTemplate="{StaticResource Jo}"
+                  SelectionChanged="{Binding SelectedJoke, Mode=TwoWay}"
+                          Height="400">
+    </ListView>
     </Grid>
 </Page>

@@ -1,5 +1,4 @@
-﻿using Windows.Storage;
-using Bellwether.Repositories.Context;
+﻿using Bellwether.Repositories.Context;
 using Bellwether.Repositories.Repositories;
 using Microsoft.Data.Entity;
 
@@ -15,9 +14,6 @@ namespace Bellwether.Services.Utility
             context.Database.OpenConnection();
             return context;
         }
-
-        //private static StorageFolder _localFolder;
-        //public static StorageFolder LocalFolder => _localFolder ?? (_localFolder = ApplicationData.Current.LocalFolder);
 
         private static IResourceRepository _applicationResourceRepository;
         public static IResourceRepository ApplicationResourceRepository

@@ -16,12 +16,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Bellwether.Models.ViewModels;
-using Bellwether.Repositories.Context;
-using Bellwether.Repositories.Repositories;
 using Bellwether.Services;
 using Bellwether.Services.Services;
 using Bellwether.Services.Utility;
-using Bellwether.Utility;
 using Bellwether.Views;
 using Microsoft.Data.Entity;
 
@@ -46,10 +43,6 @@ namespace Bellwether
             this.Suspending += OnSuspending;
         }
 
-        private void ApplyMigrations()
-        {
-            RepositoryFactory.Context.Database.Migrate();
-        }   
         private async Task InitiateResource()
         {
             await ServiceExecutor.ExecuteAsync(() => ServiceFactory.InitResourceService.Initiate());
@@ -57,7 +50,7 @@ namespace Bellwether
 
         private async Task ValidateVersion()
         {
-            await ServiceExecutor.ExecuteAsync(() => ServiceFactory.VersionValidateService.ValidateVersion());
+            await ServiceExecutor.ExecuteAsyncIfSyncData(() => ServiceFactory.VersionValidateService.ValidateVersion());
         } 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -66,7 +59,6 @@ namespace Bellwether
         /// <param name="e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ApplyMigrations();
             await InitiateResource();
             await ValidateVersion();
 #if DEBUG

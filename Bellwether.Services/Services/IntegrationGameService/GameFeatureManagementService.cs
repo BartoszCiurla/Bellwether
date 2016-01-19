@@ -10,7 +10,7 @@ namespace Bellwether.Services.Services.IntegrationGameService
     {
         bool ValidateAndFillGameFeatures(List<GameFeatureViewModel> mandatoryGameFeatures);
     }
-    public class GameFeatureManagementService: IGameFeatureManagementService
+    public class GameFeatureManagementService : IGameFeatureManagementService
     {
         public bool ValidateAndFillGameFeatures(List<GameFeatureViewModel> mandatoryGameFeatures)
         {
@@ -21,105 +21,66 @@ namespace Bellwether.Services.Services.IntegrationGameService
                     x => x.Id == mandatoryGameFeatures.First().LanguageId);
             if (localLanguage == null)
                 return false;
-            FillGameFeatures(mandatoryGameFeatures, localLanguage);
-            FillGameFeatureDetail(mandatoryGameFeatures, localLanguage);
+            InsertGameFeatureDetails(mandatoryGameFeatures, localLanguage);
+            InsertGameFeatures(mandatoryGameFeatures, localLanguage);
             return true;
         }
-
-        private void FillGameFeatureDetail(List<GameFeatureViewModel> mandatoryGameFeatures, BellwetherLanguageDao language)
+        private void InsertGameFeatureDetails(List<GameFeatureViewModel> mandatoryGameFeatures, BellwetherLanguageDao language)
         {
             var localGameFeatureDetails = RepositoryFactory.Context.GameFeatureDetails.ToList();
-            RemoveGameFeatureDetailsIfNotExistsOnLocalList(mandatoryGameFeatures, localGameFeatureDetails);
-            InsertGameFeatureDetailsIfNotExistsOnLocalList(mandatoryGameFeatures, localGameFeatureDetails, language);
-        }
-
-        private void FillGameFeatures(List<GameFeatureViewModel> mandatoryGameFeatures, BellwetherLanguageDao language)
-        {
-            var localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
-            RemoveGameFeaturesIfNotExistsOnMandatoryList(mandatoryGameFeatures, localGameFeatures);
-            InsertGameFeaturesIfNotExistsOnLocalList(mandatoryGameFeatures, localGameFeatures, language);
-        }
-
-        private void RemoveGameFeatureDetailsIfNotExistsOnLocalList(List<GameFeatureViewModel> mandatoryGameFeatures ,List<GameFeatureDetailDao> localGameFeatureDetails )
-        {
-                localGameFeatureDetails.ForEach(x =>
-                {
-                    mandatoryGameFeatures.ForEach(z =>
-                    {
-                        z.GameFeatureDetailModels.ToList().ForEach(y =>
-                        {
-                            if (
-                                mandatoryGameFeatures.FirstOrDefault(
-                                    k =>
-                                        k.Id == x.Id && k.GameFeatureName == x.GameFeatureDetailName &&
-                                        k.LanguageId == x.Language.Id) == null)
-                                RepositoryFactory.Context.GameFeatureDetails.Remove(x);
-                        });
-                    });
-                });
-            RepositoryFactory.Context.SaveChanges();
-        }
-
-        private void InsertGameFeatureDetailsIfNotExistsOnLocalList(List<GameFeatureViewModel> mandatoryGameFeatures,
-      List<GameFeatureDetailDao> localGameFeatureDetails, BellwetherLanguageDao language)
-        {
-            List<GameFeatureDao> localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
             mandatoryGameFeatures.ForEach(x =>
             {
                 x.GameFeatureDetailModels.ToList().ForEach(z =>
                 {
-                    if (localGameFeatureDetails.FirstOrDefault(y => y.Id == z.Id && y.Language.Id == language.Id && y.GameFeatureDetailName == z.GameFeatureDetailName) ==
-                        null)
+                    var gameFeature = localGameFeatureDetails.FirstOrDefault(k => k.Id == z.Id);
+                    if (gameFeature == null)
                     {
-                        var entityToUpdate =
-                            localGameFeatures.FirstOrDefault(k => k.Id == x.Id && k.Language.Id == language.Id);
-                        entityToUpdate.GameFeatureDetails.Add(new GameFeatureDetailDao
+                        RepositoryFactory.Context.GameFeatureDetails.Add(new GameFeatureDetailDao
                         {
                             Id = z.Id,
-                            GameFeatureDetailName = z.GameFeatureDetailName,
-                            Language = language
+                            Language = language,
+                            GameFeatureDetailName = z.GameFeatureDetailName
                         });
-                        RepositoryFactory.Context.Update(entityToUpdate);
+                    }
+                    else
+                    {
+                        gameFeature.GameFeatureDetailName = z.GameFeatureDetailName;
+                        gameFeature.Language = language;
+                        RepositoryFactory.Context.GameFeatureDetails.Update(gameFeature);
                     }
                 });
-            });        
-         
+            });
+            RepositoryFactory.Context.SaveChanges();
         }
 
-        private void InsertGameFeaturesIfNotExistsOnLocalList(List<GameFeatureViewModel> mandatoryGameFeatures,
-            List<GameFeatureDao> localGameFeatures,BellwetherLanguageDao language)
+        private void InsertGameFeatures(List<GameFeatureViewModel> mandatoryGameFeatures, BellwetherLanguageDao language)
         {
-            List<GameFeatureDao> gameFeatures = new List<GameFeatureDao>();
+            var localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
+            var localGameFeaturesDetail = RepositoryFactory.Context.GameFeatureDetails.ToList();
             mandatoryGameFeatures.ForEach(x =>
             {
-                if (localGameFeatures.FirstOrDefault(z => z.Id == x.Id && z.Language.Id == language.Id && z.GameFeatureName == x.GameFeatureName) == null)
-                    gameFeatures.Add(new GameFeatureDao
+                var gameFeature =
+                    localGameFeatures.FirstOrDefault(
+                        z => z.Id == x.Id);
+                if (gameFeature == null)
+                    RepositoryFactory.Context.GameFeatures.Add(new GameFeatureDao
                     {
                         Id = x.Id,
                         GameFeatureName = x.GameFeatureName,
                         Language = language,
                         GameFeatureDetails =
                             new List<GameFeatureDetailDao>(
-                                x.GameFeatureDetailModels.ToList().Select(y => new GameFeatureDetailDao
-                                {
-                                    Id = y.Id,
-                                    Language = language,
-                                    GameFeatureDetailName = y.GameFeatureDetailName
-                                }))
+                                x.GameFeatureDetailModels.ToList().Select(y => localGameFeaturesDetail.FirstOrDefault(k => k.Id == y.Id)))
                     });
-            });
-            RepositoryFactory.Context.GameFeatures.AddRange(gameFeatures);
-            RepositoryFactory.Context.SaveChanges();
-        }
-
-        private void RemoveGameFeaturesIfNotExistsOnMandatoryList(List<GameFeatureViewModel> mandatoryGameFeatures,
-            List<GameFeatureDao> localGameFeatures)
-        {
-            localGameFeatures.ForEach(x =>
-            {
-                if (mandatoryGameFeatures.FirstOrDefault(z => z.Id == x.Id && z.LanguageId == x.Language.Id && z.GameFeatureName == x.GameFeatureName) ==
-                    null)
-                    RepositoryFactory.Context.GameFeatures.Remove(x);
+                else
+                {
+                    gameFeature.GameFeatureName = x.GameFeatureName;
+                    gameFeature.Language = language;
+                    gameFeature.GameFeatureDetails = new List<GameFeatureDetailDao>(
+                        x.GameFeatureDetailModels.ToList()
+                            .Select(y => localGameFeaturesDetail.FirstOrDefault(k => k.Id == y.Id)));
+                    RepositoryFactory.Context.GameFeatures.Update(gameFeature);
+                }
             });
             RepositoryFactory.Context.SaveChanges();
         }

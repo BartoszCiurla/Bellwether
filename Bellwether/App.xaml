@@ -6,7 +6,6 @@
     RequestedTheme="Light">
     <Application.Resources>
         <ResourceDictionary>
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/AppShellStyles.xaml"/>
                 <ResourceDictionary Source="Styles/HomeStyles.xaml"/>

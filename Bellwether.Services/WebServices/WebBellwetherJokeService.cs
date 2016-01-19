@@ -8,21 +8,21 @@ namespace Bellwether.Services.WebServices
 {
     public interface IWebBellwetherJokeService
     {
-        Task<JokeCategory[]> GetJokeCategories(int languageId);
-        Task<Joke[]> GetJokes(int languageId);
+        Task<JokeCategoryViewModel[]> GetJokeCategories(int languageId);
+        Task<JokeViewModel[]> GetJokes(int languageId);
     }
     public class WebBellwetherJokeService:IWebBellwetherJokeService
     {
-        public async Task<JokeCategory[]> GetJokeCategories(int languageId)
+        public async Task<JokeCategoryViewModel[]> GetJokeCategories(int languageId)
         {
             var stringContent = await RequestExecutor.CreateRequestGetWithUriParam(await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetJokeCategories") + languageId);
-            var jokeCategories = JsonConvert.DeserializeObject<ResponseViewModel<JokeCategory[]>>(stringContent);
+            var jokeCategories = JsonConvert.DeserializeObject<ResponseViewModel<JokeCategoryViewModel[]>>(stringContent);
             return jokeCategories.IsValid ? jokeCategories.Data : null;
         }
-        public async Task<Joke[]> GetJokes(int languageId)
+        public async Task<JokeViewModel[]> GetJokes(int languageId)
         {
             var stringContent = await RequestExecutor.CreateRequestGetWithUriParam(await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetJokes") + languageId);
-            var jokes = JsonConvert.DeserializeObject<ResponseViewModel<Joke[]>>(stringContent);
+            var jokes = JsonConvert.DeserializeObject<ResponseViewModel<JokeViewModel[]>>(stringContent);
             return jokes.IsValid ? jokes.Data : null;
         }
 

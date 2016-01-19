@@ -6,5 +6,6 @@
         public string JokeContent { get; set; }
         public int JokeCategoryId { get; set; }
         public string JokeCategoryName { get; set; }
+        public int LanguageId { get; set; }
     }
 }

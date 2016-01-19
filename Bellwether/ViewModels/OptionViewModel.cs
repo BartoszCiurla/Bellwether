@@ -1,133 +1,140 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Collections.ObjectModel;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Bellwether.Commands;
-//using Bellwether.Models.Models;
-//using Bellwether.Repositories.Entities;
-//using Bellwether.Repositories.Factories;
-//using Bellwether.Services.Factories;
-//using Bellwether.Services.Services;
-//using Bellwether.Services.Utility;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Bellwether.Commands;
+using Bellwether.Models.Models;
+using Bellwether.Models.ViewModels;
+using Bellwether.Services.Utility;
 
-//namespace Bellwether.ViewModels
-//{
-//    public class OptionViewModel : ViewModel
-//    {
-//        private readonly ILanguageService _languageService;
-//        private readonly IResourceService _resourceService;
-//        private IJokeService _jokeService;
-//        public OptionViewModel()
-//        {
-//            _languageService = ServiceFactory.LanguageService;
-//            _resourceService = ServiceFactory.ResourceService;
-//            _jokeService = ServiceFactory.JokeService;
-//            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
-//            LoadContent();
-//        }
+namespace Bellwether.ViewModels
+{
+    public class OptionViewModel : ViewModel
+    {
+        private BellwetherLanguage _currentLanguage;
+        public BellwetherLanguage CurrentLanguage
+        {
+            get { return _currentLanguage; }
+            set
+            {
+                _currentLanguage = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private BellwetherLanguage _selectedLanguage;
+        public BellwetherLanguage SelectedLanguage
+        {
+            get { return _selectedLanguage; }
+            set
+            {
+                _selectedLanguage = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public ObservableCollection<BellwetherLanguage> Languages { get; set; }
+        private bool _isDataSynchronize;
 
-//        private BellwetherLanguageDao _currentLanguage;
-//        public BellwetherLanguageDao CurrentLanguage
-//        {
-//            get { return _currentLanguage; }
-//            set
-//            {
-//                _currentLanguage = value;
-//                NotifyPropertyChanged();
-//            }
-//        }
-//        private BellwetherLanguageDao _selectedLanguage;
-//        public BellwetherLanguageDao SelectedLanguage
-//        {
-//            get { return _selectedLanguage; }
-//            set
-//            {
-//                _selectedLanguage = value;
-//                NotifyPropertyChanged();
-//            }
-//        }
-//        public ObservableCollection<BellwetherLanguageDao> Languages { get; set; }
-//        public RelayCommand ChangeLanguageCommand { get; set; }
+        public bool IsDataSynchronize
+        {
+            get { return _isDataSynchronize; }
+            set
+            {
+                _isDataSynchronize = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-//        private async void ChangeLanguage()
-//        {
-//            if (BasicLanguageVerification())
-//            {
-//                var resource = await _resourceService.GetApplicationApiUrl();
-//                var vesionLanguageFile =
-//                        await
-//                            _languageService.GetLanguageFile(resource.GetLanguageFile + SelectedLanguage.Id);
-//                if (vesionLanguageFile != null)
-//                {
-//                    var mandatoryVersion = await ServiceFactory.WebBellwetherVersionService.GetVersionForLanguage(resource.GetVersion + SelectedLanguage.Id);
-//                    await _resourceService.ChangeLanguage(vesionLanguageFile, new BellwetherLanguage {Id = SelectedLanguage.Id,LanguageShortName = SelectedLanguage.LanguageShortName,LanguageName = SelectedLanguage.LanguageName,LanguageVersion = Convert.ToDouble(mandatoryVersion.LanguageVersion)});
-//                    OldRepositoryFactory.JokeRepository.RemoveJokes();
-//                    OldRepositoryFactory.JokeCategoryRepository.RemoveJokeCategories();
-//                    await _jokeService.CheckAndFillJokeCategories(resource.GetJokeCategories + SelectedLanguage.Id);
-//                    await
-//                        _resourceService.ChangeJokeCategoryVersion(mandatoryVersion.JokeCategoryVersion);
-                    
-//                    await _jokeService.CheckAndFillJokes(resource.GetJokes + SelectedLanguage.Id);
-//                    await _resourceService.ChangeJokeVersion(mandatoryVersion.JokeVersion);
-//                    LoadContent();
-//                }
-//            }
-//        }
+        public RelayCommand ChangeLanguageCommand { get; set; }
+        public RelayCommand ChangeSynchronize { get; set; }
+        public OptionViewModel()
+        {
+            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+            ChangeSynchronize = new RelayCommand(ChangeSynchronizeData);
+            LoadContent();
+        }
 
-//        private bool BasicLanguageVerification()
-//        {
-//            if (_selectedLanguage == null)
-//                return false;
-//            if (_currentLanguage == null)
-//                return false;
-//            if (_selectedLanguage == _currentLanguage)
-//                return false;
-//            return true;
-//        }
-//        private void LoadLanguages()
-//        {
-//            Languages = new ObservableCollection<BellwetherLanguageDao>(_languageService.GetLocalLanguages()); 
-//        }
-       
-//        private async void LoadContent()
-//        {
-//            LoadLanguages();
-//            await LoadLangStaticData();
-//            await LoadAppStaticData();
-//        }
+        private async void ChangeSynchronizeData()
+        {
+           var isSync = await
+                ServiceExecutor.ExecuteAsync(
+                    () => ServiceFactory.ResourceService.SaveValueForKey("SynchronizeData", IsDataSynchronize.ToString()));
+            if (!isSync.IsValid)
+                IsDataSynchronize = !IsDataSynchronize;
+        }
 
-//        private async Task LoadAppStaticData()
-//        {
-//            var requriedKeysAndValue = await _resourceService.GetApplicationSettings();
-//            string currLang = requriedKeysAndValue.AppLanguage;
-//            CurrentLanguage =
-//                _languageService
-//                    .GetLocalLanguages()
-//                    .FirstOrDefault(x => x.LanguageShortName == currLang);
-//            SelectedLanguage = CurrentLanguage;
-//        }
+        private async void ChangeLanguage()
+        {
+            if (BasicLanguageVerification())
+            {
+                var languageIsChanged = await
+                    ServiceExecutor.ExecuteAsyncIfSyncData(
+                        () =>
+                            ServiceFactory.LanguageManagementService.ChangeApplicationLanguage(
+                                SelectedLanguage.LanguageShortName));
+                if (languageIsChanged.IsValid)
+                    LoadContent();
+            }
+        }
 
-//        private async Task LoadLangStaticData()
-//        {
-//            var lang = new List<string> {"Settings", "ChangeLanguage", "ApplyLanguage", "CurrentLanguage" };
-//            var requiredKeysAndvalues = await _resourceService.GetLanguageContentScenario(lang);
-//            TextSettings = requiredKeysAndvalues["Settings"];
-//            TextChangeLanguage = requiredKeysAndvalues["ChangeLanguage"];
-//            TextApplyLanguage = requiredKeysAndvalues["ApplyLanguage"];
-//            TextCurrentLanguage = requiredKeysAndvalues["CurrentLanguage"];
-//        }
+        private bool BasicLanguageVerification()
+        {
+            if (_selectedLanguage == null)
+                return false;
+            if (_currentLanguage == null)
+                return false;
+            if (_selectedLanguage == _currentLanguage)
+                return false;
+            return true;
+        }
+        private void LoadLanguages()
+        {
+            var langs = ServiceExecutor.Execute(() => ServiceFactory.LanguageService.GetLocalLanguages());
+            Languages = new ObservableCollection<BellwetherLanguage>(langs.Data);
+        }
 
-//        private string _textSettings;
-//        public string TextSettings { get { return _textSettings; } set { _textSettings = value; NotifyPropertyChanged(); } }
-//        private string _textCurrentLanguage;
-//        public string TextCurrentLanguage { get { return _textCurrentLanguage; } set { _textCurrentLanguage = value; NotifyPropertyChanged(); } }
-//        private string _textChangeLanguage;
-//        public string TextChangeLanguage { get { return _textChangeLanguage; } set { _textChangeLanguage = value; NotifyPropertyChanged(); } }
-//        private string _textApplyLanguage;
+        private async void LoadContent()
+        {
+            LoadLanguages();
+            await LoadLanguageContent();
+            await LoadApplicationSettings();
+        }
 
-//        public string TextApplyLanguage { get { return _textApplyLanguage; } set { _textApplyLanguage = value; NotifyPropertyChanged(); } }
+        private async Task LoadApplicationSettings()
+        {
+            SettingsViewModel settings = await ServiceFactory.ResourceService.GetAppSettings();
+            IsDataSynchronize = settings.SynchronizeData;
+            CurrentLanguage = ServiceFactory.LanguageService.GetLocalLanguageByShortName(settings.ApplicationLanguage);
+            SelectedLanguage = CurrentLanguage;
+        }
+
+        private async Task LoadLanguageContent()
+        {
+            var contentKeys = new[] { "Settings", "ChangeLanguage", "ApplyLanguage", "CurrentLanguage", "DataSynchronization" };
+            var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKeys);
+            TextSettings = contentDictionary["Settings"];
+            TextChangeLanguage = contentDictionary["ChangeLanguage"];
+            TextApplyLanguage = contentDictionary["ApplyLanguage"];
+            TextCurrentLanguage = contentDictionary["CurrentLanguage"];
+            TextSynchronizeData = contentDictionary["DataSynchronization"];
+        }
+
+        private string _textSettings;
+        public string TextSettings { get { return _textSettings; } set { _textSettings = value; NotifyPropertyChanged(); } }
+        private string _textCurrentLanguage;
+        public string TextCurrentLanguage { get { return _textCurrentLanguage; } set { _textCurrentLanguage = value; NotifyPropertyChanged(); } }
+        private string _textChangeLanguage;
+        public string TextChangeLanguage { get { return _textChangeLanguage; } set { _textChangeLanguage = value; NotifyPropertyChanged(); } }
+        private string _textApplyLanguage;
+        public string TextApplyLanguage { get { return _textApplyLanguage; } set { _textApplyLanguage = value; NotifyPropertyChanged(); } }
+        private string _textSynchronizeData;
+        public string TextSynchronizeData
+        {
+            get { return _textSynchronizeData; }
+            set
+            {
+                _textSynchronizeData = value;
+                NotifyPropertyChanged();
+            }
+        }
 
 
-//    }
-//}
+    }
+}

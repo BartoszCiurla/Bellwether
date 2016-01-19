@@ -12,8 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Bellwether.Repositories.Context;
-using Bellwether.Repositories.Repositories;
 using Bellwether.Services.Services;
 using Bellwether.ViewModels;
 
@@ -29,10 +27,10 @@ namespace Bellwether.Views
         public OptionPage()
         {
             this.InitializeComponent();
-            //this.Loaded += (s, e) =>
-            //{
-            //    this.DataContext = new OptionViewModel();
-            //};
+            this.Loaded += (s, e) =>
+            {
+                this.DataContext = new OptionViewModel();
+            };
         }
     }
 }

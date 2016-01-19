@@ -1,40 +1,59 @@
-﻿
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.Media.SpeechSynthesis;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Bellwether.Commands;
+using Bellwether.Models.Models;
 using Bellwether.Services.Utility;
-using Bellwether.Utility;
 
 namespace Bellwether.ViewModels
 {
-    public class JokeViewModel
+    public class JokeViewModel:ViewModel
     {
+        public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
+        private Models.ViewModels.JokeViewModel _selectedJoke;
+
+        public Models.ViewModels.JokeViewModel SelectedJoke
+        {
+            get { return _selectedJoke; }
+            set
+            {
+                _selectedJoke = value;
+                Read();
+                NotifyPropertyChanged();
+            }
+        }
+
+        private RelayCommand _selectedJokeCommand;
+        public RelayCommand SelectedJokeCommand
+        {
+            get
+            {
+                return this._selectedJokeCommand ?? (this._selectedJokeCommand = new RelayCommand(() =>
+                {
+
+                }));
+            }
+        }
+        public RelayCommand SpeakCommand { get; set;}
         public JokeViewModel()
-        {
+        {   
+            SpeakCommand = new RelayCommand(Read);  
+            LoadContent();
         }
 
-        public async void Dupa()
+        private void LoadContent()
         {
-            await ServiceExecutor.ExecuteAsync(() => ServiceFactory.InitResourceService.Initiate());
+            var jokes = ServiceExecutor.Execute(() => ServiceFactory.JokeService.GetJokes());
+            Jokes = new ObservableCollection<Models.ViewModels.JokeViewModel>(jokes.Data);         
         }
-        //private readonly IJokeService _jokeService;
-        //private IResourceService _resourceService;
-        //public JokeViewModel()
-        //{
-        //    _jokeService = ServiceFactory.JokeService;
-        //    _resourceService = ServiceFactory.ResourceService;
-        //    InitTest();
-        //}
-        //public ObservableCollection<JokeCategoryDao> JokeCategories { get; set; }
-        //public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
-        //public void InitTest()
-        //{
-            
-        //    JokeCategories = new ObservableCollection<JokeCategoryDao>(_jokeService.GetLocalJokeCategories());
-        //    Jokes = new ObservableCollection<Models.ViewModels.JokeViewModel>(_jokeService.GetLocalJokes());
-        //}
 
-        //public async void Dupa()
-        //{
-        //   var test = await ServiceExecutor.ExecuteAsync(() => ServiceFactory.InitResourceService.Init());
-        //}
+        private async void Read()
+        {
+            await ServiceExecutor.ExecuteAsync(() => ServiceFactory.SpeechSyntesizerService.Read(this.SelectedJoke.JokeContent));
+        }
     }
 }

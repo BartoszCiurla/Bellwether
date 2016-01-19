@@ -1,8 +1,6 @@
-﻿using System;
-using Windows.UI.Popups;
-using Bellwether.Models.ViewModels;
+﻿using Bellwether.Models.ViewModels;
 
-namespace Bellwether.ExtensionMethods
+namespace Bellwether.Services.ExtensionMethods
 {
     public static class ResponseExtensionMethods
     {

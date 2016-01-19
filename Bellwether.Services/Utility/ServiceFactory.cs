@@ -2,6 +2,7 @@
 using Bellwether.Services.Services.JokeService;
 using Bellwether.Services.Services.LanguageService;
 using Bellwether.Services.Services.ResourceService;
+using Bellwether.Services.Services.SpeechSynthesizer;
 using Bellwether.Services.Services.VersionService;
 using Bellwether.Services.WebServices;
 
@@ -13,12 +14,23 @@ namespace Bellwether.Services.Utility
         public static IInitResourceService InitResourceService
             => _initResourceService ?? (_initResourceService = new InitiateResourceService());
 
+        private static IResourceService _resourceService;
+        public static IResourceService ResourceService => _resourceService ?? (_resourceService = new ResourceService());
+
         private static IVersionValidateService _versionValidateService;
         public static IVersionValidateService VersionValidateService
             => _versionValidateService ?? (_versionValidateService = new VersionValidateService());
 
+        private static IVersionManagementService _versionManagementService;
+        public static IVersionManagementService VersionManagementService
+            => _versionManagementService ?? (_versionManagementService = new VersionManagementService());
+
         private static ILanguageService _languageService;
         public static ILanguageService LanguageService => _languageService ?? (_languageService = new LanguageService());
+
+        private static ILanguageManagementService _languageManagementService;
+        public static ILanguageManagementService LanguageManagementService
+            => _languageManagementService ?? (_languageManagementService = new LanguageManagementService());
 
         private static IWebBellwetherLanguageService _webBellwetherLanguageService;
         public static IWebBellwetherLanguageService WebBellwetherLanguageService
@@ -40,6 +52,9 @@ namespace Bellwether.Services.Utility
         public static IJokeManagementService JokeManagementService
             => _jokeManagementService ?? (_jokeManagementService = new JokeManagementService());
 
+        private static IJokeService _jokeService;
+        public static IJokeService JokeService => _jokeService ?? (_jokeService = new JokeService());
+
         private static IGameFeatureManagementService _gameFeatureManagementService;
         public static IGameFeatureManagementService GameFeatureManagementService
             => _gameFeatureManagementService ?? (_gameFeatureManagementService = new GameFeatureManagementService());
@@ -55,5 +70,13 @@ namespace Bellwether.Services.Utility
             =>
                 _integrationGameManagementService ??
                 (_integrationGameManagementService = new IntegrationGameManagementService());
+
+        private static IIntegrationGameService _integrationGameService;
+        public static IIntegrationGameService IntegrationGameService
+            => _integrationGameService ?? (_integrationGameService = new IntegrationGameService());
+
+        private static ISpeechSyntesizerService _speechSyntesizerService;
+        public static ISpeechSyntesizerService SpeechSyntesizerService
+            => _speechSyntesizerService ?? (_speechSyntesizerService = new SpeechSyntesizerService());
     }
 }

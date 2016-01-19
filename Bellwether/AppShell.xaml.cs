@@ -38,9 +38,9 @@ namespace Bellwether
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Edit,
+                    Symbol = Symbol.Audio,
                     Label = "Gry",
-                    DestPage = typeof(AppShell)
+                    DestPage = typeof(IntegrationGamePage)
                 },
                 new NavMenuItem()
                 {
@@ -50,7 +50,7 @@ namespace Bellwether
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Favorite,
+                    Symbol = Symbol.Bullets,
                     Label = "Wodzirej",
                     DestPage = typeof(AppShell)
                 },

@@ -25,7 +25,7 @@ namespace Bellwether.Services.WebServices
             var stringContent =
                 await
                     RequestExecutor.CreateRequestGetWithUriParam(
-                        await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetIntegrationGames" + languageId));
+                        await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetIntegrationGames") + languageId);
             var integrationGames =
                 JsonConvert.DeserializeObject<ResponseViewModel<List<DirectIntegrationGameViewModel>>>(stringContent);
             return integrationGames.Data;

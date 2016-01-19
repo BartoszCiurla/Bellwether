@@ -10,12 +10,6 @@ namespace Bellwether.Services.Config
         {
             Mapper.CreateMap<BellwetherLanguage, BellwetherLanguageDao>();
             Mapper.CreateMap<BellwetherLanguageDao, BellwetherLanguage>();
-
-            Mapper.CreateMap<JokeCategory, JokeCategoryDao>();
-            Mapper.CreateMap<JokeCategoryDao, JokeCategory>();
-
-            Mapper.CreateMap<Joke, JokeDao>();
-            Mapper.CreateMap<JokeDao, Joke>();
         }
     }
 }

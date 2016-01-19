@@ -43,14 +43,14 @@
     <Compile Include="ViewModels\DirectIntegrationGameViewModel.cs" />
     <Compile Include="ViewModels\GameFeatureViewModel.cs" />
     <Compile Include="ViewModels\GameFeatureDetailViewModel.cs" />
-    <Compile Include="Models\Joke.cs" />
-    <Compile Include="Models\JokeCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scenarios\AppScenario.cs" />
     <Compile Include="ViewModels\ClientVersionViewModel.cs" />
+    <Compile Include="ViewModels\IntegrationGameViewModel.cs" />
+    <Compile Include="ViewModels\JokeCategoryViewModel.cs" />
     <Compile Include="ViewModels\JokeViewModel.cs" />
     <Compile Include="Models\LanguageFilePosition.cs" />
     <Compile Include="ViewModels\ResponseViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

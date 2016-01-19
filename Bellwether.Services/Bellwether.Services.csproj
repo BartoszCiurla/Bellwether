@@ -108,19 +108,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\AutoMapperConfig.cs" />
+    <Compile Include="ExtensionMethods\ResponseExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IntegrationGameService\GameFeatureManagementService.cs" />
     <Compile Include="Services\IntegrationGameService\IntegrationGameManagementService.cs" />
+    <Compile Include="Services\IntegrationGameService\IntegrationGameService.cs" />
     <Compile Include="Services\JokeService\JokeCategoryManagementService.cs" />
     <Compile Include="Services\JokeService\JokeManagementService.cs" />
+    <Compile Include="Services\JokeService\JokeService.cs" />
+    <Compile Include="Services\LanguageService\LanguageManagementService.cs" />
     <Compile Include="Services\ResourceService\InitiateResourceService.cs" />
     <Compile Include="Services\LanguageService\LanguageService.cs" />
     <Compile Include="Services\ResourceService\ResourceService.cs" />
+    <Compile Include="Services\SpeechSynthesizer\SpeechSyntesizerService.cs" />
+    <Compile Include="Services\VersionService\VersionManagementService.cs" />
     <Compile Include="Services\VersionService\VersionValidateService.cs" />
     <Compile Include="Utility\ModelMapper.cs" />
     <Compile Include="Utility\RepositoryFactory.cs" />
     <Compile Include="Utility\RequestExecutor.cs" />
     <Compile Include="Utility\ResourcesFiles.cs" />
+    <Compile Include="Utility\ServiceExecutor.cs" />
     <Compile Include="Utility\ServiceFactory.cs" />
     <Compile Include="WebServices\WebBellwetherIntegrationGameService.cs" />
     <Compile Include="WebServices\WebBellwetherJokeService.cs" />

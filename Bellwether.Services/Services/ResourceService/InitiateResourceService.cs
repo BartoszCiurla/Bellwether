@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Windows.Storage;
 using Bellwether.Services.Utility;
+using Microsoft.Data.Entity;
 
 namespace Bellwether.Services.Services.ResourceService
 {
@@ -28,6 +29,7 @@ namespace Bellwether.Services.Services.ResourceService
         }
         public async Task<bool> Initiate()
         {
+            RepositoryFactory.Context.Database.Migrate();
             await InitApplicationResources(_localResourcesFolder, _localApplicationResourcesFile, _staticApplicationResourcesFile);
             await
                 InitLanguageResources(_localResourcesFolder, _localLanguageResourcesFile, _staticLanguageResourcesFile);

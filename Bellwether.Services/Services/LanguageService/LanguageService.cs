@@ -25,12 +25,12 @@ namespace Bellwether.Services.Services.LanguageService
         {
             if (mandatoryLanguages == null)
                 return false;
-            List<BellwetherLanguageDao> localLanguages = RepositoryFactory.Context.BellwetherLanguages.ToList();
-            if (!localLanguages.Any())
-                return InsertLanguagesAndSave(mandatoryLanguages);            
-            InsertLanguageIfNotExistsOnLocalList(mandatoryLanguages, localLanguages);
-            DeleteLanguageIfNotExistsOnMandatoryList(mandatoryLanguages, localLanguages);
-            RepositoryFactory.Context.SaveChanges();
+            
+            //if (!localLanguages.Any())
+            //    return InsertLanguagesAndSave(mandatoryLanguages);            
+            InsertLanguageIfNotExistsOnLocalList(mandatoryLanguages);
+            DeleteLanguageIfNotExistsOnMandatoryList(mandatoryLanguages);
+            //RepositoryFactory.Context.SaveChanges();
             return true;
         }
 
@@ -48,8 +48,9 @@ namespace Bellwether.Services.Services.LanguageService
             RepositoryFactory.Context.SaveChanges();
             return true;
         }
-        private void InsertLanguageIfNotExistsOnLocalList(BellwetherLanguageDao[] mandatoryLanguages, List<BellwetherLanguageDao> localLanguages)
+        private void InsertLanguageIfNotExistsOnLocalList(BellwetherLanguageDao[] mandatoryLanguages)
         {
+            List<BellwetherLanguageDao> localLanguages = RepositoryFactory.Context.BellwetherLanguages.ToList();
             mandatoryLanguages.ToList().ForEach(mandatoryLanguage =>
             {
                 if (localLanguages.FirstOrDefault(localLanguage => localLanguage.Id == mandatoryLanguage.Id) == null)
@@ -57,8 +58,9 @@ namespace Bellwether.Services.Services.LanguageService
             });
         }
 
-        private void DeleteLanguageIfNotExistsOnMandatoryList(BellwetherLanguageDao[] mandatoryLanguages, List<BellwetherLanguageDao> localLanguages)
+        private void DeleteLanguageIfNotExistsOnMandatoryList(BellwetherLanguageDao[] mandatoryLanguages)
         {
+            List<BellwetherLanguageDao> localLanguages = RepositoryFactory.Context.BellwetherLanguages.ToList();
             localLanguages.ForEach(localLanguage =>
             {
                 if (

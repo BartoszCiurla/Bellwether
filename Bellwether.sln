@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3592DFFF-ADC3-4FFE-AAC9-14B3383D5825}"
 	ProjectSection(SolutionItems) = preProject
 		UsedSiteLinks.txt = UsedSiteLinks.txt
-		WorkPlan.txt = WorkPlan.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bellwether.Repositories", "Bellwether.Repositories\Bellwether.Repositories.csproj", "{B4DD2FDA-9582-4CC3-8E7A-658B7BD82C54}"
