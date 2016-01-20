@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml.Controls;
@@ -12,7 +9,7 @@ namespace Bellwether.Services.Services.SpeechSynthesizer
     {
         Task<bool> Read(string content);
     }
-    public class SpeechSyntesizerService:ISpeechSyntesizerService
+    public class SpeechSyntesizerService : ISpeechSyntesizerService
     {
         private readonly Windows.Media.SpeechSynthesis.SpeechSynthesizer _synthesizer;
         private readonly MediaElement _media;

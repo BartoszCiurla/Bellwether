@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Bellwether.Controls;
 using Bellwether.ViewModels;
 using Bellwether.Views;
+using Bellwether.Views.IntegrationGame;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 

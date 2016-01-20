@@ -25,9 +25,9 @@ namespace Bellwether.Services.Services.LanguageService
         {
             if (mandatoryLanguages == null)
                 return false;
-            
-            //if (!localLanguages.Any())
-            //    return InsertLanguagesAndSave(mandatoryLanguages);            
+            var localLanguages = RepositoryFactory.Context.BellwetherLanguages.ToList();
+            if (!localLanguages.Any())
+                return InsertLanguagesAndSave(mandatoryLanguages);
             InsertLanguageIfNotExistsOnLocalList(mandatoryLanguages);
             DeleteLanguageIfNotExistsOnMandatoryList(mandatoryLanguages);
             //RepositoryFactory.Context.SaveChanges();

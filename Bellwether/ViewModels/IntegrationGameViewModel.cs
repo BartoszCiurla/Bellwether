@@ -10,6 +10,16 @@ namespace Bellwether.ViewModels
 {
     public class IntegrationGameViewModel:ViewModel
     {
+        private Models.ViewModels.IntegrationGameViewModel _selectedIntegrationGame;
+        public Models.ViewModels.IntegrationGameViewModel SelectedIntegrationGame
+        {
+            get { return _selectedIntegrationGame; }
+            set
+            {
+                _selectedIntegrationGame = value;
+                NotifyPropertyChanged();
+            }
+        }
         public ObservableCollection<Models.ViewModels.IntegrationGameViewModel> IntegrationGames { get; set; }
 
         public IntegrationGameViewModel()
@@ -24,5 +34,6 @@ namespace Bellwether.ViewModels
             if(integrationGames.IsValid)
             IntegrationGames = new ObservableCollection<Models.ViewModels.IntegrationGameViewModel>(integrationGames.Data);
         }
+
     }
 }

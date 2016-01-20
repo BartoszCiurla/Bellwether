@@ -107,13 +107,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\IntegrationGameViewModel.cs" />
     <Compile Include="ViewModels\JokeViewModel.cs" />
-    <Compile Include="ViewModels\NavMenuItem.cs" />
+    <Compile Include="NavMenuItem.cs" />
     <Compile Include="ViewModels\OptionViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IntegrationGamePage.xaml.cs">
+    <Compile Include="Views\IntegrationGame\IntegrationGameDetailPage.xaml.cs">
+      <DependentUpon>IntegrationGameDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IntegrationGame\IntegrationGamePage.xaml.cs">
       <DependentUpon>IntegrationGamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\JokePage.xaml.cs">
@@ -177,7 +180,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\IntegrationGamePage.xaml">
+    <Page Include="Views\IntegrationGame\IntegrationGameDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IntegrationGame\IntegrationGamePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
