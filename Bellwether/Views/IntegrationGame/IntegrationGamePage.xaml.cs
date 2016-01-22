@@ -14,60 +14,31 @@ namespace Bellwether.Views.IntegrationGame
     /// </summary>
     public sealed partial class IntegrationGamePage : Page
     {
-        private IntegrationGameViewModel _viewModel;
+        private IntegrationGamePageViewModel _viewModel;
         public IntegrationGamePage()
         {
             this.InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                _viewModel = new IntegrationGameViewModel();
+                _viewModel = new IntegrationGamePageViewModel();             
                 this.DataContext = _viewModel;
-                MasterListView.ItemsSource = _viewModel.IntegrationGames;
                 OnLoaded(s, e);
             };
         }
 
         private void OnItemClick(object sender, ItemClickEventArgs e)
         {
-            // The clicked item it is the new selected contact
             _viewModel.SelectedIntegrationGame = e.ClickedItem as Models.ViewModels.IntegrationGameViewModel;
             if (PageSizeStatesGroup.CurrentState == NarrowState)
             {
-                // Go to the details page and display the item 
-                Frame.Navigate(typeof(IntegrationGameDetailPage), _viewModel.SelectedIntegrationGame, new DrillInNavigationTransitionInfo());
+                Frame.Navigate(typeof(IntegrationGameDetailPage), _viewModel, new DrillInNavigationTransitionInfo());
             }
-            //else
-            {
-                // Play a refresh animation when the user switches detail items.
-                //EnableContentTransitions();
-            }
+
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.SelectedIntegrationGame == null && _viewModel.IntegrationGames.Count > 0)
-            {
-                _viewModel.SelectedIntegrationGame = _viewModel.IntegrationGames[0];
-                MasterListView.SelectedIndex = 0;
-            }
-            // If the app starts in narrow mode - showing only the Master listView - 
-            // it is necessary to set the commands and the selection mode.
-            if (PageSizeStatesGroup.CurrentState == NarrowState)
-            {
-                VisualStateManager.GoToState(this, MasterState.Name, true);
-            }
-            else if (PageSizeStatesGroup.CurrentState == WideState)
-            {
-                // In this case, the app starts is wide mode, Master/Details view, 
-                // so it is necessary to set the commands and the selection mode.
-                VisualStateManager.GoToState(this, MasterDetailsState.Name, true);
-                MasterListView.SelectionMode = ListViewSelectionMode.Extended;
-                MasterListView.SelectedItem = _viewModel.SelectedIntegrationGame;
-            }
-            else
-            {
-                new InvalidOperationException();
-            }
+            MasterListView.SelectedItem = _viewModel.SelectedIntegrationGame;           
         }
 
         private void OnCurrentStateChanged(object sender, VisualStateChangedEventArgs e)
@@ -75,12 +46,10 @@ namespace Bellwether.Views.IntegrationGame
             bool isNarrow = e.NewState == NarrowState;
             if (isNarrow)
             {
-                Frame.Navigate(typeof(IntegrationGameDetailPage), _viewModel.SelectedIntegrationGame, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(IntegrationGameDetailPage), _viewModel, new SuppressNavigationTransitionInfo());
             }
             else
             {
-                //VisualStateManager.GoToState(this, MasterDetailsState.Name, true);
-                MasterListView.SelectionMode = ListViewSelectionMode.Extended;
                 MasterListView.SelectedItem = _viewModel.SelectedIntegrationGame;
             }
 
@@ -94,31 +63,24 @@ namespace Bellwether.Views.IntegrationGame
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (PageSizeStatesGroup.CurrentState == WideState)
-            {
-                if (MasterListView.SelectedItems.Count == 1)
-                {
-                    _viewModel.SelectedIntegrationGame = MasterListView.SelectedItem as Models.ViewModels.IntegrationGameViewModel;
+            //if (PageSizeStatesGroup.CurrentState == WideState)
+            //{
+            //    if (MasterListView.SelectedItems.Count == 1)
+            //    {
+            //        _viewModel.SelectedIntegrationGame = MasterListView.SelectedItem as Models.ViewModels.IntegrationGameViewModel;
                     EnableContentTransitions();
-                }
-                // Entering in Extended selection
-                else if (MasterListView.SelectedItems.Count > 1
-                     && MasterDetailsStatesGroup.CurrentState == MasterDetailsState)
-                {
-                    VisualStateManager.GoToState(this, ExtendedSelectionState.Name, true);
-                }
-            }
-            // Exiting Extended selection
-            if (MasterDetailsStatesGroup.CurrentState == ExtendedSelectionState &&
-                MasterListView.SelectedItems.Count == 1)
-            {
-                VisualStateManager.GoToState(this, MasterDetailsState.Name, true);
-            }
+            //    }         
+            //}
         }
         private void EnableContentTransitions()
         {
-            DetailContentPresenter.ContentTransitions.Clear();
-            DetailContentPresenter.ContentTransitions.Add(new EntranceThemeTransition());
+            //DetailContentPresenter.ContentTransitions.Clear();
+            
+            DetailContentPresenter.ChildrenTransitions.Clear();
+            DetailContentPresenter.ChildrenTransitions.Add(new EntranceThemeTransition { FromHorizontalOffset = 500, FromVerticalOffset = 500 });
+            //DetailContentPresenter.ChildrenTransitions.Add(new EntranceThemeTransition());
+           // DetailContentPresenter.ChildrenTransitions.Add(new PopupThemeTransition {FromHorizontalOffset = 500,FromVerticalOffset = 500});
+           //DetailContentPresenter.ChildrenTransitions.Add();
         }
     }
 }

@@ -11,7 +11,7 @@ using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
 {
-    public class JokeViewModel:ViewModel
+    public class JokePageViewModel:ViewModel
     {
         public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
         private Models.ViewModels.JokeViewModel _selectedJoke;
@@ -39,7 +39,7 @@ namespace Bellwether.ViewModels
             }
         }
         public RelayCommand SpeakCommand { get; set;}
-        public JokeViewModel()
+        public JokePageViewModel()
         {   
             SpeakCommand = new RelayCommand(Read);  
             LoadContent();

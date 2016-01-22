@@ -31,7 +31,7 @@ namespace Bellwether.Services.Utility
             }
             catch (Exception e)
             {
-                await new MessageDialog(e.ToString()).ShowAsync();
+                await new MessageDialog(e.Message).ShowAsync();
                 return new ResponseViewModel<TResponse>().Invalid(e.Message);
             }
         }
@@ -50,7 +50,7 @@ namespace Bellwether.Services.Utility
             }
             catch (Exception e)
             {
-                await new MessageDialog(e.ToString()).ShowAsync();
+                await new MessageDialog(e.Message).ShowAsync();
                 return new ResponseViewModel<TResponse>().Invalid(e.Message);
             }
         }

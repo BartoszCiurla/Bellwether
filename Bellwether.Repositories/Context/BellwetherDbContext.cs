@@ -18,7 +18,7 @@ namespace Bellwether.Repositories.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string databaseFilePath = "Testy7.db";
+            string databaseFilePath = "Testy22.db";
             try
             {
                 databaseFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseFilePath);

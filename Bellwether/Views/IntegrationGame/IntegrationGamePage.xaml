@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:gameViewModels="using:Bellwether.Models.ViewModels"
-    NavigationCacheMode="Enabled"
+    xmlns:gameViewModels="using:Bellwether.Models.ViewModels"  
     mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
@@ -72,38 +71,10 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
-            <VisualStateGroup x:Name="MasterDetailsStatesGroup">
-
-                <VisualState x:Name="MasterState">
-                    <VisualState.Setters>
-                        <Setter Target="MasterListView.SelectionMode" Value="None" />
-                        <Setter Target="MasterListView.IsItemClickEnabled" Value="True" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="MasterDetailsState">
-                    <VisualState.Setters>
-                        <Setter Target="MasterListView.SelectionMode" Value="Extended" />
-                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="ExtendedSelectionState">
-                    <VisualState.Setters>
-                       
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="MultipleSelectionState">
-                    <VisualState.Setters>
-                        <Setter Target="MasterListView.SelectionMode" Value="Multiple" />
-                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
-                     
-                    </VisualState.Setters>
-                </VisualState>
-
-            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--#region Navigation across the samples -->       
-        <TextBlock Text="Gry intergracyjne" 
+        <!--#region Navigation across the samples -->
+        <TextBlock Text="{Binding TextPageTittle}" 
                    HorizontalAlignment="Center"
                    Style="{ThemeResource  TitleTextBlockStyle}" 
                    VerticalAlignment="Center"
@@ -122,19 +93,14 @@
                 <ColumnDefinition x:Name="DetailColumn" Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                <TextBlock Text="Dostępne gry" Margin="24,8,8,8"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Style="{ThemeResource TitleTextBlockStyle}" />
-            </Border>
-
             <ListView x:Name="MasterListView" 
                   SelectionMode="Single"
+                  SelectedItem="{Binding SelectedIntegrationGame}"   
                   SelectionChanged="OnSelectionChanged"
                   IsItemClickEnabled="True"
                   ShowsScrollingPlaceholders="False"
                   ItemTemplate="{StaticResource IntegrationGameListViewTemplate }"
+                  ItemsSource="{Binding IntegrationGames}"
                   ItemClick="OnItemClick"
                   Grid.Row="1">
                 <ListView.ItemContainerStyle>
@@ -144,65 +110,48 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <ContentPresenter
-                x:Name="DetailContentPresenter"
+            <StackPanel 
                 Grid.Column="1"
-                Grid.RowSpan="2"
+                Grid.Row="0" 
+                Grid.RowSpan="2" 
                 BorderThickness="1,0,0,0"
                 Padding="24,0"
-                BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                Content="{x:Bind MasterListView.SelectedItem, Mode=OneWay}">
-                <ContentPresenter.ContentTemplate>
-                    <DataTemplate x:DataType="gameViewModels:IntegrationGameViewModel">
-                        <StackPanel>
-                            <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"   
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                x:Name="DetailContentPresenter">
+                <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                    Margin="0,8"       
-                                   Text="{x:Bind GameName}"/>
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                                   Text="{Binding SelectedIntegrationGame.GameName}"/>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,9" 
                                    TextWrapping="WrapWholeWords"
-                                   Text="{x:Bind GameDescription}" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   Text="{x:Bind CategoryGame}" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   Text="{x:Bind PaceOfPlay}" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   Text="{x:Bind NumberOfPlayer}" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   Text="{x:Bind PreparationFun}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ContentPresenter.ContentTemplate>
-                <ContentPresenter.ContentTransitions>
+                                   Text="{Binding SelectedIntegrationGame.GameDescription}" />
+                <!--GAME FEATURES-->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
+                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" />
+                </StackPanel>
+                <StackPanel.ChildrenTransitions>
                     <TransitionCollection/>
-                </ContentPresenter.ContentTransitions>
-            </ContentPresenter>
+                </StackPanel.ChildrenTransitions>
+            </StackPanel>
         </Grid>
     </Grid>
-    <!--<Page.Resources>
-        <DataTemplate x:Key="IG" x:DataType="viewModels:IntegrationGameViewModel">
-            <Grid Width="280">
-                <TextBlock Text="{x:Bind GameName}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                <TextBlock Text="{x:Bind GameDescription}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                <TextBlock Text="{x:Bind CategoryGame}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                <TextBlock Text="{x:Bind PaceOfPlay}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                <TextBlock Text="{x:Bind NumberOfPlayer}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                <TextBlock Text="{x:Bind PreparationFun}" 
-                   Margin="8,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
-    <ListView x:Name="IntegrationGames" ItemsSource="{Binding IntegrationGames}"          
-              ItemTemplate="{StaticResource IG}"
-                          Height="400">
-    </ListView>-->
 </Page>

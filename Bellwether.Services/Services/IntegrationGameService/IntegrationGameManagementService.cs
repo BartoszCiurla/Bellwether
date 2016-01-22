@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Bellwether.Models.ViewModels;
 using Bellwether.Repositories.Entities;
@@ -8,11 +9,11 @@ namespace Bellwether.Services.Services.IntegrationGameService
 {
     public interface IIntegrationGameManagementService
     {
-        bool ValidateAndFillIntegrationGames(List<DirectIntegrationGameViewModel> mandatoryIntegrationGames);
+        bool ValidateAndFillIntegrationGames(List<SimpleIntegrationGameViewModel> mandatoryIntegrationGames);
     }
     public class IntegrationGameManagementService : IIntegrationGameManagementService
     {
-        public bool ValidateAndFillIntegrationGames(List<DirectIntegrationGameViewModel> mandatoryIntegrationGames)
+        public bool ValidateAndFillIntegrationGames(List<SimpleIntegrationGameViewModel> mandatoryIntegrationGames)
         {
             if (mandatoryIntegrationGames == null)
                 return false;            
@@ -25,61 +26,49 @@ namespace Bellwether.Services.Services.IntegrationGameService
             return true;
         }
 
-        private void InsertIntegrationGameIfNotExistsOnLocalList(List<DirectIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
+        private void InsertIntegrationGameIfNotExistsOnLocalList(List<SimpleIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
         {
-            List<IntegrationGameDao> localIntegrationGames = RepositoryFactory.Context.IntegrationGames.ToList();
-            List<GameFeatureDao> gameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
+            List<GameFeatureDao> localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
             mandatory.ForEach(x =>
             {
-                var integrationGame = localIntegrationGames.FirstOrDefault(y => y.Id == x.Id);
-                if (integrationGame == null)
+                var integrationGameDao = RepositoryFactory.Context.IntegrationGames.FirstOrDefault(y => y.Id == x.Id);
+                if (integrationGameDao == null)
                 {
-                    RepositoryFactory.Context.IntegrationGames.Add(new IntegrationGameDao { Id = x.Id, Language = language, IntegrationGameDescription = x.GameDescription, IntegrationGameName = x.GameName, GameFeatures = FillFeaturesForGame(x, gameFeatures, language) });
+                    RepositoryFactory.Context.IntegrationGames.Add(new IntegrationGameDao { Id = x.Id, Language = language, IntegrationGameDescription = x.GameDescription, IntegrationGameName = x.GameName, GameFeatures = FillFeaturesForGame(x, localGameFeatures, language) });
                 }
                 else
                 {
-                    integrationGame.IntegrationGameDescription = x.GameDescription;
-                    integrationGame.IntegrationGameName = x.GameName;
-                    integrationGame.Language = language;
-                    integrationGame.GameFeatures = FillFeaturesForGame(x, gameFeatures, language);
-                    RepositoryFactory.Context.Update(integrationGame);
+                    integrationGameDao.IntegrationGameDescription = x.GameDescription;
+                    integrationGameDao.IntegrationGameName = x.GameName;
+                    integrationGameDao.Language = language;
+                    integrationGameDao.GameFeatures.ToList().ForEach(z =>
+                    {
+                        z.Language = language;
+                        z.GameFeature = GetGameFeatureById(z.GameFeature.Id, localGameFeatures);
+                        z.GameFeatureDetail = GetGameFeatureDetailById(z.GameFeatureDetail.Id, localGameFeatures);
+                    });
+                    RepositoryFactory.Context.Update(integrationGameDao);
                 }                                    
             });
-            RepositoryFactory.Context.SaveChanges();
+            RepositoryFactory.Context.SaveChanges();          
         }
     
-        private List<IntegrationGameFeatureDao> FillFeaturesForGame(DirectIntegrationGameViewModel mandatoryGame, List<GameFeatureDao> gameFeatures, BellwetherLanguageDao language)
+        private List<IntegrationGameFeatureDao> FillFeaturesForGame(SimpleIntegrationGameViewModel mandatoryGame, List<GameFeatureDao> gameFeatures, BellwetherLanguageDao language)
         {
-            return new List<IntegrationGameFeatureDao>
+            var integrationGameFeatures = new List<IntegrationGameFeatureDao>();
+            mandatoryGame.GameFeatures.ToList().ForEach(gameFeatureDetailId =>
             {
-                new IntegrationGameFeatureDao
+                integrationGameFeatures.Add(new IntegrationGameFeatureDao
                 {
                     Language = language,
-                    GameFeature = GetGameFeatureByName(mandatoryGame.GameName, gameFeatures),
-                    GameFeatureDetail = GetGameFeatureDetailByName(mandatoryGame.GameName, gameFeatures)
-                },
-                new IntegrationGameFeatureDao
-                {
-                    Language = language,
-                    GameFeature = GetGameFeatureByName(mandatoryGame.CategoryGame, gameFeatures),
-                    GameFeatureDetail = GetGameFeatureDetailByName(mandatoryGame.CategoryGame, gameFeatures)
-                },
-                new IntegrationGameFeatureDao
-                {
-                    Language = language,
-                    GameFeature = GetGameFeatureByName(mandatoryGame.NumberOfPlayer, gameFeatures),
-                    GameFeatureDetail = GetGameFeatureDetailByName(mandatoryGame.NumberOfPlayer, gameFeatures)
-                },
-                new IntegrationGameFeatureDao
-                {
-                    Language = language,
-                    GameFeature = GetGameFeatureByName(mandatoryGame.PreparationFun, gameFeatures),
-                    GameFeatureDetail = GetGameFeatureDetailByName(mandatoryGame.PreparationFun, gameFeatures)
-                }
-            };
+                    GameFeature = GetGameFeatureById(gameFeatureDetailId,gameFeatures),
+                    GameFeatureDetail = GetGameFeatureDetailById(gameFeatureDetailId,gameFeatures)
+                });
+            });
+            return integrationGameFeatures;           
         }
 
-        private GameFeatureDao GetGameFeatureByName(string gameFeatureDetailName,
+        private GameFeatureDao GetGameFeatureById(int gameFeatureDetailId,
             List<GameFeatureDao> gameFeatures)
         {
             GameFeatureDao gameFeature = null;
@@ -87,7 +76,7 @@ namespace Bellwether.Services.Services.IntegrationGameService
             {
                 x.GameFeatureDetails.ToList().ForEach(z =>
                 {
-                    if (z.GameFeatureDetailName == gameFeatureDetailName)
+                    if (z.Id == gameFeatureDetailId)
                     {
                         gameFeature = x;
                     }
@@ -96,7 +85,7 @@ namespace Bellwether.Services.Services.IntegrationGameService
             return gameFeature;
         }
 
-        private GameFeatureDetailDao GetGameFeatureDetailByName(string gameFeatureDetailName,
+        private GameFeatureDetailDao GetGameFeatureDetailById(int gameFeatureDetailId,
             List<GameFeatureDao> gameFeatures)
         {
             GameFeatureDetailDao gameFeatureDetail = null;
@@ -104,7 +93,7 @@ namespace Bellwether.Services.Services.IntegrationGameService
             {
                 x.GameFeatureDetails.ToList().ForEach(z =>
                 {
-                    if (z.GameFeatureDetailName == gameFeatureDetailName)
+                    if (z.Id == gameFeatureDetailId)
                         gameFeatureDetail = z;
                 });
             });

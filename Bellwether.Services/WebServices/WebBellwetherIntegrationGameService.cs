@@ -9,7 +9,7 @@ namespace Bellwether.Services.WebServices
     public interface IWebBellwetherIntegrationGameService
     {
         Task<List<GameFeatureViewModel>> GetGameFeatures(int languageId);
-        Task<List<DirectIntegrationGameViewModel>> GetIntegrationGames(int languageId);
+        Task<List<SimpleIntegrationGameViewModel>> GetIntegrationGames(int languageId);
     }
     public class WebBellwetherIntegrationGameService: IWebBellwetherIntegrationGameService
     {
@@ -20,14 +20,14 @@ namespace Bellwether.Services.WebServices
             return gameFeatures.Data;
         }
 
-        public async Task<List<DirectIntegrationGameViewModel>> GetIntegrationGames(int languageId)
+        public async Task<List<SimpleIntegrationGameViewModel>> GetIntegrationGames(int languageId)
         {
             var stringContent =
                 await
                     RequestExecutor.CreateRequestGetWithUriParam(
                         await RepositoryFactory.ApplicationResourceRepository.GetValueForKey("GetIntegrationGames") + languageId);
             var integrationGames =
-                JsonConvert.DeserializeObject<ResponseViewModel<List<DirectIntegrationGameViewModel>>>(stringContent);
+                JsonConvert.DeserializeObject<ResponseViewModel<List<SimpleIntegrationGameViewModel>>>(stringContent);
             return integrationGames.Data;
         }
     }

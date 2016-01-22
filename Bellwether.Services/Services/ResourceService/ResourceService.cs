@@ -16,11 +16,12 @@ namespace Bellwether.Services.Services.ResourceService
     {
         public async Task<SettingsViewModel> GetAppSettings()
         {
-            var settings = await RepositoryFactory.ApplicationResourceRepository.GetSelectedKeysValues(new[] { "SynchronizeData", "ApplicationLanguage" });
+            var settings = await RepositoryFactory.ApplicationResourceRepository.GetSelectedKeysValues(new[] { "SynchronizeData", "ApplicationLanguage", "ApplicationVoiceId"});
             return new SettingsViewModel
             {
                 ApplicationLanguage = settings["ApplicationLanguage"],
-                SynchronizeData = Convert.ToBoolean(settings["SynchronizeData"])
+                SynchronizeData = Convert.ToBoolean(settings["SynchronizeData"]),
+                ApplicationVoiceId = settings["ApplicationVoiceId"]
             };
         }
 

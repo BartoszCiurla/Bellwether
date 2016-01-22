@@ -32,12 +32,12 @@ namespace Bellwether.Services.Services.IntegrationGameService
             {
                 x.GameFeatureDetailModels.ToList().ForEach(z =>
                 {
-                    var gameFeature = localGameFeatureDetails.FirstOrDefault(k => k.Id == z.Id);
+                    var gameFeature = localGameFeatureDetails.FirstOrDefault(k => k.Id == z.GameFeatureDetailId);
                     if (gameFeature == null)
                     {
                         RepositoryFactory.Context.GameFeatureDetails.Add(new GameFeatureDetailDao
                         {
-                            Id = z.Id,
+                            Id = z.GameFeatureDetailId,
                             Language = language,
                             GameFeatureDetailName = z.GameFeatureDetailName
                         });
@@ -70,15 +70,18 @@ namespace Bellwether.Services.Services.IntegrationGameService
                         Language = language,
                         GameFeatureDetails =
                             new List<GameFeatureDetailDao>(
-                                x.GameFeatureDetailModels.ToList().Select(y => localGameFeaturesDetail.FirstOrDefault(k => k.Id == y.Id)))
+                                x.GameFeatureDetailModels.ToList().Select(y => localGameFeaturesDetail.FirstOrDefault(k => k.Id == y.GameFeatureDetailId)))
                     });
                 else
                 {
                     gameFeature.GameFeatureName = x.GameFeatureName;
                     gameFeature.Language = language;
-                    gameFeature.GameFeatureDetails = new List<GameFeatureDetailDao>(
-                        x.GameFeatureDetailModels.ToList()
-                            .Select(y => localGameFeaturesDetail.FirstOrDefault(k => k.Id == y.Id)));
+                    x.GameFeatureDetailModels.ToList().ForEach(k =>
+                    {
+                        var gameFeatureDetail = gameFeature.GameFeatureDetails.FirstOrDefault(u => u.Id == k.GameFeatureDetailId);
+                        gameFeatureDetail.GameFeatureDetailName = k.GameFeatureDetailName;
+                        gameFeatureDetail.Language = language;
+                    });      
                     RepositoryFactory.Context.GameFeatures.Update(gameFeature);
                 }
             });

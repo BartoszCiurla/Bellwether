@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.Media.SpeechSynthesis;
 using Bellwether.Commands;
 using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
@@ -7,7 +9,7 @@ using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
 {
-    public class OptionViewModel : ViewModel
+    public class OptionPageViewModel : ViewModel
     {
         private BellwetherLanguage _currentLanguage;
         public BellwetherLanguage CurrentLanguage
@@ -29,9 +31,27 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        public ObservableCollection<BellwetherLanguage> Languages { get; set; }
-        private bool _isDataSynchronize;
+        private VoiceViewModel _selectedVoice;
+        public VoiceViewModel SelectedVoice
+        {
+            get { return _selectedVoice; }
+            set { _selectedVoice = value; NotifyPropertyChanged(); }
+        }
 
+        private VoiceViewModel _currentVoice;
+        public VoiceViewModel CurrentVoice
+        {
+            get
+            {
+                return _currentVoice;                
+            }
+            set
+            {
+                _currentVoice = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _isDataSynchronize;
         public bool IsDataSynchronize
         {
             get { return _isDataSynchronize; }
@@ -41,21 +61,25 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
+        public ObservableCollection<BellwetherLanguage> Languages { get; set; }
+        public ObservableCollection<VoiceViewModel> Voices { get; set; }
         public RelayCommand ChangeLanguageCommand { get; set; }
-        public RelayCommand ChangeSynchronize { get; set; }
-        public OptionViewModel()
+        public RelayCommand ChangeSynchronizeCommand { get; set; }
+        public RelayCommand ChangeVoiceCommand { get; set; }
+        public OptionPageViewModel()
         {
+            Languages = new ObservableCollection<BellwetherLanguage>();
+            Voices = new ObservableCollection<VoiceViewModel>();      
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
-            ChangeSynchronize = new RelayCommand(ChangeSynchronizeData);
+            ChangeSynchronizeCommand = new RelayCommand(ChangeSynchronizeData);
+            ChangeVoiceCommand = new RelayCommand(ChangeVoice);
             LoadContent();
         }
-
         private async void ChangeSynchronizeData()
         {
-           var isSync = await
-                ServiceExecutor.ExecuteAsync(
-                    () => ServiceFactory.ResourceService.SaveValueForKey("SynchronizeData", IsDataSynchronize.ToString()));
+            var isSync = await
+                 ServiceExecutor.ExecuteAsync(
+                     () => ServiceFactory.ResourceService.SaveValueForKey("SynchronizeData", IsDataSynchronize.ToString()));
             if (!isSync.IsValid)
                 IsDataSynchronize = !IsDataSynchronize;
         }
@@ -74,6 +98,11 @@ namespace Bellwether.ViewModels
             }
         }
 
+        private async void ChangeVoice()
+        {
+            
+        }
+
         private bool BasicLanguageVerification()
         {
             if (_selectedLanguage == null)
@@ -87,14 +116,18 @@ namespace Bellwether.ViewModels
         private void LoadLanguages()
         {
             var langs = ServiceExecutor.Execute(() => ServiceFactory.LanguageService.GetLocalLanguages());
-            Languages = new ObservableCollection<BellwetherLanguage>(langs.Data);
+            langs.Data.ToList().ForEach(x =>
+            {
+                Languages.Add(x);
+            });
         }
 
         private async void LoadContent()
-        {
+        {            
             LoadLanguages();
             await LoadLanguageContent();
             await LoadApplicationSettings();
+            LoadVoices();
         }
 
         private async Task LoadApplicationSettings()
@@ -102,9 +135,33 @@ namespace Bellwether.ViewModels
             SettingsViewModel settings = await ServiceFactory.ResourceService.GetAppSettings();
             IsDataSynchronize = settings.SynchronizeData;
             CurrentLanguage = ServiceFactory.LanguageService.GetLocalLanguageByShortName(settings.ApplicationLanguage);
-            SelectedLanguage = CurrentLanguage;
+            SelectedLanguage = CurrentLanguage;            
+            CurrentVoice = LoadVoice(settings.ApplicationVoiceId);
+            SelectedVoice = CurrentVoice;
         }
 
+        private VoiceViewModel LoadVoice(string voiceId)
+        {
+            var voices = SpeechSynthesizer.AllVoices;
+            var voice = voices.FirstOrDefault(x => x.Id == voiceId);
+            return VoiceExists(voice) ? new VoiceViewModel { Voice = voice } : new VoiceViewModel { Voice = GetFirstVoiceByLanguage(SelectedLanguage.LanguageShortName) };
+        }
+        private VoiceInformation GetFirstVoiceByLanguage(string languageShortName)
+        {
+            return SpeechSynthesizer.AllVoices.FirstOrDefault(x => x.Language.Contains(languageShortName));
+        }
+        private bool VoiceExists(VoiceInformation voice)
+        {
+            return voice != null;
+        }
+
+        private void LoadVoices()
+        {
+            SpeechSynthesizer.AllVoices.ToList().ForEach(x =>
+            {
+                Voices.Add(new VoiceViewModel {Voice = x});
+            });
+        }
         private async Task LoadLanguageContent()
         {
             var contentKeys = new[] { "Settings", "ChangeLanguage", "ApplyLanguage", "CurrentLanguage", "DataSynchronization" };

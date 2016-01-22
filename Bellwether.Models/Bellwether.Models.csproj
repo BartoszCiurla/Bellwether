@@ -51,6 +51,7 @@
     <Compile Include="Models\LanguageFilePosition.cs" />
     <Compile Include="ViewModels\ResponseViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SimpleIntegrationGameViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

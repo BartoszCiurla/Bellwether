@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Bellwether.Models.ViewModels;
+using Bellwether.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,7 +27,7 @@ namespace Bellwether.Views.IntegrationGame
     /// </summary>
     public sealed partial class IntegrationGameDetailPage : Page
     {
-        private IntegrationGameViewModel SelectedIntegrationgame { get; set; }
+        private IntegrationGamePageViewModel _viewModel;
         public IntegrationGameDetailPage()
         {
             this.InitializeComponent();
@@ -52,8 +53,8 @@ namespace Bellwether.Views.IntegrationGame
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            SelectedIntegrationgame = e.Parameter as IntegrationGameViewModel;
+            _viewModel = e.Parameter as IntegrationGamePageViewModel;
+            this.DataContext = _viewModel;
             // Register for hardware and software back request from the system
             SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;

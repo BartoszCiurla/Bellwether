@@ -105,12 +105,13 @@
     <Compile Include="Controls\NavMenuListView.cs" />
     <Compile Include="Controls\ParallaxBackgroundHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\IntegrationGameViewModel.cs" />
-    <Compile Include="ViewModels\JokeViewModel.cs" />
+    <Compile Include="ViewModels\IntegrationGamePageViewModel.cs" />
+    <Compile Include="ViewModels\JokePageViewModel.cs" />
     <Compile Include="NavMenuItem.cs" />
-    <Compile Include="ViewModels\OptionViewModel.cs" />
+    <Compile Include="ViewModels\OptionPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
-    <Compile Include="Views\HomePage.xaml.cs">
+    <Compile Include="ViewModels\VoiceViewModel.cs" />
+    <Compile Include="Views\Home\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IntegrationGame\IntegrationGameDetailPage.xaml.cs">
@@ -119,10 +120,10 @@
     <Compile Include="Views\IntegrationGame\IntegrationGamePage.xaml.cs">
       <DependentUpon>IntegrationGamePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\JokePage.xaml.cs">
+    <Compile Include="Views\Joke\JokePage.xaml.cs">
       <DependentUpon>JokePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OptionPage.xaml.cs">
+    <Compile Include="Views\Option\OptionPage.xaml.cs">
       <DependentUpon>OptionPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -176,7 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\HomePage.xaml">
+    <Page Include="Views\Home\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,11 +189,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\JokePage.xaml">
+    <Page Include="Views\Joke\JokePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OptionPage.xaml">
+    <Page Include="Views\Option\OptionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

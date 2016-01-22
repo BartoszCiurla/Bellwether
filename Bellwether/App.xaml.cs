@@ -20,6 +20,7 @@ using Bellwether.Services;
 using Bellwether.Services.Services;
 using Bellwether.Services.Utility;
 using Bellwether.Views;
+using Bellwether.Views.Home;
 using Microsoft.Data.Entity;
 
 namespace Bellwether

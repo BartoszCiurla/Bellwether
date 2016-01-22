@@ -14,6 +14,34 @@
     </Page.Transitions>
     <StackPanel Padding="24,0" Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                                   Margin="0,8"       
+                                   Text="{Binding SelectedIntegrationGame.GameName}"/>
+        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                                   Margin="0,9" 
+                                   TextWrapping="WrapWholeWords"
+                                   Text="{Binding SelectedIntegrationGame.GameDescription}" />
+        <!--GAME FEATURES-->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
+                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" />
+        </StackPanel>
+        <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                Margin="0,8"       
                                Text="{x:Bind SelectedIntegrationgame.GameName}"/>
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
@@ -33,6 +61,6 @@
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    Margin="0,9" 
                                    TextWrapping="WrapWholeWords"
-                                   Text="{x:Bind SelectedIntegrationgame.NumberOfPlayer}" />
+                                   Text="{x:Bind SelectedIntegrationgame.NumberOfPlayer}" />-->
     </StackPanel>
 </Page>
