@@ -26,6 +26,18 @@
                 <TextBlock x:Name="Text" Grid.Column="1" Text="{x:Bind Label}" />
             </Grid>
         </DataTemplate>
+        <Style x:Key="FrameBackgroundMovie" TargetType="Frame">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Frame">
+                        <Grid>
+                            <MediaElement AutoPlay="True" IsLooping="True" Source="../Assets/CloudFly.mp4"   Stretch="UniformToFill"/>
+                            <ContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>

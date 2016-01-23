@@ -4,10 +4,116 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:Bellwether.Models.ViewModels"
     mc:Ignorable="d">
+    <Page.Transitions>
+        <TransitionCollection>
+            <EntranceThemeTransition />
+        </TransitionCollection>
+    </Page.Transitions>
+    <Page.Resources>
+        <DataTemplate x:Name="JokeListViewTemplate" x:DataType="viewModels:JokeViewModel">
+            <StackPanel Orientation="Vertical">
+                <StackPanel x:Name="JokeContentPanel">
+                    <TextBlock 
+                    Text="{x:Bind JokeContent}"
+                    TextWrapping="WrapWholeWords"
+                        FontSize="24"
+                        />
+                </StackPanel>
+                <StackPanel x:Name="JokeCategoryPanel"
+                    BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"  
+                    BorderThickness="0,0,0,1"
+                    Margin="0,0,0,40">
+                    <TextBlock                    
+                    Text="{x:Bind JokeCategoryName}"
+                    FontSize="20"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
 
-    <GridView   
+    <Grid x:Name="LayoutRoot">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="PageSizeStatesGroup">
+                <VisualState x:Name="VeryWideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="JokeDetail.MaxWidth" Value="920"/>
+                        <Setter Target="PageHeader.FontSize" Value="36"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="JokeDetail.MaxWidth" Value="720"/>
+                        <Setter Target="PageHeader.FontSize" Value="30"/>
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="JokeDetail.MaxWidth" Value="560"/>
+                        <Setter Target="PageHeader.FontSize" Value="24"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!--PAGE HEADER-->
+        <TextBlock x:Name="PageHeader"
+                   Text="{Binding TextPageTittle}" 
+                   HorizontalAlignment="Center"
+                   Style="{ThemeResource  TitleTextBlockStyle}" 
+                   Margin="20,0,0,20"/>
+
+        <Grid x:Name="JokeDetail" MaxWidth="560" Margin="0,40">
+            <ListView x:Name="JokeListView"
+                        ItemsSource="{Binding Jokes}"
+                        ItemTemplate="{StaticResource JokeListViewTemplate }"              
+                        IsItemClickEnabled="False"
+                        ContainerContentChanging="JokeListView_OnContainerContentChanging"
+                        HorizontalAlignment="Center">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Background" Value="{x:Null}"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+    </Grid>
+
+
+
+
+
+    <!--<ListView
+        x:Name="JokesListView"
+        ItemsSource="{Binding Jokes}"
+        IsItemClickEnabled="False">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <RelativePanel>
+                <TextBlock x:Name="ContentId"
+                    Text="{Binding JokeContent}"/>
+                <TextBlock
+                    RelativePanel.Below="ContetId"
+                    Text="{Binding JokeCategoryName}"/>
+                </RelativePanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+
+    </ListView>-->
+
+    <!--<GridView   
               ItemsSource="{Binding Jokes}" 
               IsItemClickEnabled="True" 
               SelectionMode="Single"         
@@ -18,13 +124,15 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="{Binding JokeContent}"/>
                     <TextBlock Text="{Binding JokeCategoryName}"/>
-                    <!--<Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />-->
-                    <!--RightTapped="Grid_RightTapped">-->
-                    <!--<Border Background="White"  BorderThickness="0" Width="210" Height="85">
+                    -->
+    <!--<Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />-->
+    <!--RightTapped="Grid_RightTapped">-->
+    <!--<Border Background="White"  BorderThickness="0" Width="210" Height="85">
                         <TextBlock Text="{Binding FileName}" />
                     </Border>-->
+    <!--
                 </StackPanel>
             </DataTemplate>
         </GridView.ItemTemplate>
-    </GridView>
+    </GridView>-->
 </Page>

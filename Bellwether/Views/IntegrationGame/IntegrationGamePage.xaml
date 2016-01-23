@@ -25,15 +25,14 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Text="{x:Bind GameName}" 
-                           x:Phase="1"  
+                           Text="{x:Bind GameName}"                               
                            Style="{ThemeResource BaseTextBlockStyle}"
                            Margin="12,6,0,0"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -46,7 +45,36 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="PageSizeStatesGroup"
                             CurrentStateChanged="OnCurrentStateChanged">
+                <VisualState x:Name="VeryVeryWideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1500"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MasterListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <Setter Target="MasterColumn.Width" Value="520" />
+                        <Setter Target="DetailColumn.Width" Value="*"/>
+                        <Setter Target="PageHeader.FontSize" Value="40"/>
+                        <Setter Target="GameName.FontSize" Value="34"/>
+                        <Setter Target="GameDescription.FontSize" Value="30"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VeryWideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MasterListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <Setter Target="MasterColumn.Width" Value="420" />
+                        <Setter Target="DetailColumn.Width" Value="*"/>
+                        <Setter Target="PageHeader.FontSize" Value="36"/>
+                        <Setter Target="GameName.FontSize" Value="32"/>
+                        <Setter Target="GameDescription.FontSize" Value="28"/>
 
+
+                    </VisualState.Setters>
+                </VisualState>
                 <VisualState x:Name="WideState">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720"  />
@@ -56,6 +84,10 @@
                         <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
                         <Setter Target="MasterColumn.Width" Value="320" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
+                        <Setter Target="PageHeader.FontSize" Value="30"/>
+                        <Setter Target="GameName.FontSize" Value="24"/>
+                        <Setter Target="GameDescription.FontSize" Value="20"/>
+
                     </VisualState.Setters>
                 </VisualState>
 
@@ -68,27 +100,29 @@
                         <Setter Target="DetailContentPresenter.Visibility" Value="Collapsed" />
                         <Setter Target="MasterColumn.Width" Value="*" />
                         <Setter Target="DetailColumn.Width" Value="0"/>
+                        <Setter Target="PageHeader.FontSize" Value="24"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--#region Navigation across the samples -->
-        <TextBlock Text="{Binding TextPageTittle}" 
-                   HorizontalAlignment="Center"
-                   Style="{ThemeResource  TitleTextBlockStyle}" 
-                   VerticalAlignment="Center"
-                   Grid.Column="1"/>
-        <!--#endregion-->
+        <!--PAGE HEADER-->
+        <TextBlock 
+            x:Name="PageHeader"
+            Text="{Binding TextPageTittle}" 
+            HorizontalAlignment="Center"
+            Style="{ThemeResource  TitleTextBlockStyle}" 
+            VerticalAlignment="Center"
+            Grid.Column="1"/>
 
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        <Grid 
               Grid.Row="1"
               Grid.ColumnSpan="2" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions >
                 <ColumnDefinition x:Name="MasterColumn" Width="320"  />
                 <ColumnDefinition x:Name="DetailColumn" Width="*" />
             </Grid.ColumnDefinitions>
@@ -102,6 +136,9 @@
                   ItemTemplate="{StaticResource IntegrationGameListViewTemplate }"
                   ItemsSource="{Binding IntegrationGames}"
                   ItemClick="OnItemClick"
+                  BorderThickness="1,0,0,0"
+                  BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                  Margin="0,40,0,0"
                   Grid.Row="1">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -110,50 +147,52 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <StackPanel 
-                Grid.Column="1"
+            <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto"  Grid.Column="1"
                 Grid.Row="0" 
-                Grid.RowSpan="2" 
-                BorderThickness="1,0,0,0"
-                Padding="24,0"
-                BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"   
+                Grid.RowSpan="2"   >
+                <StackPanel         
+                Padding="24,0"                
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                x:Name="DetailContentPresenter">
-                <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                x:Name="DetailContentPresenter"
+                Margin="40,0,40,0"           
+              >
+
+                    <TextBlock x:Name="GameName" Style="{ThemeResource TitleTextBlockStyle}"
                                    Margin="0,8"       
                                    Text="{Binding SelectedIntegrationGame.GameName}"/>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                    <TextBlock x:Name="GameDescription" Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,9" 
                                    TextWrapping="WrapWholeWords"
                                    Text="{Binding SelectedIntegrationGame.GameDescription}" />
-                <!--GAME FEATURES-->
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                    <!--GAME FEATURES-->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    Text="{Binding SelectedIntegrationGame.CategoryGame}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    Text="{Binding SelectedIntegrationGame.PaceOfPlay}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
                                    Text="{Binding SelectedIntegrationGame.PreparationFun}" />
-                </StackPanel>
+                    </StackPanel>
 
-                <Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
-                <StackPanel.ChildrenTransitions>
-                    <TransitionCollection/>
-                </StackPanel.ChildrenTransitions>
-            </StackPanel>
+                    <Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection/>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>

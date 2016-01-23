@@ -54,12 +54,6 @@ namespace Bellwether
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Bullets,
-                    Label = "Wodzirej",
-                    DestPage = typeof(AppShell)
-                },
-                new NavMenuItem()
-                {
                     Symbol = Symbol.Favorite,
                     Label = "Ustawienia",
                     DestPage = typeof(OptionPage)
@@ -92,7 +86,7 @@ namespace Bellwether
                     // DisplayMode changes.
                     this.CheckTogglePaneButtonSizeChanged();
                 });
-
+            AppFrame.Style = Resources["FrameBackgroundMovie"] as Style;
             SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
 
             NavMenuList.ItemsSource = navlist;

@@ -7,7 +7,7 @@
     xmlns:controls="using:Bellwether.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.Resources>
             <ResourceDictionary>
                 <SolidColorBrush x:Key="HubSectionBackgroundBrush" Color="{ThemeResource SystemAltMediumColor}" />
@@ -37,9 +37,9 @@
                     </DataTemplate>
                 </Hub.HeaderTemplate>
 
-                <Hub.Background>
+                <!--<Hub.Background>
                     <ImageBrush ImageSource="../../Images/1p1.jpg" Stretch="UniformToFill"/>
-                </Hub.Background>
+                </Hub.Background>-->
 
                 <HubSection Width="{x:Bind DesiredHubSectionWidth, Mode=OneWay}" />
 

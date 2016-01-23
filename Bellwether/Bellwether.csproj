@@ -134,6 +134,7 @@
     <None Include="Bellwether_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\CloudFly.mp4" />
     <Content Include="Images\1p1.jpg" />
     <Content Include="Images\cliff.jpg" />
     <Content Include="Images\grapes_background.jpg" />

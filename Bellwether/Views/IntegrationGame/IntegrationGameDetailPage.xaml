@@ -12,35 +12,40 @@
             <NavigationThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
-    <StackPanel Padding="24,0" Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="40,20,20,0" 
+                  >
+        
+        <StackPanel>
         <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                    Margin="0,8"       
-                                   Text="{Binding SelectedIntegrationGame.GameName}"/>
+                                   Text="{Binding SelectedIntegrationGame.GameName}"
+                   FontSize="20"/>
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,9" 
                                    TextWrapping="WrapWholeWords"
-                                   Text="{Binding SelectedIntegrationGame.GameDescription}" />
+                                   Text="{Binding SelectedIntegrationGame.GameDescription}" FontSize="18"/>
         <!--GAME FEATURES-->
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" />
+                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" FontSize="16"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" />
+                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" />
+                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16" />
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
-                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" />
+                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" FontSize="16" />
         </StackPanel>
-        <Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
     </StackPanel>
+    </ScrollViewer>
 </Page>

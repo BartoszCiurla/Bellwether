@@ -14,6 +14,25 @@ namespace Bellwether.ViewModels
 {
     public class JokePageViewModel:ViewModel
     {
+        private string _jokeContentSize;
+        public string JokeContentSize
+        {
+            get { return _jokeContentSize; }
+            set { _jokeContentSize = value;NotifyPropertyChanged(); }
+        }
+
+        private string _jokeCategoryNameSize;
+
+        public string JokeCategoryNameSize
+        {
+            get { return _jokeCategoryNameSize; }
+            set
+            {
+                _jokeCategoryNameSize = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public ObservableCollection<JokeViewModel> Jokes { get; set; }
         private JokeViewModel _selectedJoke;
         public JokeViewModel SelectedJoke
@@ -42,12 +61,13 @@ namespace Bellwether.ViewModels
                 }));
             }
         }
-        public RelayCommand SpeakCommand { get; set; }
+        //public RelayCommand SpeakCommand { get; set; }
         public JokePageViewModel()
         {
             Jokes = new ObservableCollection<JokeViewModel>();
-            SpeakCommand = new RelayCommand(Speak);
+            //SpeakCommand = new RelayCommand(Speak);
             LoadContent();
+            LoadLanguageContent();
         }
         public async void Speak()
         {
@@ -65,5 +85,15 @@ namespace Bellwether.ViewModels
                 Jokes.Add(x);
             });
         }
+
+        private async void LoadLanguageContent()
+        {
+            var contentKey = new[] { "JokesHeader" };
+            var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKey);
+            TextPageTittle = contentDictionary["JokesHeader"];
+        }
+
+        private string _textPageTittle;
+        public string TextPageTittle { get { return _textPageTittle; } set { _textPageTittle = value; NotifyPropertyChanged(); } }
     }
 }
