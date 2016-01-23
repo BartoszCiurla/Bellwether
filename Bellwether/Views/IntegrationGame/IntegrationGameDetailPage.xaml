@@ -41,26 +41,6 @@
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
                                    Text="{Binding SelectedIntegrationGame.PreparationFun}" />
         </StackPanel>
-        <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
-                               Margin="0,8"       
-                               Text="{x:Bind SelectedIntegrationgame.GameName}"/>
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
-                                   Margin="0,9" 
-                                   Text="{x:Bind SelectedIntegrationgame.GameDescription}" />
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   Text="{x:Bind SelectedIntegrationgame.CategoryGame}" />
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   TextWrapping="WrapWholeWords"
-                                   Text="{x:Bind SelectedIntegrationgame.NumberOfPlayer}" />
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   TextWrapping="WrapWholeWords"
-                                   Text="{x:Bind SelectedIntegrationgame.PaceOfPlay}" />
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Margin="0,9" 
-                                   TextWrapping="WrapWholeWords"
-                                   Text="{x:Bind SelectedIntegrationgame.NumberOfPlayer}" />-->
+        <Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
     </StackPanel>
 </Page>

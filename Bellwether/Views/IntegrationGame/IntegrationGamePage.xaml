@@ -83,7 +83,7 @@
 
         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
               Grid.Row="1"
-              Grid.ColumnSpan="2">
+              Grid.ColumnSpan="2" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -148,6 +148,8 @@
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
                                    Text="{Binding SelectedIntegrationGame.PreparationFun}" />
                 </StackPanel>
+
+                <Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
                 <StackPanel.ChildrenTransitions>
                     <TransitionCollection/>
                 </StackPanel.ChildrenTransitions>

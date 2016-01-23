@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using Bellwether.Commands;
 using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
@@ -20,12 +16,32 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
+
+        private string _speakerStatus;
+        public string SpeakerStatus
+        {
+            get { return _speakerStatus; }
+            set { _speakerStatus = value;NotifyPropertyChanged(); }
+        }
+
         public ObservableCollection<Models.ViewModels.IntegrationGameViewModel> IntegrationGames { get; set; }
+        public RelayCommand SpeakCommand { get; set; }
 
         public IntegrationGamePageViewModel()
         {
+            SpeakCommand = new RelayCommand(Speak);
+            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? "STOP": "Speak";
             LoadContent();
             LoadLanguageContent();
+        }
+
+        private async void Speak()
+        {            
+            SpeakerStatus =
+                await
+                    ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
+                        SelectedIntegrationGame.GameDescription)
+                    ? "Stop":"Speak";
         }
 
         private void LoadContent()

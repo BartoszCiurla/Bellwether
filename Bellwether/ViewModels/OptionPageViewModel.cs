@@ -94,13 +94,16 @@ namespace Bellwether.ViewModels
                             ServiceFactory.LanguageManagementService.ChangeApplicationLanguage(
                                 SelectedLanguage.LanguageShortName));
                 if (languageIsChanged.IsValid)
-                    LoadContent();
+                    await LoadLanguageContent();
             }
         }
 
         private async void ChangeVoice()
         {
-            
+            if(SelectedVoice.VoiceId != CurrentVoice.VoiceId) { 
+                await ServiceFactory.ResourceService.SaveValueForKey("ApplicationVoiceId",SelectedVoice.VoiceId);
+                CurrentVoice = SelectedVoice;
+            }
         }
 
         private bool BasicLanguageVerification()

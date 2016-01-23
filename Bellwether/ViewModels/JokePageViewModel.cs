@@ -7,26 +7,30 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Bellwether.Commands;
 using Bellwether.Models.Models;
+using Bellwether.Models.ViewModels;
 using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
 {
     public class JokePageViewModel:ViewModel
     {
-        public ObservableCollection<Models.ViewModels.JokeViewModel> Jokes { get; set; }
-        private Models.ViewModels.JokeViewModel _selectedJoke;
-
-        public Models.ViewModels.JokeViewModel SelectedJoke
+        public ObservableCollection<JokeViewModel> Jokes { get; set; }
+        private JokeViewModel _selectedJoke;
+        public JokeViewModel SelectedJoke
         {
             get { return _selectedJoke; }
             set
             {
                 _selectedJoke = value;
-                Read();
                 NotifyPropertyChanged();
             }
         }
-
+        private string _speakerStatus;
+        public string SpeakerStatus
+        {
+            get { return _speakerStatus; }
+            set { _speakerStatus = value; NotifyPropertyChanged(); }
+        }
         private RelayCommand _selectedJokeCommand;
         public RelayCommand SelectedJokeCommand
         {
@@ -38,22 +42,28 @@ namespace Bellwether.ViewModels
                 }));
             }
         }
-        public RelayCommand SpeakCommand { get; set;}
+        public RelayCommand SpeakCommand { get; set; }
         public JokePageViewModel()
-        {   
-            SpeakCommand = new RelayCommand(Read);  
+        {
+            Jokes = new ObservableCollection<JokeViewModel>();
+            SpeakCommand = new RelayCommand(Speak);
             LoadContent();
         }
-
+        public async void Speak()
+        {
+            SpeakerStatus =
+                await
+                    ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
+                        SelectedJoke.JokeContent)
+                    ? "Stop" : "Speak";
+        }
         private void LoadContent()
         {
             var jokes = ServiceExecutor.Execute(() => ServiceFactory.JokeService.GetJokes());
-            Jokes = new ObservableCollection<Models.ViewModels.JokeViewModel>(jokes.Data);         
-        }
-
-        private async void Read()
-        {
-            await ServiceExecutor.ExecuteAsync(() => ServiceFactory.SpeechSyntesizerService.Read(this.SelectedJoke.JokeContent));
+            jokes.Data.ToList().ForEach(x =>
+            {
+                Jokes.Add(x);
+            });
         }
     }
 }
