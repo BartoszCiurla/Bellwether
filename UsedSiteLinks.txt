@@ -2,3 +2,14 @@ https://clipchamp.com/transcode   konwerter do filmow
 https://www.youtube.com/watch?v=Skozu4-16v4  EF SQLite
 
 ContentIndexer sample -> to jest doœæ ciekawa alternatywa dla mojego s³abego rozwi¹zania ze statycznymi i lokalnymi zasobami 
+
+
+
+co zostalo do zrobienia : 
+problem z klikiem w listview jako command ma byc 
+trzeba dorobiæ szukajke i filtrowanie po kategoriach 
+trzeba zrobiæ g³ówne menu 
+trzeba zrobiæ ui dla ustawieñ 
+trzeba dorobiæ commandsy dla wszystkich widoków ... 
+
+kawa³y trzeba przerobiæ na identyczna formê jak gry bo tak jest jednak ³adniej 

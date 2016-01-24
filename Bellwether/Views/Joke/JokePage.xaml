@@ -13,7 +13,7 @@
     </Page.Transitions>
     <Page.Resources>
         <DataTemplate x:Name="JokeListViewTemplate" x:DataType="viewModels:JokeViewModel">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Padding="20,0,20,60">
                 <StackPanel x:Name="JokeContentPanel">
                     <TextBlock 
                     Text="{x:Bind JokeContent}"
@@ -21,10 +21,7 @@
                         FontSize="24"
                         />
                 </StackPanel>
-                <StackPanel x:Name="JokeCategoryPanel"
-                    BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"  
-                    BorderThickness="0,0,0,1"
-                    Margin="0,0,0,40">
+                <StackPanel x:Name="JokeCategoryPanel">
                     <TextBlock                    
                     Text="{x:Bind JokeCategoryName}"
                     FontSize="20"/>
@@ -35,6 +32,10 @@
 
 
     <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="PageSizeStatesGroup">
                 <VisualState x:Name="VeryWideState">
@@ -73,18 +74,26 @@
                    Text="{Binding TextPageTittle}" 
                    HorizontalAlignment="Center"
                    Style="{ThemeResource  TitleTextBlockStyle}" 
-                   Margin="20,0,0,20"/>
+                   Margin="0,20,0,40"
+                   Grid.Row="0"/>
 
-        <Grid x:Name="JokeDetail" MaxWidth="560" Margin="0,40">
+        <Grid x:Name="JokeDetail" MaxWidth="560" Grid.Row="1">
             <ListView x:Name="JokeListView"
                         ItemsSource="{Binding Jokes}"
                         ItemTemplate="{StaticResource JokeListViewTemplate }"              
                         IsItemClickEnabled="False"
                         ContainerContentChanging="JokeListView_OnContainerContentChanging"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Center"
+                        SelectionMode="Single"
+                      SelectedItem="{Binding SelectedJoke,Mode=TwoWay}"
+                        IsSwipeEnabled="False"                       
+                      >
+                <!--TUTAJ JEST KLUCZOWY PROBLEM NIE MA SZANS ABY TEN WBUDOWANY W LISTVIEW SCROOLVIEWER USTAWIC W INNEJ LOKACJI NP PO LEWEJ STRONIE ...--> 
+                <!--ScrollViewer.VerticalScrollBarVisibility="Hidden"-->
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="{x:Null}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                      
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>

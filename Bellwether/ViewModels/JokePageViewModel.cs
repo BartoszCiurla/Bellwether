@@ -20,9 +20,7 @@ namespace Bellwether.ViewModels
             get { return _jokeContentSize; }
             set { _jokeContentSize = value;NotifyPropertyChanged(); }
         }
-
         private string _jokeCategoryNameSize;
-
         public string JokeCategoryNameSize
         {
             get { return _jokeCategoryNameSize; }
@@ -32,7 +30,6 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
         public ObservableCollection<JokeViewModel> Jokes { get; set; }
         private JokeViewModel _selectedJoke;
         public JokeViewModel SelectedJoke
@@ -61,11 +58,11 @@ namespace Bellwether.ViewModels
                 }));
             }
         }
-        //public RelayCommand SpeakCommand { get; set; }
+        public RelayCommand SpeakCommand { get; set; }
         public JokePageViewModel()
         {
             Jokes = new ObservableCollection<JokeViewModel>();
-            //SpeakCommand = new RelayCommand(Speak);
+            SpeakCommand = new RelayCommand(Speak);
             LoadContent();
             LoadLanguageContent();
         }
