@@ -1,35 +1,13 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.Media.SpeechSynthesis;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Bellwether.Commands;
-using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
 using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
 {
     public class JokePageViewModel:ViewModel
-    {
-        private string _jokeContentSize;
-        public string JokeContentSize
-        {
-            get { return _jokeContentSize; }
-            set { _jokeContentSize = value;NotifyPropertyChanged(); }
-        }
-        private string _jokeCategoryNameSize;
-        public string JokeCategoryNameSize
-        {
-            get { return _jokeCategoryNameSize; }
-            set
-            {
-                _jokeCategoryNameSize = value;
-                NotifyPropertyChanged();
-            }
-        }
+    {       
         public ObservableCollection<JokeViewModel> Jokes { get; set; }
         private JokeViewModel _selectedJoke;
         public JokeViewModel SelectedJoke
@@ -46,51 +24,58 @@ namespace Bellwether.ViewModels
         {
             get { return _speakerStatus; }
             set { _speakerStatus = value; NotifyPropertyChanged(); }
-        }
-        private RelayCommand _selectedJokeCommand;
-        public RelayCommand SelectedJokeCommand
-        {
-            get
-            {
-                return this._selectedJokeCommand ?? (this._selectedJokeCommand = new RelayCommand(() =>
-                {
-
-                }));
-            }
-        }
-        public RelayCommand SpeakCommand { get; set; }
+        }  
+        public RelayCommand ReadCommand { get; set; }
         public JokePageViewModel()
         {
             Jokes = new ObservableCollection<JokeViewModel>();
-            SpeakCommand = new RelayCommand(Speak);
+            ReadCommand = new RelayCommand(Read);
+            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? TextStop : TextRead;
             LoadContent();
             LoadLanguageContent();
         }
-        public async void Speak()
+        public async void Read()
         {
             SpeakerStatus =
                 await
                     ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
                         SelectedJoke.JokeContent)
-                    ? "Stop" : "Speak";
+                    ? TextStop : TextRead;
         }
         private void LoadContent()
         {
             var jokes = ServiceExecutor.Execute(() => ServiceFactory.JokeService.GetJokes());
-            jokes.Data.ToList().ForEach(x =>
+            if (jokes.IsValid)
             {
-                Jokes.Add(x);
-            });
+                jokes.Data.ToList().ForEach(x =>
+                {
+                    Jokes.Add(x);
+                });
+                SelectedJoke = Jokes[0];
+            }      
         }
 
         private async void LoadLanguageContent()
         {
-            var contentKey = new[] { "JokesHeader" };
+            var contentKey = new[] { "JokesHeader", "JokeCategory", "AvailableJokes", "Stop", "Read" };
             var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKey);
             TextPageTittle = contentDictionary["JokesHeader"];
+            TextJokeCategoryName = contentDictionary["JokeCategory"];
+            TextAvailableJokes = contentDictionary["AvailableJokes"];
+            TextStop = contentDictionary["Stop"];
+            TextRead = contentDictionary["Read"];
+            SpeakerStatus = TextRead;
         }
 
         private string _textPageTittle;
         public string TextPageTittle { get { return _textPageTittle; } set { _textPageTittle = value; NotifyPropertyChanged(); } }
+        private string _textJokeCategoryName;
+        public string TextJokeCategoryName { get { return _textJokeCategoryName; } set { _textJokeCategoryName = value;NotifyPropertyChanged(); } }
+        private string _textAvailableJokes;
+        public string TextAvailableJokes { get { return _textAvailableJokes; } set { _textAvailableJokes = value;NotifyPropertyChanged(); } }
+        private string _textRead;
+        public string TextRead { get { return _textRead; } set { _textRead = value;NotifyPropertyChanged(); } }
+        private string _textStop;
+        public string TextStop { get { return _textStop; } set { _textStop = value;NotifyPropertyChanged(); } }
     }
 }

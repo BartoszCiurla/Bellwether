@@ -25,23 +25,23 @@ namespace Bellwether.ViewModels
         }
 
         public ObservableCollection<Models.ViewModels.IntegrationGameViewModel> IntegrationGames { get; set; }
-        public RelayCommand SpeakCommand { get; set; }
+        public RelayCommand ReadCommand { get; set; }
 
         public IntegrationGamePageViewModel()
         {
-            SpeakCommand = new RelayCommand(Speak);
-            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? "STOP": "Speak";
+            ReadCommand = new RelayCommand(Read);
+            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? TextStop: TextRead;
             LoadContent();
             LoadLanguageContent();
         }
 
-        private async void Speak()
+        private async void Read()
         {            
             SpeakerStatus =
                 await
                     ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
                         SelectedIntegrationGame.GameDescription)
-                    ? "Stop":"Speak";
+                    ? TextStop:TextRead;
         }
 
         private void LoadContent()
@@ -49,22 +49,22 @@ namespace Bellwether.ViewModels
             var integrationGames =
                 ServiceExecutor.Execute(() => ServiceFactory.IntegrationGameService.GetIntegrationGames());
             if (integrationGames.IsValid)
-            {
                 IntegrationGames = new ObservableCollection<Models.ViewModels.IntegrationGameViewModel>(integrationGames.Data);
-                SelectedIntegrationGame = IntegrationGames[0];
-            }
-
         }
 
         private async void LoadLanguageContent()
         {
-            var contentKey = new[] { "IntegrationGamesHeader", "GameCategory", "PaceOfPlay", "PreparationFun", "NumberOfPlayer"};
+            var contentKey = new[] { "IntegrationGamesHeader", "GameCategory", "PaceOfPlay", "PreparationFun", "NumberOfPlayer", "AvailableGames","Stop","Read"};
             var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKey);
             TextPageTittle = contentDictionary["IntegrationGamesHeader"];
             TextGameCategory = contentDictionary["GameCategory"];
             TextPaceOfPlay = contentDictionary["PaceOfPlay"];
             TextPreparationFun = contentDictionary["PreparationFun"];
             TextNumberOfPlayer = contentDictionary["NumberOfPlayer"];
+            TextAvailableGames = contentDictionary["AvailableGames"];
+            TextStop = contentDictionary["Stop"];
+            TextRead = contentDictionary["Read"];
+            SpeakerStatus = TextRead;
         }
 
         private string _textPageTittle;
@@ -81,6 +81,12 @@ namespace Bellwether.ViewModels
         public string TextNumberOfPlayer { get { return _textNumberOfPlayer; } set { _textNumberOfPlayer = value;NotifyPropertyChanged(); } }
         private string _textPreparationFun;
         public string TextPreparationFun { get { return _textPreparationFun; } set { _textPreparationFun = value;NotifyPropertyChanged(); } }
+        private string _textAvailableGames;
+        public string TextAvailableGames { get { return _textAvailableGames; } set { _textAvailableGames = value;NotifyPropertyChanged(); } }        
+        private string _textRead;
+        public string TextRead { get { return _textRead; } set { _textRead = value; NotifyPropertyChanged(); } }
+        private string _textStop;
+        public string TextStop { get { return _textStop; } set { _textStop = value; NotifyPropertyChanged(); } }
 
 
     }

@@ -4,47 +4,75 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="using:Bellwether.Models.ViewModels"
+    xmlns:jokeViewModels="using:Bellwether.Models.ViewModels"
+    NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
             <EntranceThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
+    
     <Page.Resources>
-        <DataTemplate x:Name="JokeListViewTemplate" x:DataType="viewModels:JokeViewModel">
-            <StackPanel Orientation="Vertical" Padding="20,0,20,60">
-                <StackPanel x:Name="JokeContentPanel">
-                    <TextBlock 
-                    Text="{x:Bind JokeContent}"
-                    TextWrapping="WrapWholeWords"
-                        FontSize="24"
-                        />
-                </StackPanel>
-                <StackPanel x:Name="JokeCategoryPanel">
-                    <TextBlock                    
-                    Text="{x:Bind JokeCategoryName}"
-                    FontSize="20"/>
-                </StackPanel>
-            </StackPanel>
+        <DataTemplate x:Name="JokeListViewTemplate" x:DataType="jokeViewModels:JokeViewModel">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock 
+                    Text="{x:Bind JokeContent}"                               
+                    TextTrimming="CharacterEllipsis"
+                    MaxLines="1"
+                    MaxWidth="315"
+                    Style="{ThemeResource BaseTextBlockStyle}"/>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
-
-
-    <Grid x:Name="LayoutRoot">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="PageSizeStatesGroup">
+            <VisualStateGroup x:Name="PageSizeStatesGroup"
+                            CurrentStateChanged="OnCurrentStateChanged">
+                <VisualState x:Name="VeryVeryWideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1500"  />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="JokeListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <Setter Target="MasterColumn.Width" Value="520" />
+                        <Setter Target="DetailColumn.Width" Value="*"/>
+                        <Setter Target="PageHeader.FontSize" Value="40"/>
+                        <Setter Target="JokeContent.FontSize" Value="34"/>
+                        <Setter Target="JokeCategoryName.FontSize" Value="30"/>
+                        <Setter Target="AvailableJokes.FontSize" Value="32"/>
+                    </VisualState.Setters>
+                </VisualState>
                 <VisualState x:Name="VeryWideState">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1200"  />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="JokeDetail.MaxWidth" Value="920"/>
+                        <Setter Target="JokeListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <Setter Target="MasterColumn.Width" Value="320" />
+                        <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="36"/>
+                        <Setter Target="JokeContent.FontSize" Value="32"/>
+                        <Setter Target="JokeCategoryName.FontSize" Value="28"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideState">
@@ -52,8 +80,14 @@
                         <AdaptiveTrigger MinWindowWidth="720"  />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="JokeDetail.MaxWidth" Value="720"/>
+                        <Setter Target="JokeListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <Setter Target="MasterColumn.Width" Value="320" />
+                        <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="30"/>
+                        <Setter Target="JokeContent.FontSize" Value="24"/>
+                        <Setter Target="JokeCategoryName.FontSize" Value="20"/>
+
                     </VisualState.Setters>
                 </VisualState>
 
@@ -62,86 +96,91 @@
                         <AdaptiveTrigger MinWindowWidth="0"  />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="JokeDetail.MaxWidth" Value="560"/>
+                        <Setter Target="JokeListView.Visibility" Value="Visible" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Collapsed" />
+                        <Setter Target="MasterColumn.Width" Value="*" />
+                        <Setter Target="DetailColumn.Width" Value="0"/>
                         <Setter Target="PageHeader.FontSize" Value="24"/>
+                        <Setter Target="AvailableJokes.Visibility" Value="Collapsed"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--PAGE HEADER-->
-        <TextBlock x:Name="PageHeader"
-                   Text="{Binding TextPageTittle}" 
-                   HorizontalAlignment="Center"
-                   Style="{ThemeResource  TitleTextBlockStyle}" 
-                   Margin="0,20,0,40"
-                   Grid.Row="0"/>
 
-        <Grid x:Name="JokeDetail" MaxWidth="560" Grid.Row="1">
-            <ListView x:Name="JokeListView"
-                        ItemsSource="{Binding Jokes}"
-                        ItemTemplate="{StaticResource JokeListViewTemplate }"              
-                        IsItemClickEnabled="False"
-                        ContainerContentChanging="JokeListView_OnContainerContentChanging"
-                        HorizontalAlignment="Center"
-                        SelectionMode="Single"
-                      SelectedItem="{Binding SelectedJoke,Mode=TwoWay}"
-                        IsSwipeEnabled="False"                       
-                      >
-                <!--TUTAJ JEST KLUCZOWY PROBLEM NIE MA SZANS ABY TEN WBUDOWANY W LISTVIEW SCROOLVIEWER USTAWIC W INNEJ LOKACJI NP PO LEWEJ STRONIE ...--> 
-                <!--ScrollViewer.VerticalScrollBarVisibility="Hidden"-->
+        <!--PAGE HEADER-->
+        <TextBlock 
+            x:Name="PageHeader"
+            Text="{Binding TextPageTittle}" 
+            HorizontalAlignment="Center"
+            Style="{ThemeResource  TitleTextBlockStyle}" 
+            Margin="0,20,0,0"
+            Grid.Column="1"/>
+
+        <Grid 
+              Grid.Row="1"
+              Grid.ColumnSpan="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition x:Name="MasterColumn" Width="320"  />
+                <ColumnDefinition x:Name="DetailColumn" Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="AvailableJokes" 
+                Text="{Binding TextAvailableJokes}" 
+                HorizontalAlignment="Center"
+                Margin="0,0,0,20"
+                Style="{ThemeResource TitleTextBlockStyle}"/>
+            
+            <ListView x:Name="JokeListView" 
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedJoke}"   
+                  SelectionChanged="OnSelectionChanged"
+                  IsItemClickEnabled="True"
+                  ItemTemplate="{StaticResource JokeListViewTemplate }"
+                  ItemsSource="{Binding Jokes}"
+                  ItemClick="OnItemClick"
+                  ContainerContentChanging="JokeListView_OnContainerContentChanging"
+                  BorderThickness="1,0,0,0"
+                  BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"  
+                  Grid.Row="1" Grid.Column="0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="Transparent"/>
-                      
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
+
+            <ScrollViewer 
+                VerticalScrollMode="Auto" 
+                VerticalScrollBarVisibility="Auto"  
+                Grid.Column="1"
+                Grid.Row="0" 
+                Grid.RowSpan="2">
+                <StackPanel         
+                Padding="24,0"                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                x:Name="DetailContentPresenter"
+                Margin="40,0,40,0">
+                    <TextBlock x:Name="JokeContent" Style="{ThemeResource TitleTextBlockStyle}"
+                        Margin="0,8"   
+                        TextWrapping="WrapWholeWords"
+                        Text="{Binding SelectedJoke.JokeContent}"/>
+                    <TextBlock
+                    Text="{Binding TextJokeCategoryName}"/>
+                    <TextBlock x:Name="JokeCategoryName" Style="{ThemeResource BodyTextBlockStyle}"
+                        Margin="0,9" 
+                        Text="{Binding SelectedJoke.JokeCategoryName}"/>
+                    <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection/>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
-
-
-
-
-
-    <!--<ListView
-        x:Name="JokesListView"
-        ItemsSource="{Binding Jokes}"
-        IsItemClickEnabled="False">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <RelativePanel>
-                <TextBlock x:Name="ContentId"
-                    Text="{Binding JokeContent}"/>
-                <TextBlock
-                    RelativePanel.Below="ContetId"
-                    Text="{Binding JokeCategoryName}"/>
-                </RelativePanel>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-
-    </ListView>-->
-
-    <!--<GridView   
-              ItemsSource="{Binding Jokes}" 
-              IsItemClickEnabled="True" 
-              SelectionMode="Single"         
-              SelectionChanged="ItemGridView_SelectionChanged"
-        ItemClick="ItemGridView_ItemClick">
-        <GridView.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding JokeContent}"/>
-                    <TextBlock Text="{Binding JokeCategoryName}"/>
-                    -->
-    <!--<Button Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />-->
-    <!--RightTapped="Grid_RightTapped">-->
-    <!--<Border Background="White"  BorderThickness="0" Width="210" Height="85">
-                        <TextBlock Text="{Binding FileName}" />
-                    </Border>-->
-    <!--
-                </StackPanel>
-            </DataTemplate>
-        </GridView.ItemTemplate>
-    </GridView>-->
 </Page>

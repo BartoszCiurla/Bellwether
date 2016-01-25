@@ -19,11 +19,11 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1">
-            <StackPanel VerticalAlignment="Center" Margin="40,0,40,0">
-            <TextBlock Style="{ThemeResource TitleTextBlockStyle}"                                    
+            <StackPanel VerticalAlignment="Center" Margin="40,40,40,0">
+                <TextBlock Style="{ThemeResource TitleTextBlockStyle}"                                    
                    Text="{Binding SelectedIntegrationGame.GameName}"
                    FontSize="20"/>
-            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                 Margin="0,9" 
                 TextWrapping="WrapWholeWords"
                 Text="{Binding SelectedIntegrationGame.GameDescription}" FontSize="18"/>
@@ -48,7 +48,7 @@
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
                                    Text="{Binding SelectedIntegrationGame.PreparationFun}" FontSize="16" />
                 </StackPanel>
-                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding SpeakCommand}" Content="{Binding SpeakerStatus}" />
+                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

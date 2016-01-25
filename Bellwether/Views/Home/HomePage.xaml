@@ -27,38 +27,38 @@
                 Derive from the Hub control to create a parallax experience.
                 </TextBlock>
             </StackPanel>-->
-
+            <Image Grid.Row="1" Source="../../Images/23nR.png" MaxHeight="378" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
             <controls:ParallaxBackgroundHub VerticalAlignment="Stretch" Orientation="Horizontal" Grid.Row="1"
-                                         SizeChanged="ParallaxBackgroundHub_SizeChanged" HorizontalAlignment="Stretch"
-                                         >
+                                         SizeChanged="ParallaxBackgroundHub_SizeChanged" HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" BorderBrush="{ThemeResource AppBarItemDisabledForegroundThemeBrush}">
                 <Hub.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Bellwether" FontSize="66"></TextBlock>
+                        <!--<TextBlock Text="Bellwether" FontSize="66"></TextBlock>-->
+                        <Image Source="../../Images/BigBLogoLightR.png" Width="150" Height="150"  />
                     </DataTemplate>
                 </Hub.HeaderTemplate>
 
                 <!--<Hub.Background>
-                    <ImageBrush ImageSource="../../Images/1p1.jpg" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="../../Images/23nR.png" AlignmentY="Bottom"/>
                 </Hub.Background>-->
 
                 <HubSection Width="{x:Bind DesiredHubSectionWidth, Mode=OneWay}" />
 
                 <HubSection Background="{StaticResource HubSectionBackgroundBrush}"
                             MaxWidth="{x:Bind DesiredHubSectionWidth, Mode=OneWay}"
-                            Header="Header 1" Padding="20">
+                            Header="Gry integracyjne" Padding="20">
                     <DataTemplate>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" MaxWidth="560"
-                                   Text="This is a Hub control that has been extended to include a basic parallax effect. To do this, we add a PerspectiveTransform3D to the Hub's root ScrollViewer, and add a new element inside the ScrollViewer to hold the background image." />
+                                   Text="Szukasz sposobu na swietna zabawe , wyeliminowanie nudy , poznanie sie , tutaj znajdziesz to wszystko ." />
                     </DataTemplate>
                 </HubSection>
 
                 <HubSection Background="{StaticResource HubSectionBackgroundBrush}"
                             MaxWidth="{x:Bind DesiredHubSectionWidth, Mode=OneWay}"
                             Margin="150,0"
-                            Header="Header 2" Padding="20">
+                            Header="Kawały" Padding="20">
                     <DataTemplate>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" MaxWidth="560">
-                            <Run Text="To apply the perspective effect, we add a CompositeTransform3D with a negative TranslateZ to the background element." />
+                            <Run Text="Gdy dobre suchary nie sa twym atutem , zablysnij dzieki zebranej w jednej miejscu kompleksowej bibliotece zartow .Brakuje ci odwagi niech zrobi to za Ciebie program ." />
                             <LineBreak />
                             <LineBreak />
                             <Run Text="When the size of the ScrollViewer changes, we must update the origin of the CompositeTransform3D accordingly." />
@@ -77,7 +77,6 @@
                                    />
                     </DataTemplate>
                 </HubSection>
-
             </controls:ParallaxBackgroundHub>
         </Grid>
     </Grid>

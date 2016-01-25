@@ -22,34 +22,58 @@ namespace Bellwether.Views.IntegrationGame
         private static double _persistedItemContainerHeight = -1;
         private static string _persistedItemKey = "";
         private static string _persistedPosition = "";
-        private IntegrationGamePageViewModel _viewModel;
+        private readonly IntegrationGamePageViewModel _viewModel = new IntegrationGamePageViewModel();
         public IntegrationGamePage()
         {
             this.InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                _viewModel = new IntegrationGamePageViewModel();
                 this.DataContext = _viewModel;
-                Page_Loaded(s, e);
+                OnLoaded(s, e);
+                LoadScrolPosition(s, e);
             };
         }
-
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.SelectedIntegrationGame == null && _viewModel.IntegrationGames.Count > 0)
+            {
+                _viewModel.SelectedIntegrationGame = _viewModel.IntegrationGames[0];
+                IntegrationGameListView.SelectedIndex = 0;
+            }
+            // If the app starts in narrow mode - showing only the Master listView - 
+            // it is necessary to set the commands and the selection mode.
+            if (PageSizeStatesGroup.CurrentState == NarrowState)
+            {
+                VisualStateManager.GoToState(this, NarrowState.Name, true);
+            }
+            else if (PageSizeStatesGroup.CurrentState == WideState)
+            {
+                // In this case, the app starts is wide mode, Master/Details view, 
+                // so it is necessary to set the commands and the selection mode.
+                VisualStateManager.GoToState(this, WideState.Name, true);
+                IntegrationGameListView.SelectionMode = ListViewSelectionMode.Single;
+                IntegrationGameListView.SelectedItem = _viewModel.SelectedIntegrationGame;
+                int indexOfSelectedGame = _viewModel.IntegrationGames.IndexOf(_viewModel.SelectedIntegrationGame);
+                IntegrationGameListView.SelectedIndex = indexOfSelectedGame;
+            }
+            else
+            {
+                new InvalidOperationException();
+            }
+        }
+        private async void LoadScrolPosition(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_persistedPosition))
+                await ListViewPersistenceHelper.SetRelativeScrollPositionAsync(this.IntegrationGameListView, _persistedPosition, this.GetItem);
+        }
         private void OnItemClick(object sender, ItemClickEventArgs e)
         {
             _viewModel.SelectedIntegrationGame = e.ClickedItem as IntegrationGameViewModel;
             if (PageSizeStatesGroup.CurrentState == NarrowState)
-            {
                 Frame.Navigate(typeof(IntegrationGameDetailPage), _viewModel, new DrillInNavigationTransitionInfo());
-            }
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            IntegrationGameListView.SelectedItem = _viewModel.SelectedIntegrationGame;
-            if (!string.IsNullOrEmpty(_persistedPosition))
-                await ListViewPersistenceHelper.SetRelativeScrollPositionAsync(this.IntegrationGameListView, _persistedPosition, this.GetItem);
-
-        }
+      
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             try
@@ -128,9 +152,12 @@ namespace Bellwether.Views.IntegrationGame
             }
             else
             {
+                //VisualStateManager.GoToState(this, WideState.Name, true);
+                //IntegrationGameListView.SelectionMode = ListViewSelectionMode.Single;
                 IntegrationGameListView.SelectedItem = _viewModel.SelectedIntegrationGame;
+                int indexOfSelectedGame = _viewModel.IntegrationGames.IndexOf(_viewModel.SelectedIntegrationGame);
+                IntegrationGameListView.SelectedIndex = indexOfSelectedGame;
             }
-
             EntranceNavigationTransitionInfo.SetIsTargetElement(IntegrationGameListView, isNarrow);
             if (DetailContentPresenter != null)
             {
@@ -138,24 +165,15 @@ namespace Bellwether.Views.IntegrationGame
             }
         }
 
-
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (PageSizeStatesGroup.CurrentState == WideState)
-            //{
-            //    if (MasterListView.SelectedItems.Count == 1)
-            //    {
-            //        _viewModel.SelectedIntegrationGame = MasterListView.SelectedItem as Models.ViewModels.IntegrationGameViewModel;
+        {            
             EnableContentTransitions();
-            //    }         
-            //}
         }
+
         private void EnableContentTransitions()
         {
             DetailContentPresenter.ChildrenTransitions.Clear();
             DetailContentPresenter.ChildrenTransitions.Add(new EntranceThemeTransition { FromHorizontalOffset = 500, FromVerticalOffset = 500 });
         }
-
-
     }
 }

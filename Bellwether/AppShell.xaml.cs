@@ -57,7 +57,7 @@ namespace Bellwether
                     Symbol = Symbol.Favorite,
                     Label = "Ustawienia",
                     DestPage = typeof(OptionPage)
-                },
+                },   
             });
 
         public static AppShell Current = null;

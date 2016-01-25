@@ -1,8 +1,9 @@
+
 {
   "IntegrationGamesHeader": "Gry integracyjne test",
   "IntegrationGamesContent": "Szukasz sposobu na swietna zabawe , wyeliminowanie nudy , poznanie sie , tutaj znajdziesz to wszystko .",
   "BellwetherHeader": "Wodzirej",
-  "BellwetherContent": " Alkohol jeszcze nie dziala , nikt nie chce dzialac , pozostale opcje sa nie atrakcyjne .Aplikacja przygotuje dla Was cos ekstra ;)",
+  "BellwetherContent": "Alkohol jeszcze nie dziala , nikt nie chce dzialac , pozostale opcje sa nie atrakcyjne .Aplikacja przygotuje dla Was cos ekstra ;)",
   "JokesHeader": "Kawały",
   "JokesContent": "Gdy dobre suchary nie sa twym atutem , zablysnij dzieki zebranej w jednej miejscu kompleksowej bibliotece zartow .Brakuje ci odwagi niech zrobi to za Ciebie program .",
   "PhotoGalleryHeader": "Galeria zdjęć",
@@ -227,5 +228,9 @@
   "IncreasingVersionDescription": "Obecna wersja + 0.1",
   "SaveAll": "Zapisz wszystkie",
   "DataSynchronization": "Synchronizacja danych",
-  "DataSynchronizationSecurityDescription": "Synchornizacja danych jest wyłaczona , nie mogę pobrać wymaganych danych"
+  "DataSynchronizationSecurityDescription": "Synchornizacja danych jest wyłaczona , nie mogę pobrać wymaganych danych",
+  "AvailableGames": "Dostępne gry",
+  "AvailableJokes": "Dostępne kawały",
+  "Read": "Czytaj",
+  "Stop": "Stop"
 }
