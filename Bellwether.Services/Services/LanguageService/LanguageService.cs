@@ -30,7 +30,7 @@ namespace Bellwether.Services.Services.LanguageService
                 return InsertLanguagesAndSave(mandatoryLanguages);
             InsertLanguageIfNotExistsOnLocalList(mandatoryLanguages);
             DeleteLanguageIfNotExistsOnMandatoryList(mandatoryLanguages);
-            //RepositoryFactory.Context.SaveChanges();
+            RepositoryFactory.Context.SaveChanges();
             return true;
         }
 

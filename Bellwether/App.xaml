@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/AppShellStyles.xaml"/>
                 <ResourceDictionary Source="Styles/HomeStyles.xaml"/>
+                <ResourceDictionary Source="Styles/GlobalStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -12,7 +12,7 @@
             <EntranceThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
-    
+
     <Page.Resources>
         <DataTemplate x:Name="JokeListViewTemplate" x:DataType="jokeViewModels:JokeViewModel">
             <Grid>
@@ -25,11 +25,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock 
-                    Text="{x:Bind JokeContent}"                               
+                    Text="{x:Bind JokeContent}"    
+                    Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                     TextTrimming="CharacterEllipsis"
                     MaxLines="1"
                     MaxWidth="315"
-                    Style="{ThemeResource BaseTextBlockStyle}"/>
+                    Margin="20,0,20,0"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -56,9 +57,10 @@
                         <Setter Target="MasterColumn.Width" Value="520" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="40"/>
-                        <Setter Target="JokeContent.FontSize" Value="34"/>
-                        <Setter Target="JokeCategoryName.FontSize" Value="30"/>
                         <Setter Target="AvailableJokes.FontSize" Value="32"/>
+                        <Setter Target="TextBlockJokeContent.FontSize" Value="34"/>
+                        <Setter Target="TextBlockJokeCategory.FontSize" Value="30"/>
+                        <Setter Target="LabelJokeCategory.FontSize" Value="30"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VeryWideState">
@@ -71,8 +73,10 @@
                         <Setter Target="MasterColumn.Width" Value="320" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="36"/>
-                        <Setter Target="JokeContent.FontSize" Value="32"/>
-                        <Setter Target="JokeCategoryName.FontSize" Value="28"/>
+                        <Setter Target="AvailableJokes.FontSize" Value="28"/>
+                        <Setter Target="TextBlockJokeContent.FontSize" Value="32"/>
+                        <Setter Target="TextBlockJokeCategory.FontSize" Value="28"/>
+                        <Setter Target="LabelJokeCategory.FontSize" Value="28"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideState">
@@ -85,9 +89,10 @@
                         <Setter Target="MasterColumn.Width" Value="320" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="30"/>
-                        <Setter Target="JokeContent.FontSize" Value="24"/>
-                        <Setter Target="JokeCategoryName.FontSize" Value="20"/>
-
+                        <Setter Target="AvailableJokes.FontSize" Value="24"/>
+                        <Setter Target="TextBlockJokeContent.FontSize" Value="24"/>
+                        <Setter Target="TextBlockJokeCategory.FontSize" Value="20"/>
+                        <Setter Target="LabelJokeCategory.FontSize" Value="20"/>
                     </VisualState.Setters>
                 </VisualState>
 
@@ -113,7 +118,7 @@
             x:Name="PageHeader"
             Text="{Binding TextPageTittle}" 
             HorizontalAlignment="Center"
-            Style="{ThemeResource  TitleTextBlockStyle}" 
+            Style="{StaticResource TextBlockBasicFontFamilyAndForeground}" 
             Margin="0,20,0,0"
             Grid.Column="1"/>
 
@@ -133,8 +138,8 @@
                 Text="{Binding TextAvailableJokes}" 
                 HorizontalAlignment="Center"
                 Margin="0,0,0,20"
-                Style="{ThemeResource TitleTextBlockStyle}"/>
-            
+                Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"/>
+
             <ListView x:Name="JokeListView" 
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedJoke}"   
@@ -143,10 +148,13 @@
                   ItemTemplate="{StaticResource JokeListViewTemplate }"
                   ItemsSource="{Binding Jokes}"
                   ItemClick="OnItemClick"
-                  ContainerContentChanging="JokeListView_OnContainerContentChanging"
-                  BorderThickness="1,0,0,0"
-                  BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"  
-                  Grid.Row="1" Grid.Column="0">
+                  ContainerContentChanging="JokeListView_OnContainerContentChanging"         
+                  Grid.Row="1" 
+                  Grid.Column="0"
+                  Margin="20,0,20,0">
+                <ListView.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.7"/>
+                </ListView.Background>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -158,24 +166,31 @@
                 VerticalScrollMode="Auto" 
                 VerticalScrollBarVisibility="Auto"  
                 Grid.Column="1"
-                Grid.Row="0" 
-                Grid.RowSpan="2">
-                <StackPanel         
-                Padding="24,0"                
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                x:Name="DetailContentPresenter"
-                Margin="40,0,40,0">
-                    <TextBlock x:Name="JokeContent" Style="{ThemeResource TitleTextBlockStyle}"
+                Grid.Row="1" 
+                Margin="0,0,20,0">
+                <StackPanel  
+                    x:Name="DetailContentPresenter"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.7"/>
+                    </StackPanel.Background>
+                    <StackPanel Margin="20,10,20,0">
+                        <TextBlock x:Name="TextBlockJokeContent" Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                         Margin="0,8"   
                         TextWrapping="WrapWholeWords"
                         Text="{Binding SelectedJoke.JokeContent}"/>
-                    <TextBlock
-                    Text="{Binding TextJokeCategoryName}"/>
-                    <TextBlock x:Name="JokeCategoryName" Style="{ThemeResource BodyTextBlockStyle}"
-                        Margin="0,9" 
-                        Text="{Binding SelectedJoke.JokeCategoryName}"/>
-                    <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <TextBlock
+                                x:Name="LabelJokeCategory"
+                                Text="{Binding TextJokeCategoryName}"
+                                Style="{StaticResource CategoryName}"/>
+                            <TextBlock x:Name="TextBlockJokeCategory" Style="{StaticResource CategoryNameDetail}"
+                                Text="{Binding SelectedJoke.JokeCategoryName}"/>
+                        </StackPanel>
+                        <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+                    </StackPanel>
+
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection/>
                     </StackPanel.ChildrenTransitions>

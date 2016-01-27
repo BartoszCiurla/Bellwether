@@ -19,36 +19,39 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1">
-            <StackPanel VerticalAlignment="Center" Margin="40,40,40,0">
-                <TextBlock Style="{ThemeResource TitleTextBlockStyle}"                                    
+            <StackPanel VerticalAlignment="Center" Margin="20,40,20,0">
+                <StackPanel.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.7"/>
+                </StackPanel.Background>
+                <StackPanel Margin="20,10,20,0">
+                    <TextBlock Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"                                    
                    Text="{Binding SelectedIntegrationGame.GameName}"
                    FontSize="20"/>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                    <TextBlock Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                 Margin="0,9" 
-                TextWrapping="WrapWholeWords"
+                TextWrapping="WrapWholeWords"           
                 Text="{Binding SelectedIntegrationGame.GameDescription}" FontSize="18"/>
-                <!--GAME FEATURES-->
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" FontSize="16"/>
+                    <!--GAME FEATURES-->
+                    <StackPanel HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding TextGameCategory}" Style="{StaticResource MobileCategoryName}"/>
+                            <TextBlock Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.CategoryGame}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding TextPaceOfPlay}" Style="{StaticResource MobileCategoryName}"/>
+                            <TextBlock Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.PaceOfPlay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{StaticResource MobileCategoryName}"/>
+                            <TextBlock Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.NumberOfPlayer}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding TextPreparationFun}" Style="{StaticResource MobileCategoryName}"/>
+                            <TextBlock Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.PreparationFun}"/>
+                        </StackPanel>
+                        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" FontSize="16" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" FontSize="16" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}" FontSize="16" />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
-                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" FontSize="16" />
-                </StackPanel>
-                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -25,10 +25,11 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock 
                     Text="{x:Bind GameName}"                               
-                    Style="{ThemeResource BaseTextBlockStyle}"
-                    TextTrimming="Clip"
+                    Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
+                    TextTrimming="CharacterEllipsis"
                     MaxLines="1"
-                    MaxWidth="315"/>
+                    MaxWidth="315"
+                    Margin="20,0,20,0"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -56,9 +57,17 @@
                         <Setter Target="MasterColumn.Width" Value="520" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="40"/>
-                        <Setter Target="GameName.FontSize" Value="34"/>
-                        <Setter Target="GameDescription.FontSize" Value="30"/>
+                        <Setter Target="TextBlockGameName.FontSize" Value="34"/>
+                        <Setter Target="TextBlockGameDescription.FontSize" Value="30"/>
                         <Setter Target="AvailableGames.FontSize" Value="32"/>
+                        <Setter Target="LabelGameCategory.FontSize" Value="30"/>
+                        <Setter Target="TextBlockGameCategory.FontSize" Value="30"/>
+                        <Setter Target="LabelPaceOfPlay.FontSize" Value="30"/>
+                        <Setter Target="TextBlockPaceOfPlay.FontSize" Value="30"/>
+                        <Setter Target="LabelNumberOfPlayer.FontSize" Value="30"/>
+                        <Setter Target="TextBlockNumberOfPlayer.FontSize" Value="30"/>
+                        <Setter Target="LabelPreparationFun.FontSize" Value="30"/>
+                        <Setter Target="TextBlockPreparationFun.FontSize" Value="30"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VeryWideState">
@@ -71,10 +80,17 @@
                         <Setter Target="MasterColumn.Width" Value="320" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="36"/>
-                        <Setter Target="GameName.FontSize" Value="32"/>
-                        <Setter Target="GameDescription.FontSize" Value="28"/>
-
-
+                        <Setter Target="TextBlockGameName.FontSize" Value="32"/>
+                        <Setter Target="TextBlockGameDescription.FontSize" Value="28"/>
+                        <Setter Target="AvailableGames.FontSize" Value="28"/>
+                        <Setter Target="LabelGameCategory.FontSize" Value="28"/>
+                        <Setter Target="TextBlockGameCategory.FontSize" Value="28"/>
+                        <Setter Target="LabelPaceOfPlay.FontSize" Value="28"/>
+                        <Setter Target="TextBlockPaceOfPlay.FontSize" Value="28"/>
+                        <Setter Target="LabelNumberOfPlayer.FontSize" Value="28"/>
+                        <Setter Target="TextBlockNumberOfPlayer.FontSize" Value="28"/>
+                        <Setter Target="LabelPreparationFun.FontSize" Value="28"/>
+                        <Setter Target="TextBlockPreparationFun.FontSize" Value="28"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideState">
@@ -87,9 +103,17 @@
                         <Setter Target="MasterColumn.Width" Value="320" />
                         <Setter Target="DetailColumn.Width" Value="*"/>
                         <Setter Target="PageHeader.FontSize" Value="30"/>
-                        <Setter Target="GameName.FontSize" Value="24"/>
-                        <Setter Target="GameDescription.FontSize" Value="20"/>
-
+                        <Setter Target="TextBlockGameName.FontSize" Value="24"/>
+                        <Setter Target="TextBlockGameDescription.FontSize" Value="20"/>
+                        <Setter Target="AvailableGames.FontSize" Value="24"/>
+                        <Setter Target="LabelGameCategory.FontSize" Value="20"/>
+                        <Setter Target="TextBlockGameCategory.FontSize" Value="20"/>
+                        <Setter Target="LabelPaceOfPlay.FontSize" Value="20"/>
+                        <Setter Target="TextBlockPaceOfPlay.FontSize" Value="20"/>
+                        <Setter Target="LabelNumberOfPlayer.FontSize" Value="20"/>
+                        <Setter Target="TextBlockNumberOfPlayer.FontSize" Value="20"/>
+                        <Setter Target="LabelPreparationFun.FontSize" Value="20"/>
+                        <Setter Target="TextBlockPreparationFun.FontSize" Value="20"/>
                     </VisualState.Setters>
                 </VisualState>
 
@@ -109,13 +133,13 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        
+
         <!--PAGE HEADER-->
         <TextBlock 
             x:Name="PageHeader"
             Text="{Binding TextPageTittle}" 
             HorizontalAlignment="Center"
-            Style="{ThemeResource  TitleTextBlockStyle}" 
+            Style="{StaticResource TextBlockBasicFontFamilyAndForeground}" 
             Margin="0,20,0,0"
             Grid.Column="1"/>
 
@@ -130,13 +154,13 @@
                 <ColumnDefinition x:Name="MasterColumn" Width="320"  />
                 <ColumnDefinition x:Name="DetailColumn" Width="*" />
             </Grid.ColumnDefinitions>
-           
+
             <TextBlock x:Name="AvailableGames"  
                 Text="{Binding TextAvailableGames}" 
                 HorizontalAlignment="Center"
-                Margin="0,0,0,20"
-                Style="{ThemeResource TitleTextBlockStyle}"/>
-            
+                Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
+                Margin="0,0,0,20"/>
+
             <ListView x:Name="IntegrationGameListView" 
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedIntegrationGame}"   
@@ -145,10 +169,13 @@
                   ItemTemplate="{StaticResource IntegrationGameListViewTemplate }"
                   ItemsSource="{Binding IntegrationGames}"
                   ItemClick="OnItemClick"
-                  ContainerContentChanging="IntegrationGameListView_OnContainerContentChanging"
-                  BorderThickness="1,0,0,0"
-                  BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"      
-                  Grid.Row="1" Grid.Column="0">
+                  ContainerContentChanging="IntegrationGameListView_OnContainerContentChanging"            
+                  Grid.Row="1" 
+                  Grid.Column="0"
+                  Margin="20,0,20,0">
+                <ListView.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.7"/>
+                </ListView.Background>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -160,44 +187,43 @@
                 VerticalScrollMode="Auto" 
                 VerticalScrollBarVisibility="Auto"  
                 Grid.Column="1"
-                Grid.Row="0" 
-                Grid.RowSpan="2">
-                <StackPanel         
-                Padding="24,0"                
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                x:Name="DetailContentPresenter"
-                Margin="40,0,40,0">
-                    <TextBlock x:Name="GameName" Style="{ThemeResource TitleTextBlockStyle}"
-                                   Margin="0,8"       
+                Grid.Row="1"
+                Margin="0,0,20,0">
+                <StackPanel                    
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    x:Name="DetailContentPresenter">
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.7"/>
+                    </StackPanel.Background>
+                    <StackPanel Margin="20,10,20,0">
+                        <TextBlock x:Name="TextBlockGameName" Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"                     
                                    Text="{Binding SelectedIntegrationGame.GameName}"/>
-                    <TextBlock x:Name="GameDescription" Style="{ThemeResource BodyTextBlockStyle}"
+                        <TextBlock x:Name="TextBlockGameDescription" Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                                    Margin="0,9" 
                                    TextWrapping="WrapWholeWords"
                                    Text="{Binding SelectedIntegrationGame.GameDescription}" />
-                    <!--GAME FEATURES-->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TextGameCategory}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.CategoryGame}" />
+                        <!--GAME FEATURES-->
+                        <StackPanel HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="LabelGameCategory" Text="{Binding TextGameCategory}" Style="{StaticResource CategoryName}"/>
+                                <TextBlock x:Name="TextBlockGameCategory" Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.CategoryGame}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="LabelPaceOfPlay" Text="{Binding TextPaceOfPlay}" Style="{StaticResource CategoryName}"/>
+                                <TextBlock x:Name="TextBlockPaceOfPlay" Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.PaceOfPlay}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="LabelNumberOfPlayer" Text="{Binding TextNumberOfPlayer}" Style="{StaticResource CategoryName}"/>
+                                <TextBlock x:Name="TextBlockNumberOfPlayer" Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.NumberOfPlayer}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="LabelPreparationFun" Text="{Binding TextPreparationFun}" Style="{StaticResource CategoryName}"/>
+                                <TextBlock x:Name="TextBlockPreparationFun" Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.PreparationFun}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" Foreground="#FFFBFBFB" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TextPaceOfPlay}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.PaceOfPlay}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TextNumberOfPlayer}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   Text="{Binding SelectedIntegrationGame.NumberOfPlayer}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TextPreparationFun}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"      
-                                   Text="{Binding SelectedIntegrationGame.PreparationFun}" />
-                    </StackPanel>
-
-                    <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection/>
                     </StackPanel.ChildrenTransitions>

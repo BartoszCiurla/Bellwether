@@ -31,7 +31,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Frame">
                         <Grid>
-                            <MediaElement AutoPlay="True" IsLooping="True" Source="../Assets/CloudFly.mp4"   Stretch="UniformToFill"/>
+                            <MediaElement AutoPlay="True" IsLooping="True" Source="../Assets/WorshipHandsLoop.mov"   Stretch="UniformToFill"/>
                             <ContentPresenter />
                         </Grid>
                     </ControlTemplate>

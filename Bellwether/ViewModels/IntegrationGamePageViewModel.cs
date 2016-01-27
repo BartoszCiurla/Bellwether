@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Bellwether.Commands;
+using Bellwether.Models.ViewModels;
 using Bellwether.Services.Utility;
 
 namespace Bellwether.ViewModels
@@ -30,6 +31,7 @@ namespace Bellwether.ViewModels
         public IntegrationGamePageViewModel()
         {
             ReadCommand = new RelayCommand(Read);
+            IntegrationGames = new ObservableCollection<IntegrationGameViewModel>();
             SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? TextStop: TextRead;
             LoadContent();
             LoadLanguageContent();

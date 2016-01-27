@@ -146,6 +146,7 @@
     <Content Include="Assets\Square71x71Logo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\WorshipHandsLoop.mov" />
     <Content Include="Images\23nR.png" />
     <Content Include="Images\BigBLogoLightR.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -174,6 +175,11 @@
     <Page Include="Styles\AppShellStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\GlobalStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Styles\HomeStyles.xaml">
       <Generator>MSBuild:Compile</Generator>

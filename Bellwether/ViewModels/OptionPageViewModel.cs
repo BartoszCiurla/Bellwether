@@ -151,7 +151,8 @@ namespace Bellwether.ViewModels
         }
         private VoiceInformation GetFirstVoiceByLanguage(string languageShortName)
         {
-            return SpeechSynthesizer.AllVoices.FirstOrDefault(x => x.Language.Contains(languageShortName));
+            var voice = SpeechSynthesizer.AllVoices.FirstOrDefault(x => x.Language.Contains(languageShortName));
+            return voice ?? SpeechSynthesizer.AllVoices.First();
         }
         private bool VoiceExists(VoiceInformation voice)
         {

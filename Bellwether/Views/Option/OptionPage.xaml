@@ -38,6 +38,7 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="Obecny lektor"/>
                         <TextBlock Text="{Binding CurrentVoice.DisplayName}"/>
+                        <TextBlock Text="Jak bedzie wyglądała ta czcionka , i co zadecyduje że to własnie ja wybiorę" FontSize="26.667" FontFamily="Segoe Print" FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
