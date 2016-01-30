@@ -110,7 +110,7 @@ namespace Bellwether.Controls
         /// <param name="e"></param>
         protected override void OnKeyDown(KeyRoutedEventArgs e)
         {
-        var focusedItem = FocusManager.GetFocusedElement();
+            var focusedItem = FocusManager.GetFocusedElement();
 
             switch (e.Key)
             {
@@ -236,17 +236,18 @@ namespace Bellwether.Controls
         /// </summary>
         private void OnPaneToggled()
         {
-            if (this.splitViewHost.IsPaneOpen)
-            {
-                this.ItemsPanelRoot.ClearValue(FrameworkElement.WidthProperty);
-                this.ItemsPanelRoot.ClearValue(FrameworkElement.HorizontalAlignmentProperty);
-            }
-            else if (this.splitViewHost.DisplayMode == SplitViewDisplayMode.CompactInline ||
-                this.splitViewHost.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                this.ItemsPanelRoot.SetValue(FrameworkElement.WidthProperty, this.splitViewHost.CompactPaneLength);
-                this.ItemsPanelRoot.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
-            }
+            if (ItemsPanelRoot != null)
+                if (this.splitViewHost.IsPaneOpen)
+                {
+                    this.ItemsPanelRoot.ClearValue(FrameworkElement.WidthProperty);
+                    this.ItemsPanelRoot.ClearValue(FrameworkElement.HorizontalAlignmentProperty);
+                }
+                else if (this.splitViewHost.DisplayMode == SplitViewDisplayMode.CompactInline ||
+                    this.splitViewHost.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+                {
+                    this.ItemsPanelRoot.SetValue(FrameworkElement.WidthProperty, this.splitViewHost.CompactPaneLength);
+                    this.ItemsPanelRoot.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                }
         }
     }
 }

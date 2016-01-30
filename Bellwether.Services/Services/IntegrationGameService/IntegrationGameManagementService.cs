@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bellwether.Models.ViewModels;
@@ -16,17 +17,17 @@ namespace Bellwether.Services.Services.IntegrationGameService
         public bool ValidateAndFillIntegrationGames(List<SimpleIntegrationGameViewModel> mandatoryIntegrationGames)
         {
             if (mandatoryIntegrationGames == null)
-                return false;            
+                return false;
             BellwetherLanguageDao localLanguage =
                 RepositoryFactory.Context.BellwetherLanguages.FirstOrDefault(
                     x => x.Id == mandatoryIntegrationGames.First().LanguageId);
             if (localLanguage == null)
                 return false;
-            InsertIntegrationGameIfNotExistsOnLocalList(mandatoryIntegrationGames, localLanguage);
+            InsertIntegrationGame(mandatoryIntegrationGames, localLanguage);
             return true;
         }
 
-        private void InsertIntegrationGameIfNotExistsOnLocalList(List<SimpleIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
+        private void InsertIntegrationGame(List<SimpleIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
         {
             List<GameFeatureDao> localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
             mandatory.ForEach(x =>
@@ -48,11 +49,11 @@ namespace Bellwether.Services.Services.IntegrationGameService
                         z.GameFeatureDetail = GetGameFeatureDetailById(z.GameFeatureDetail.Id, localGameFeatures);
                     });
                     RepositoryFactory.Context.Update(integrationGameDao);
-                }                                    
+                }
             });
-            RepositoryFactory.Context.SaveChanges();          
+            RepositoryFactory.Context.SaveChanges();
         }
-    
+
         private List<IntegrationGameFeatureDao> FillFeaturesForGame(SimpleIntegrationGameViewModel mandatoryGame, List<GameFeatureDao> gameFeatures, BellwetherLanguageDao language)
         {
             var integrationGameFeatures = new List<IntegrationGameFeatureDao>();
@@ -61,11 +62,11 @@ namespace Bellwether.Services.Services.IntegrationGameService
                 integrationGameFeatures.Add(new IntegrationGameFeatureDao
                 {
                     Language = language,
-                    GameFeature = GetGameFeatureById(gameFeatureDetailId,gameFeatures),
-                    GameFeatureDetail = GetGameFeatureDetailById(gameFeatureDetailId,gameFeatures)
+                    GameFeature = GetGameFeatureById(gameFeatureDetailId, gameFeatures),
+                    GameFeatureDetail = GetGameFeatureDetailById(gameFeatureDetailId, gameFeatures)
                 });
             });
-            return integrationGameFeatures;           
+            return integrationGameFeatures;
         }
 
         private GameFeatureDao GetGameFeatureById(int gameFeatureDetailId,

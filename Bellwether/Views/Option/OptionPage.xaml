@@ -4,44 +4,60 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+     RequestedTheme="Dark">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <EntranceThemeTransition />
+        </TransitionCollection>
+    </Page.Transitions>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border>
-            <TextBlock Margin="10" VerticalAlignment="Center" Text="{Binding TextSettings}"/>
-        </Border>
-        <Grid Grid.Row="1">
-            <StackPanel MinWidth="250" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
+        <TextBlock 
+            x:Name="PageHeader"
+            Text="{Binding TextPageTittle}" 
+            HorizontalAlignment="Center"
+            Style="{StaticResource TextBlockBasicFontFamilyAndForeground}" 
+            Margin="0,20,0,0"
+            />
+        <ScrollViewer Grid.Row="1">
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
                         <ComboBox x:Name="AvailableLanguages" VerticalContentAlignment="Center" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" DisplayMemberPath="LanguageName" Header="{Binding TextChangeLanguage}"/>
-                        <Button Command="{Binding ChangeLanguageCommand}" Content="{Binding TextApplyLanguage}" />
+                        <Button Command="{Binding ChangeLanguageCommand}" Content="{Binding TextApplyLanguage}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding TextCurrentLanguage}"/>
-                        <TextBlock Text="{Binding CurrentLanguage.LanguageName}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TextCurrentLanguage}" Style="{StaticResource CategoryName}"/>
+                        <TextBlock Text="{Binding CurrentLanguage.LanguageName}" Style="{StaticResource CategoryNameDetail}"/>
                     </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <AppBarToggleButton x:Name="SynchronizeData" Icon="Shuffle" Command="{Binding ChangeSynchronizeCommand}" IsChecked="{Binding IsDataSynchronize ,Mode=TwoWay}" Label="{Binding TextSynchronizeData}"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
                         <ComboBox x:Name="VoiceLectors" VerticalAlignment="Center"  ItemsSource="{Binding Voices}" SelectedItem="{Binding SelectedVoice,Mode=TwoWay}" DisplayMemberPath="DisplayName" Header="Dostepni lektorzy"/>
                         <Button Command="{Binding ChangeVoiceCommand}" Content="Zapisz lektora"/>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Obecny lektor"/>
-                        <TextBlock Text="{Binding CurrentVoice.DisplayName}"/>
-                        <TextBlock Text="Jak bedzie wyglądała ta czcionka , i co zadecyduje że to własnie ja wybiorę" FontSize="26.667" FontFamily="Segoe Print" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Obecny lektor" Style="{StaticResource CategoryName}"/>
+                        <TextBlock Text="{Binding CurrentVoice.DisplayName}" Style="{StaticResource CategoryNameDetail}"/>
                     </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </Grid>
+
+                <StackPanel x:Name="StackPanel3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2">
+                    <AppBarToggleButton x:Name="SynchronizeData" Icon="Shuffle" Command="{Binding ChangeSynchronizeCommand}" IsChecked="{Binding IsDataSynchronize ,Mode=TwoWay}" Label="{Binding TextSynchronizeData}"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

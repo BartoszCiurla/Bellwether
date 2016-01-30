@@ -7,8 +7,8 @@ namespace Bellwether.ViewModels
 {
     public class IntegrationGamePageViewModel : ViewModel
     {
-        private Models.ViewModels.IntegrationGameViewModel _selectedIntegrationGame;
-        public Models.ViewModels.IntegrationGameViewModel SelectedIntegrationGame
+        private IntegrationGameViewModel _selectedIntegrationGame;
+        public IntegrationGameViewModel SelectedIntegrationGame
         {
             get { return _selectedIntegrationGame; }
             set
@@ -18,32 +18,37 @@ namespace Bellwether.ViewModels
             }
         }
 
-        private string _speakerStatus;
-        public string SpeakerStatus
+        private bool _speakerStatus;
+        public bool SpeakerStatus
         {
             get { return _speakerStatus; }
             set { _speakerStatus = value;NotifyPropertyChanged(); }
         }
 
-        public ObservableCollection<Models.ViewModels.IntegrationGameViewModel> IntegrationGames { get; set; }
+        public ObservableCollection<IntegrationGameViewModel> IntegrationGames { get; set; }
         public RelayCommand ReadCommand { get; set; }
 
         public IntegrationGamePageViewModel()
         {
             ReadCommand = new RelayCommand(Read);
             IntegrationGames = new ObservableCollection<IntegrationGameViewModel>();
-            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? TextStop: TextRead;
             LoadContent();
             LoadLanguageContent();
+            LoadSpeakerStatus();
+        }
+
+        public void LoadSpeakerStatus()
+        {
+            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus();
         }
 
         private async void Read()
-        {            
+        {
+            if (SelectedIntegrationGame != null)  
             SpeakerStatus =
                 await
                     ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
-                        SelectedIntegrationGame.GameDescription)
-                    ? TextStop:TextRead;
+                        SelectedIntegrationGame.GameDescription);
         }
 
         private void LoadContent()
@@ -51,7 +56,7 @@ namespace Bellwether.ViewModels
             var integrationGames =
                 ServiceExecutor.Execute(() => ServiceFactory.IntegrationGameService.GetIntegrationGames());
             if (integrationGames.IsValid)
-                IntegrationGames = new ObservableCollection<Models.ViewModels.IntegrationGameViewModel>(integrationGames.Data);
+                IntegrationGames = new ObservableCollection<IntegrationGameViewModel>(integrationGames.Data);
         }
 
         private async void LoadLanguageContent()
@@ -66,7 +71,6 @@ namespace Bellwether.ViewModels
             TextAvailableGames = contentDictionary["AvailableGames"];
             TextStop = contentDictionary["Stop"];
             TextRead = contentDictionary["Read"];
-            SpeakerStatus = TextRead;
         }
 
         private string _textPageTittle;

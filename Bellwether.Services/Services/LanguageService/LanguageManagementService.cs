@@ -24,7 +24,7 @@ namespace Bellwether.Services.Services.LanguageService
             if (!await RepositoryFactory.ApplicationResourceRepository.SaveSelectedValues(resetSelectedKeysInResources))
                 return false;
             var validateResult = await 
-                ServiceExecutor.ExecuteAsyncIfSyncData(() => ServiceFactory.VersionValidateService.ValidateVersion());
+                ServiceExecutor.ExecuteAsyncIfSyncData(() => ServiceFactory.VersionValidateService.ValidateVersion());            
             return validateResult.IsValid;
         }
     }

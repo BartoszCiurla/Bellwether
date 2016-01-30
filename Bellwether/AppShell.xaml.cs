@@ -21,6 +21,7 @@ using Bellwether.Views.Home;
 using Bellwether.Views.IntegrationGame;
 using Bellwether.Views.Joke;
 using Bellwether.Views.Option;
+using Bellwether.Services.Utility;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,35 +32,7 @@ namespace Bellwether
     /// </summary>
     public sealed partial class AppShell : Page
     {
-        private List<NavMenuItem> navlist = new List<NavMenuItem>(
-            new[]
-            {
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Contact,
-                    Label = "Home",
-                    DestPage = typeof(HomePage)
-                },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Audio,
-                    Label = "Gry",
-                    DestPage = typeof(IntegrationGamePage)
-                },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Favorite,
-                    Label = "Kawały",
-                    DestPage = typeof(JokePage)
-                },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Favorite,
-                    Label = "Ustawienia",
-                    DestPage = typeof(OptionPage)
-                },   
-            });
-
+        private List<NavMenuItem> _navlist;
         public static AppShell Current = null;
 
         /// <summary>
@@ -70,7 +43,7 @@ namespace Bellwether
         public AppShell()
         {
             this.InitializeComponent();
-
+            LoadLanguageContent();
             this.Loaded += (sender, args) =>
             {
                 Current = this;
@@ -87,9 +60,44 @@ namespace Bellwether
                     this.CheckTogglePaneButtonSizeChanged();
                 });
             AppFrame.Style = Resources["FrameBackgroundMovie"] as Style;
+            //RootSplitView.Style = Resources["FrameBackgroundMovie"] as Style;
+            
             SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
+        }
 
-            NavMenuList.ItemsSource = navlist;
+        private async void LoadLanguageContent()
+        {
+            var contentKey = new[] { "IntegrationGamesHeader", "JokesHeader", "Settings","Home"};
+            var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKey);
+            _navlist = new List<NavMenuItem>(
+            new[]
+            {
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Home,
+                    Label = contentDictionary["Home"],
+                    DestPage = typeof(HomePage)
+                },
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Bullets,
+                    Label = contentDictionary["IntegrationGamesHeader"],
+                    DestPage = typeof(IntegrationGamePage)
+                },
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Favorite,
+                    Label = contentDictionary["JokesHeader"],
+                    DestPage = typeof(JokePage)
+                },
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Setting,
+                    Label = contentDictionary["Settings"],
+                    DestPage = typeof(OptionPage)
+                },
+            });
+            NavMenuList.ItemsSource = _navlist;
         }
 
         public Frame AppFrame { get { return this.frame; } }
@@ -187,14 +195,14 @@ namespace Bellwether
         {
             if (e.NavigationMode == NavigationMode.Back)
             {
-                var item = (from p in this.navlist where p.DestPage == e.SourcePageType select p).FirstOrDefault();
+                var item = (from p in this._navlist where p.DestPage == e.SourcePageType select p).FirstOrDefault();
                 if (item == null && this.AppFrame.BackStackDepth > 0)
                 {
                     // In cases where a page drills into sub-pages then we'll highlight the most recent
                     // navigation menu item that appears in the BackStack
                     foreach (var entry in this.AppFrame.BackStack.Reverse())
                     {
-                        item = (from p in this.navlist where p.DestPage == entry.SourcePageType select p).SingleOrDefault();
+                        item = (from p in this._navlist where p.DestPage == entry.SourcePageType select p).SingleOrDefault();
                         if (item != null)
                             break;
                     }

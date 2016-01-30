@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bellwether.Models.Models;
 using Bellwether.Models.ViewModels;
@@ -26,7 +27,25 @@ namespace Bellwether.Services.Services.VersionService
             await ValidateJokeVersion(mandatoryVersion);
             await ValidateGameFeatureVersion(mandatoryVersion);
             await ValidateIntegrationGameVersion(mandatoryVersion);
+            DeleteOtherLanguageData(mandatoryVersion);
             return true;
+        }
+
+        private void DeleteOtherLanguageData(ClientVersionViewModel mandatoryVersion)
+        {
+            var jokes = RepositoryFactory.Context.Jokes.Where(x => x.Language.Id != mandatoryVersion.Language.Id);
+            RepositoryFactory.Context.Jokes.RemoveRange(jokes);
+            var jokeCategories =
+                RepositoryFactory.Context.JokeCategories.Where(x => x.Language.Id != mandatoryVersion.Language.Id);
+            RepositoryFactory.Context.JokeCategories.RemoveRange(jokeCategories);
+            var integrationGames =
+                RepositoryFactory.Context.IntegrationGames.Where(x => x.Language.Id != mandatoryVersion.Language.Id).ToList();
+            RepositoryFactory.Context.IntegrationGames.RemoveRange(integrationGames);
+            var integrationGameFeatures =
+                RepositoryFactory.Context.IntegrationGameFeatures.Where(
+                    x => x.Language.Id != mandatoryVersion.Language.Id).ToList();
+            RepositoryFactory.Context.IntegrationGameFeatures.RemoveRange(integrationGameFeatures);
+            RepositoryFactory.Context.SaveChanges();
         }
         private async Task<bool> ValidateIntegrationGameVersion(ClientVersionViewModel mandatoryVersion)
         {

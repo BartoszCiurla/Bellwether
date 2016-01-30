@@ -13,7 +13,7 @@ namespace Bellwether.Services.Services.IntegrationGameService
     public class GameFeatureManagementService : IGameFeatureManagementService
     {
         public bool ValidateAndFillGameFeatures(List<GameFeatureViewModel> mandatoryGameFeatures)
-        {
+       {
             if (mandatoryGameFeatures == null)
                 return false;
             BellwetherLanguageDao localLanguage =

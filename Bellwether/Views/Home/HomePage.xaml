@@ -33,7 +33,7 @@
                 <Hub.HeaderTemplate>
                     <DataTemplate>
                         <!--<TextBlock Text="Bellwether" FontSize="66"></TextBlock>-->
-                        <Image Source="../../Images/BigBLogoLightR.png" Width="150" Height="150"  />
+                        <Image Source="../../Images/BigBLogoDarkR.png" Width="150" Height="150"  />
                     </DataTemplate>
                 </Hub.HeaderTemplate>
 
@@ -45,29 +45,25 @@
 
                 <HubSection Background="{StaticResource HubSectionBackgroundBrush}"
                             MaxWidth="{x:Bind DesiredHubSectionWidth, Mode=OneWay}"
-                            Header="Gry integracyjne" Padding="20">
+                            Header="{Binding TextIntegrationGamesHeader}" Padding="20">
                     <DataTemplate>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" MaxWidth="560"
-                                   Text="Szukasz sposobu na swietna zabawe , wyeliminowanie nudy , poznanie sie , tutaj znajdziesz to wszystko ." />
+                                   Text="{Binding TextIntegrationGames}" />
                     </DataTemplate>
                 </HubSection>
 
                 <HubSection Background="{StaticResource HubSectionBackgroundBrush}"
                             MaxWidth="{x:Bind DesiredHubSectionWidth, Mode=OneWay}"
                             Margin="150,0"
-                            Header="Kawały" Padding="20">
+                            Header="{Binding TextJokesHeader}" Padding="20">
                     <DataTemplate>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" MaxWidth="560">
-                            <Run Text="Gdy dobre suchary nie sa twym atutem , zablysnij dzieki zebranej w jednej miejscu kompleksowej bibliotece zartow .Brakuje ci odwagi niech zrobi to za Ciebie program ." />
-                            <LineBreak />
-                            <LineBreak />
-                            <Run Text="When the size of the ScrollViewer changes, we must update the origin of the CompositeTransform3D accordingly." />
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" MaxWidth="560" Text="{Binding TextJokes}">
                         </TextBlock>
                     </DataTemplate>
                 </HubSection>
 
 
-                <HubSection Background="{StaticResource HubSectionBackgroundBrush}"
+                <!--<HubSection Background="{StaticResource HubSectionBackgroundBrush}"
                             MaxWidth="{x:Bind DesiredHubSectionWidth, Mode=OneWay}"
                             Margin="0,0,200,0"
                             Header="Header 3" Padding="20">
@@ -76,7 +72,7 @@
                                    Text="See ParallaxBackgroundHub.cs and generic.xaml."
                                    />
                     </DataTemplate>
-                </HubSection>
+                </HubSection>-->
             </controls:ParallaxBackgroundHub>
         </Grid>
     </Grid>

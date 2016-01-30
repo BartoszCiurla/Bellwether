@@ -4,8 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:jokeViewModels="using:Bellwether.Models.ViewModels"
     NavigationCacheMode="Enabled"
+    RequestedTheme="Dark"
     mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
@@ -15,7 +18,7 @@
 
     <Page.Resources>
         <DataTemplate x:Name="JokeListViewTemplate" x:DataType="jokeViewModels:JokeViewModel">
-            <Grid>
+            <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -28,9 +31,9 @@
                     Text="{x:Bind JokeContent}"    
                     Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                     TextTrimming="CharacterEllipsis"
-                    MaxLines="1"
-                    MaxWidth="315"
-                    Margin="20,0,20,0"/>
+                    MaxLines="1"   
+                    Margin="20,0,20,0"
+                    />
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -121,7 +124,6 @@
             Style="{StaticResource TextBlockBasicFontFamilyAndForeground}" 
             Margin="0,20,0,0"
             Grid.Column="1"/>
-
         <Grid 
               Grid.Row="1"
               Grid.ColumnSpan="2" Grid.Column="0">
@@ -188,7 +190,22 @@
                             <TextBlock x:Name="TextBlockJokeCategory" Style="{StaticResource CategoryNameDetail}"
                                 Text="{Binding SelectedJoke.JokeCategoryName}"/>
                         </StackPanel>
-                        <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,20,0,20">
+                            <ProgressRing IsActive="{x:Bind ProgressToggle.IsOn, Mode=OneWay}" Width="130" Height="50"/>
+                            <ToggleSwitch  x:Name="ProgressToggle"  OffContent="{Binding TextRead}" OnContent="{Binding TextStop}" IsOn="{Binding SpeakerStatus}" RequestedTheme="Dark" Foreground="#FFFBFBFB" FontFamily="Segoe Print" FontSize="16">
+                                <i:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Toggled">
+                                        <core:InvokeCommandAction Command="{Binding ReadCommand}"/>
+                                    </core:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                                <ToggleSwitch.Background>
+                                    <ImageBrush Stretch="Fill"/>
+                                </ToggleSwitch.Background>
+                            </ToggleSwitch>
+                        </StackPanel>
+
+                        <!--<Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />-->
                     </StackPanel>
 
                     <StackPanel.ChildrenTransitions>

@@ -5,7 +5,10 @@
     xmlns:local="using:Bellwether.Views.Joke"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    mc:Ignorable="d"
+     RequestedTheme="Dark">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -36,7 +39,21 @@
                         Style="{StaticResource MobileCategoryNameDetail}"
                         Text="{Binding SelectedJoke.JokeCategoryName}"/>
                     </StackPanel>
-                    <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
+                        <ProgressRing IsActive="{x:Bind ProgressToggle.IsOn, Mode=OneWay}" Width="130" Height="50"/>
+                        <ToggleSwitch  x:Name="ProgressToggle"  OffContent="{Binding TextRead}" OnContent="{Binding TextStop}" IsOn="{Binding SpeakerStatus}" RequestedTheme="Dark" Foreground="#FFFBFBFB" FontFamily="Segoe Print" FontSize="16">
+                            <i:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Toggled">
+                                    <core:InvokeCommandAction Command="{Binding ReadCommand}"/>
+                                </core:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                            <ToggleSwitch.Background>
+                                <ImageBrush Stretch="Fill"/>
+                            </ToggleSwitch.Background>
+                        </ToggleSwitch>
+                    </StackPanel>
+                    <!--<Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" Foreground="White" />-->
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

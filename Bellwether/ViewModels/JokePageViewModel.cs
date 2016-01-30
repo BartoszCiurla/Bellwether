@@ -19,8 +19,8 @@ namespace Bellwether.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        private string _speakerStatus;
-        public string SpeakerStatus
+        private bool _speakerStatus;
+        public bool SpeakerStatus
         {
             get { return _speakerStatus; }
             set { _speakerStatus = value; NotifyPropertyChanged(); }
@@ -30,17 +30,17 @@ namespace Bellwether.ViewModels
         {
             Jokes = new ObservableCollection<JokeViewModel>();
             ReadCommand = new RelayCommand(Read);
-            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus() ? TextStop : TextRead;
+            SpeakerStatus = ServiceFactory.SpeechSyntesizerService.GetSpeakerStatus();
             LoadContent();
             LoadLanguageContent();
         }
         public async void Read()
         {
+            if(SelectedJoke != null)
             SpeakerStatus =
                 await
                     ServiceFactory.SpeechSyntesizerService.ValidateSpeakerAndSpeak(
-                        SelectedJoke.JokeContent)
-                    ? TextStop : TextRead;
+                        SelectedJoke.JokeContent);
         }
         private void LoadContent()
         {
@@ -64,7 +64,6 @@ namespace Bellwether.ViewModels
             TextAvailableJokes = contentDictionary["AvailableJokes"];
             TextStop = contentDictionary["Stop"];
             TextRead = contentDictionary["Read"];
-            SpeakerStatus = TextRead;
         }
 
         private string _textPageTittle;

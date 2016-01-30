@@ -5,7 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="using:Bellwether.Models.ViewModels"
+        xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     NavigationCacheMode="Enabled"
+    RequestedTheme="Dark"
     mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
@@ -27,8 +30,7 @@
                     Text="{x:Bind GameName}"                               
                     Style="{StaticResource TextBlockBasicFontFamilyAndForeground}"
                     TextTrimming="CharacterEllipsis"
-                    MaxLines="1"
-                    MaxWidth="315"
+                    MaxLines="1"   
                     Margin="20,0,20,0"/>
             </Grid>
         </DataTemplate>
@@ -221,8 +223,24 @@
                                 <TextBlock x:Name="LabelPreparationFun" Text="{Binding TextPreparationFun}" Style="{StaticResource CategoryName}"/>
                                 <TextBlock x:Name="TextBlockPreparationFun" Style="{StaticResource CategoryNameDetail}" Text="{Binding SelectedIntegrationGame.PreparationFun}"/>
                             </StackPanel>
+
+
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
+                                <ProgressRing IsActive="{x:Bind ProgressToggle.IsOn, Mode=OneWay}" Width="130" Height="50"/>
+                                <ToggleSwitch  x:Name="ProgressToggle"  OffContent="{Binding TextRead}" OnContent="{Binding TextStop}" IsOn="{Binding SpeakerStatus}" RequestedTheme="Dark" Foreground="#FFFBFBFB" FontFamily="Segoe Print" FontSize="16">
+                                    <i:Interaction.Behaviors>
+                                        <core:EventTriggerBehavior EventName="Toggled">
+                                            <core:InvokeCommandAction Command="{Binding ReadCommand}"/>
+                                        </core:EventTriggerBehavior>
+                                    </i:Interaction.Behaviors>
+                                    <ToggleSwitch.Background>
+                                        <ImageBrush Stretch="Fill"/>
+                                    </ToggleSwitch.Background>
+                                </ToggleSwitch>
+                            </StackPanel>
+
                         </StackPanel>
-                        <Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" Foreground="#FFFBFBFB" />
+                        <!--<Button Command="{Binding ReadCommand}" Content="{Binding SpeakerStatus}" Foreground="#FFFBFBFB" />-->
                     </StackPanel>
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection/>

@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Bellwether.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -15,6 +16,7 @@ namespace Bellwether.Views.Home
         public HomePage()
         {
             this.InitializeComponent();
+            this.DataContext = new HomePageViewModel();
         }
         public static DependencyProperty DesiredHubSectionWidthProperty => s_desiredHubSectionWidthProperty;
 

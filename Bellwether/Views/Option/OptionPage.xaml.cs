@@ -10,13 +10,24 @@ namespace Bellwether.Views.Option
     /// </summary>
     public sealed partial class OptionPage : Page
     {
+        private OptionPageViewModel _viewModel;
         public OptionPage()
         {
             this.InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                this.DataContext = new OptionPageViewModel();
+                _viewModel = new OptionPageViewModel();
+                this.DataContext = _viewModel;
+                OnLoaded();
             };
+        }
+
+        private void OnLoaded()
+        {
+            int indexOfCurrentLanguage = _viewModel.Languages.IndexOf(_viewModel.CurrentLanguage);
+            AvailableLanguages.SelectedIndex = indexOfCurrentLanguage;
+            int indexOfCurrentVoice = _viewModel.Voices.IndexOf(_viewModel.CurrentVoice);
+            VoiceLectors.SelectedIndex = indexOfCurrentVoice;           
         }
     }
 }

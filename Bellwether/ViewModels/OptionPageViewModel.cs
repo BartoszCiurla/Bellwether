@@ -170,15 +170,15 @@ namespace Bellwether.ViewModels
         {
             var contentKeys = new[] { "Settings", "ChangeLanguage", "ApplyLanguage", "CurrentLanguage", "DataSynchronization" };
             var contentDictionary = await ServiceFactory.ResourceService.GetLanguageContentForKeys(contentKeys);
-            TextSettings = contentDictionary["Settings"];
+            TextPageTittle = contentDictionary["Settings"];
             TextChangeLanguage = contentDictionary["ChangeLanguage"];
             TextApplyLanguage = contentDictionary["ApplyLanguage"];
             TextCurrentLanguage = contentDictionary["CurrentLanguage"];
             TextSynchronizeData = contentDictionary["DataSynchronization"];
         }
 
-        private string _textSettings;
-        public string TextSettings { get { return _textSettings; } set { _textSettings = value; NotifyPropertyChanged(); } }
+        private string _textPageTittle;
+        public string TextPageTittle { get { return _textPageTittle; } set { _textPageTittle = value; NotifyPropertyChanged(); } }
         private string _textCurrentLanguage;
         public string TextCurrentLanguage { get { return _textCurrentLanguage; } set { _textCurrentLanguage = value; NotifyPropertyChanged(); } }
         private string _textChangeLanguage;

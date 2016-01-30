@@ -51,14 +51,14 @@ namespace Bellwether.Services.Services.ResourceService
                 var dataFolder = await ApplicationData.Current.LocalFolder.TryGetItemAsync(folderName) as StorageFolder ??
                             await ApplicationData.Current.LocalFolder.CreateFolderAsync(folderName);
                 var localFile = await dataFolder.TryGetItemAsync(fileName) as StorageFile;
-            //if (localFile == null)
-            //{
+            if (localFile == null)
+            {
                 // te ify dopiero w wersji produkcyjnej 
                 StorageFile storageStaticFile = GetDataFromStaticFile(staticFileLocation);
                 var file = await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                 string content = await FileIO.ReadTextAsync(storageStaticFile);
                 await FileIO.WriteTextAsync(file, content);
-            //}
+            }
         }
         private StorageFile GetDataFromStaticFile(string staticFileLocation)
         {
