@@ -28,7 +28,7 @@ namespace Bellwether.Repositories.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     GameFeatureName = table.Column<string>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,7 +38,7 @@ namespace Bellwether.Repositories.Migrations
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "IntegrationGameDao",
@@ -48,7 +48,7 @@ namespace Bellwether.Repositories.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IntegrationGameDescription = table.Column<string>(nullable: true),
                     IntegrationGameName = table.Column<string>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +58,7 @@ namespace Bellwether.Repositories.Migrations
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "JokeCategoryDao",
@@ -67,7 +67,7 @@ namespace Bellwether.Repositories.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     JokeCategoryName = table.Column<string>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,7 +77,7 @@ namespace Bellwether.Repositories.Migrations
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "GameFeatureDetailDao",
@@ -85,25 +85,25 @@ namespace Bellwether.Repositories.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    GameFeatureDaoId = table.Column<int>(nullable: true),
                     GameFeatureDetailName = table.Column<string>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    GameFeatureId = table.Column<int>(nullable: false),
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameFeatureDetailDao", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GameFeatureDetailDao_GameFeatureDao_GameFeatureDaoId",
-                        column: x => x.GameFeatureDaoId,
+                        name: "FK_GameFeatureDetailDao_GameFeatureDao_GameFeatureId",
+                        column: x => x.GameFeatureId,
                         principalTable: "GameFeatureDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GameFeatureDetailDao_BellwetherLanguageDao_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "JokeDao",
@@ -111,9 +111,9 @@ namespace Bellwether.Repositories.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    JokeCategoryId = table.Column<int>(nullable: true),
+                    JokeCategoryId = table.Column<int>(nullable: false),
                     JokeContent = table.Column<string>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,13 +123,13 @@ namespace Bellwether.Repositories.Migrations
                         column: x => x.JokeCategoryId,
                         principalTable: "JokeCategoryDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_JokeDao_BellwetherLanguageDao_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "IntegrationGameFeatureDao",
@@ -137,10 +137,10 @@ namespace Bellwether.Repositories.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    GameFeatureDetailId = table.Column<int>(nullable: true),
-                    GameFeatureId = table.Column<int>(nullable: true),
-                    IntegrationGameId = table.Column<int>(nullable: true),
-                    LanguageId = table.Column<int>(nullable: true)
+                    GameFeatureDetailId = table.Column<int>(nullable: false),
+                    GameFeatureId = table.Column<int>(nullable: false),
+                    IntegrationGameId = table.Column<int>(nullable: false),
+                    LanguageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,25 +150,25 @@ namespace Bellwether.Repositories.Migrations
                         column: x => x.GameFeatureDetailId,
                         principalTable: "GameFeatureDetailDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_IntegrationGameFeatureDao_GameFeatureDao_GameFeatureId",
                         column: x => x.GameFeatureId,
                         principalTable: "GameFeatureDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_IntegrationGameFeatureDao_IntegrationGameDao_IntegrationGameId",
                         column: x => x.IntegrationGameId,
                         principalTable: "IntegrationGameDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_IntegrationGameFeatureDao_BellwetherLanguageDao_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "BellwetherLanguageDao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
         }
 

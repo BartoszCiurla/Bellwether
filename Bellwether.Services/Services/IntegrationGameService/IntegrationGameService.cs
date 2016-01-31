@@ -35,9 +35,9 @@ namespace Bellwether.Services.Services.IntegrationGameService
         private IEnumerable<string> GetGameFeatureDetailName(int integrationGameId)
         {             
             return
-                RepositoryFactory.Context.IntegrationGameFeatures.ToList().Where(
-                    x => x.IntegrationGame.Id == integrationGameId)
-                    .OrderBy(x => x.GameFeature.Id)
+                RepositoryFactory.Context.IntegrationGameFeatures.Where(
+                    x => x.IntegrationGameId == integrationGameId)
+                    .OrderBy(x => x.GameFeatureId)
                     .Select(x => x.GameFeatureDetail.GameFeatureDetailName);
         }
     }

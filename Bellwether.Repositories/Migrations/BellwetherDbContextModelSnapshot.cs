@@ -34,7 +34,7 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("GameFeatureName");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -44,11 +44,11 @@ namespace Bellwether.Repositories.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("GameFeatureDaoId");
-
                     b.Property<string>("GameFeatureDetailName");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("GameFeatureId");
+
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -62,7 +62,7 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("IntegrationGameName");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -72,13 +72,13 @@ namespace Bellwether.Repositories.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("GameFeatureDetailId");
+                    b.Property<int>("GameFeatureDetailId");
 
-                    b.Property<int?>("GameFeatureId");
+                    b.Property<int>("GameFeatureId");
 
-                    b.Property<int?>("IntegrationGameId");
+                    b.Property<int>("IntegrationGameId");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -90,7 +90,7 @@ namespace Bellwether.Repositories.Migrations
 
                     b.Property<string>("JokeCategoryName");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -100,11 +100,11 @@ namespace Bellwether.Repositories.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("JokeCategoryId");
+                    b.Property<int>("JokeCategoryId");
 
                     b.Property<string>("JokeContent");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.HasKey("Id");
                 });
@@ -120,7 +120,7 @@ namespace Bellwether.Repositories.Migrations
                 {
                     b.HasOne("Bellwether.Repositories.Entities.GameFeatureDao")
                         .WithMany()
-                        .HasForeignKey("GameFeatureDaoId");
+                        .HasForeignKey("GameFeatureId");
 
                     b.HasOne("Bellwether.Repositories.Entities.BellwetherLanguageDao")
                         .WithMany()

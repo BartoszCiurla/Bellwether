@@ -23,13 +23,30 @@ namespace Bellwether.Services.Services.IntegrationGameService
                     x => x.Id == mandatoryIntegrationGames.First().LanguageId);
             if (localLanguage == null)
                 return false;
+            RemoveAllIntegrationGames();
             InsertIntegrationGame(mandatoryIntegrationGames, localLanguage);
             return true;
+        }
+
+        private void RemoveAllIntegrationGames()
+        {
+            var test = RepositoryFactory.Context.IntegrationGameFeatures.ToList();
+            RepositoryFactory.Context.IntegrationGameFeatures.RemoveRange(test);
+
+
+            var integrationGames = RepositoryFactory.Context.IntegrationGames.ToList();
+            RepositoryFactory.Context.IntegrationGames.RemoveRange(integrationGames);
+            RepositoryFactory.Context.SaveChanges();
         }
 
         private void InsertIntegrationGame(List<SimpleIntegrationGameViewModel> mandatory, BellwetherLanguageDao language)
         {
             List<GameFeatureDao> localGameFeatures = RepositoryFactory.Context.GameFeatures.ToList();
+
+            var test = RepositoryFactory.Context.IntegrationGames.ToList();
+            var test2 = RepositoryFactory.Context.IntegrationGameFeatures.ToList();
+            Debug.WriteLine(test.Count());
+            Debug.WriteLine(test2.Count());
             mandatory.ForEach(x =>
             {
                 var integrationGameDao = RepositoryFactory.Context.IntegrationGames.FirstOrDefault(y => y.Id == x.Id);

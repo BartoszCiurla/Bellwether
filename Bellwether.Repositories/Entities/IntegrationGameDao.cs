@@ -5,14 +5,11 @@ namespace Bellwether.Repositories.Entities
 {
     public class IntegrationGameDao
     {
-        public IntegrationGameDao()
-        {
-            GameFeatures = new Collection<IntegrationGameFeatureDao>();
-        }
         public int Id { get; set; }
         public string IntegrationGameName { get; set; }
         public string IntegrationGameDescription { get; set; }
-        public virtual ICollection<IntegrationGameFeatureDao> GameFeatures { get; set; }
-        public virtual BellwetherLanguageDao Language { get; set; }
+        public List<IntegrationGameFeatureDao> GameFeatures { get; set; }
+        public int LanguageId { get; set; }
+        public  BellwetherLanguageDao Language { get; set; }
     }
 }

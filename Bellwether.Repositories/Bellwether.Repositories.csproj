@@ -115,9 +115,9 @@
     <Compile Include="Entities\IntegrationGameFeatureDao.cs" />
     <Compile Include="Entities\JokeCategoryDao.cs" />
     <Compile Include="Entities\JokeDao.cs" />
-    <Compile Include="Migrations\20160113232222_init.cs" />
-    <Compile Include="Migrations\20160113232222_init.designer.cs">
-      <DependentUpon>20160113232222_init.cs</DependentUpon>
+    <Compile Include="Migrations\20160131004228_init.cs" />
+    <Compile Include="Migrations\20160131004228_init.designer.cs">
+      <DependentUpon>20160131004228_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BellwetherDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

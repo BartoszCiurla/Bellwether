@@ -13,7 +13,7 @@ namespace Bellwether.Services.Services.JokeService
     {
         public IEnumerable<JokeViewModel> GetJokes()
         {
-            return RepositoryFactory.Context.Jokes.ToList().Select(x => new JokeViewModel
+            return RepositoryFactory.Context.Jokes.Select(x => new JokeViewModel
             {
                 Id = x.Id,
                 JokeContent = x.JokeContent,

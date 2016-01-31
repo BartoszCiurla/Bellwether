@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bellwether.Models.Models;
@@ -40,11 +41,7 @@ namespace Bellwether.Services.Services.VersionService
             RepositoryFactory.Context.JokeCategories.RemoveRange(jokeCategories);
             var integrationGames =
                 RepositoryFactory.Context.IntegrationGames.Where(x => x.Language.Id != mandatoryVersion.Language.Id).ToList();
-            RepositoryFactory.Context.IntegrationGames.RemoveRange(integrationGames);
-            var integrationGameFeatures =
-                RepositoryFactory.Context.IntegrationGameFeatures.Where(
-                    x => x.Language.Id != mandatoryVersion.Language.Id).ToList();
-            RepositoryFactory.Context.IntegrationGameFeatures.RemoveRange(integrationGameFeatures);
+            RepositoryFactory.Context.IntegrationGames.RemoveRange(integrationGames);                           
             RepositoryFactory.Context.SaveChanges();
         }
         private async Task<bool> ValidateIntegrationGameVersion(ClientVersionViewModel mandatoryVersion)
@@ -96,7 +93,7 @@ namespace Bellwether.Services.Services.VersionService
 
         private bool ValidateVersion(object appVersion, object mandatoryVersion)
         {
-            return Convert.ToDouble(appVersion) <= Convert.ToDouble(mandatoryVersion);
+            return Convert.ToDouble(appVersion) < Convert.ToDouble(mandatoryVersion);
         }
 
     }
